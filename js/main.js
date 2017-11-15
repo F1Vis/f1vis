@@ -139,6 +139,9 @@ function fetchStatus(callback) {
 /* This is where the actual control flow is defined */
 console.log("Let's load and preprocess all data properly.");
 
+// Enable loading modal
+$("#loading-dialog").modal('show');
+
 // Create a queue, add all the fetch&process functions and await their results
 d3.queue()
   .defer(fetchCircuits)
@@ -161,6 +164,6 @@ d3.queue()
     // Throw errors so we can see them
     if(error) throw error;
     // Hide the loadmask
-    d3.select("#loadmask").style("display", "none");
+    $("#loading-dialog").modal('hide');
   });
 

@@ -40,6 +40,7 @@
       </div>
     </nav>
 
+
     <main role="main" class="container">
 
       <div class="starter-template">
@@ -54,9 +55,22 @@
 
     </main><!-- /.container -->
 
+
+    <div id="loading-dialog" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">
+      <div class="modal-dialog modal-m">
+        <div class="modal-content">
+          <div class="modal-header">Denkpause ...<br>Bitte haben Sie einen Augenblick Geduld.</div>
+          <div class="modal-body">
+            <div class="progress progress-striped active" style="margin-bottom:0;">
+              <div class="progress-bar" style="width:100%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Placed at the end of the document so the pages load faster -->
     <!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="js/jquery/jquery-3.2.1.min.js"></script>
     <script src="js/popper/popper.min.js"></script>
     <script src="js/bootstrap/bootstrap.min.js"></script>

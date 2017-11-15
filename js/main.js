@@ -2,18 +2,20 @@
 
 /* Globally define the places where the preprocessed data is stored for READ ONLY ACCESS. */
 
-var circuits = null;
-var constructorResults = null;
-var constructors = null;
-var constructorStandings = null;
-var drivers = null;
-var driverStandings = null;
-var lapTimes = null;
-var pitStops = null;
-var qualifying = null;
-var races = null;
-var results = null;
-var seasons = null;
+var f1data = {
+  circuits: null,
+  constructorResults: null,
+  constructors: null,
+  constructorStandings: null,
+  drivers: null,
+  driverStandings: null,
+  lapTimes: null,
+  pitStops: null,
+  qualifying: null,
+  races: null,
+  results: null,
+  seasons: null
+};
 
 /* Define the functions responsible for fetching+preprocessing data */
 
@@ -21,7 +23,7 @@ var seasons = null;
 function fetchCircuits(callback) {
   d3.csv('data/circuits.csv', function(data) {
     // TODO: process data
-    circuits = data;
+    f1data.circuits = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -30,7 +32,7 @@ function fetchCircuits(callback) {
 function fetchConstructorResults(callback) {
   d3.csv('data/constructorResults.csv', function(data) {
     // TODO: process data
-    constructorResults = data;
+    f1data.constructorResults = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -39,7 +41,7 @@ function fetchConstructorResults(callback) {
 function fetchConstructors(callback) {
   d3.csv('data/constructors.csv', function(data) {
     // TODO: process data
-    constructors = data;
+    f1data.constructors = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -48,7 +50,7 @@ function fetchConstructors(callback) {
 function fetchConstructorStandings(callback) {
   d3.csv('data/constructorStandings.csv', function(data) {
     // TODO: process data
-    constructorStandings = data;
+    f1data.constructorStandings = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -57,7 +59,7 @@ function fetchConstructorStandings(callback) {
 function fetchDrivers(callback) {
   d3.csv('data/drivers.csv', function(data) {
     // TODO: process data
-    drivers = data;
+    f1data.drivers = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -66,7 +68,7 @@ function fetchDrivers(callback) {
 function fetchDriverStandings(callback) {
   d3.csv('data/driverStandings.csv', function(data) {
     // TODO: process data
-    driverStandings = data;
+    f1data.driverStandings = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -75,7 +77,7 @@ function fetchDriverStandings(callback) {
 function fetchLapTimes(callback) {
   d3.csv('data/lapTimes.csv', function(data) {
     // TODO: process data
-    lapTimes = data;
+    f1data.lapTimes = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -84,7 +86,7 @@ function fetchLapTimes(callback) {
 function fetchPitStops(callback) {
   d3.csv('data/pitStops.csv', function(data) {
     // TODO: process data
-    pitStops = data;
+    f1data.pitStops = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -93,7 +95,7 @@ function fetchPitStops(callback) {
 function fetchQualifying(callback) {
   d3.csv('data/qualifying.csv', function(data) {
     // TODO: process data
-    qualifying = data;
+    f1data.qualifying = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -102,7 +104,7 @@ function fetchQualifying(callback) {
 function fetchRaces(callback) {
   d3.csv('data/races.csv', function(data) {
     // TODO: process data
-    races = data;
+    f1data.races = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -111,7 +113,7 @@ function fetchRaces(callback) {
 function fetchResults(callback) {
   d3.csv('data/results.csv', function(data) {
     // TODO: process data
-    results = data;
+    f1data.results = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -120,7 +122,7 @@ function fetchResults(callback) {
 function fetchSeasons(callback) {
   d3.csv('data/seasons.csv', function(data) {
     // TODO: process data
-    seasons = data;
+    f1data.seasons = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -129,7 +131,7 @@ function fetchSeasons(callback) {
 function fetchStatus(callback) {
   d3.csv('data/status.csv', function(data) {
     // TODO: process data
-    var status = data;
+    f1data.status = data;
     callback(null); // Tell the queue we're done.
   });
 }
@@ -152,11 +154,10 @@ d3.queue()
   .defer(fetchResults)
   .defer(fetchSeasons)
   .defer(fetchStatus)
-  .await(function(error) {
+  .awaitAll(function(error) {
     // All data loaded by the deferred functions, now we're ready for business
     // (call more functions :D)
     console.log("All done. Ready.");
-    console.log(arguments);
     if(error) throw error;
   });
 

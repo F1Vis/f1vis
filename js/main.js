@@ -158,6 +158,9 @@ d3.queue()
     // All data loaded by the deferred functions, now we're ready for business
     // (call more functions :D)
     console.log("All done. Ready.");
+    // Throw errors so we can see them
     if(error) throw error;
+    // Hide the loadmask
+    d3.select("#loadmask").style("display", "none");
   });
 

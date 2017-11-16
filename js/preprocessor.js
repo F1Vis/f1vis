@@ -4,7 +4,9 @@
  * In this file, functions for loading and preprocessing the data are defined.
  */
 
-/* Define the functions responsible for fetching+preprocessing data in a preprocessor object */
+/* 
+ * Define the functions responsible for fetching+preprocessing data in a preprocessor object
+ */
 var preprocessor = {
   // Structure that gets filled with results
   results: {
@@ -248,4 +250,38 @@ var preprocessor = {
     });
   },
 
-}
+  // Starts the fetch+preprocess step, calls back given function with results.
+  load: function(callback) {
+    // Show loading dialog
+    loadingDialog.show(13);
+    // Create a queue, add all the fetch&process functions and await their results
+    d3.queue()
+      .defer(preprocessor.fetchCircuits)
+      .defer(preprocessor.fetchConstructorResults)
+      .defer(preprocessor.fetchConstructors)
+      .defer(preprocessor.fetchConstructorStandings)
+      .defer(preprocessor.fetchDrivers)
+      .defer(preprocessor.fetchDriverStandings)
+      .defer(preprocessor.fetchLapTimes)
+      .defer(preprocessor.fetchPitStops)
+      .defer(preprocessor.fetchQualifying)
+      .defer(preprocessor.fetchRaces)
+      .defer(preprocessor.fetchResults)
+      .defer(preprocessor.fetchSeasons)
+      .defer(preprocessor.fetchStatus)
+      .awaitAll(function(error) {
+        // Throw errors so we can see them
+        if(error) throw error;
+        // Hide the loading dialog
+        loadingDialog.hide();
+        // Callback with the results
+        callback(preprocessor.results);
+      });
+  },
+
+  // Simple getter method to fetch the raw data
+  getResults: function() {
+    return preprocessor.results;
+  },
+
+};

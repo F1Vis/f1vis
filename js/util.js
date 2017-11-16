@@ -34,5 +34,3 @@ var loadingDialog = {
     $(this.id + " .progress-bar").attr("style", "width: " + percentage + "%;");    
   },
 };
-
-

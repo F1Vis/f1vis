@@ -2,7 +2,11 @@ body {
   padding-top: 5rem;
 }
 
-.starter-template {
+.content-box {
   padding: 3rem 1.5rem;
   text-align: center;
+}
+
+.chart-box {
+  border: 1px solid grey;
 }

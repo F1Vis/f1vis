@@ -1,8 +1,12 @@
 "use strict";
 
+/*
+ * This file contains the main control flow.
+ */
+
 /* Globally define the places where the preprocessed data is stored for READ ONLY ACCESS. */
 
-var f1data = {
+var f1Data = {
   circuits: null,
   constructorResults: null,
   constructors: null,
@@ -29,7 +33,8 @@ function fetchCircuits(callback) {
       d["lng"] = parseFloat(d["lng"]);
       d["alt"] = parseInt(d["alt"]);
     });
-    f1data.circuits = data; // Store results
+    f1Data.circuits = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -45,7 +50,8 @@ function fetchConstructorResults(callback) {
       d["raceId"] = parseInt(d["raceId"]);
       d["status"] = parseInt(d["status"]);
     });
-    f1data.constructorResults = data; // Store results
+    f1Data.constructorResults = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -57,7 +63,8 @@ function fetchConstructors(callback) {
     data.forEach(function(d, i) {
       d["constructorId"] = parseInt(d["constructorId"]);
     });
-    f1data.constructors = data;
+    f1Data.constructors = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -74,7 +81,8 @@ function fetchConstructorStandings(callback) {
       d["raceId"] = parseInt(d["raceId"]);
       d["wins"] = parseInt(d["wins"]);
     });
-    f1data.constructorStandings = data;
+    f1Data.constructorStandings = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -88,7 +96,8 @@ function fetchDrivers(callback) {
       d["driverId"] = parseInt(d["driverId"]);
       d["number"] = parseInt(d["number"]);
     });
-    f1data.drivers = data;
+    f1Data.drivers = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -105,7 +114,8 @@ function fetchDriverStandings(callback) {
       d["raceID"] = parseInt(d["raceId"]);
       d["wins"] = parseInt(d["wins"]);
     });
-    f1data.driverStandings = data;
+    f1Data.driverStandings = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -121,7 +131,8 @@ function fetchLapTimes(callback) {
       d["position"] = parseInt(d["position"]);
       d["raceId"] = parseInt(d["raceId"]);
     });
-    f1data.lapTimes = data;
+    f1Data.lapTimes = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -138,7 +149,8 @@ function fetchPitStops(callback) {
       d["raceId"] = parseInt(d["raceId"]);
       d["stop"] = parseInt(d["stop"]);
     });
-    f1data.pitStops = data;
+    f1Data.pitStops = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -158,7 +170,8 @@ function fetchQualifying(callback) {
       d["qualifyId"] = parseInt(d["qualifyId"]);
       d["raceId"] = parseInt(d["raceId"]);
     });
-    f1data.qualifying = data;
+    f1Data.qualifying = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -175,7 +188,8 @@ function fetchRaces(callback) {
       d["time"] = new Date(d["time"]);
       d["year"] = parseInt(d["year"]);
     });
-    f1data.races = data;
+    f1Data.races = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -203,7 +217,8 @@ function fetchResults(callback) {
       d["statusId"] = parseInt(d["statusId"]);
       d["time"] = new Date(d["time"]);
     });
-    f1data.results = data;
+    f1Data.results = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -215,7 +230,8 @@ function fetchSeasons(callback) {
     data.forEach(function(d, i) {
       d["year"] = parseInt(d["year"]);
     });
-    f1data.seasons = data;
+    f1Data.seasons = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -227,7 +243,8 @@ function fetchStatus(callback) {
     data.forEach(function(d, i) {
       d["statusId"] = parseInt(d["statusId"]);
     });
-    f1data.status = data;
+    f1Data.status = data; // Store results
+    loadingDialog.itemFinished(); // Update loading dialog progress bar
     callback(null); // Tell the queue we're done.
   });
 }
@@ -235,8 +252,8 @@ function fetchStatus(callback) {
 /* This is where the actual control flow is defined */
 console.log("Let's load and preprocess all data properly.");
 
-// Enable loading modal
-$("#loading-dialog").modal('show');
+// Show loading dialog
+loadingDialog.show(13);
 
 // Create a queue, add all the fetch&process functions and await their results
 d3.queue()
@@ -259,7 +276,7 @@ d3.queue()
     console.log("All done. Ready.");
     // Throw errors so we can see them
     if(error) throw error;
-    // Hide the loadmask
-    $("#loading-dialog").modal('hide');
+    // Hide the loading dialog
+    loadingDialog.hide();
   });
 

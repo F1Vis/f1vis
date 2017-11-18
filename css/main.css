@@ -10,3 +10,20 @@ body {
 .chart-box {
   border: 1px solid grey;
 }
+
+/* This container will allow scaling svg, so we don't need to care about it in d3.js */
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 0; /* not 10px, but 0 instead */
+  left: 0;
+}

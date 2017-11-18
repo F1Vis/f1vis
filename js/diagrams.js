@@ -5,17 +5,22 @@
  */
 
 function createTestPieChart(containerId, dataset) {
-  var width = 360;
-  var height = 360;
-  var radius = Math.min(width, height) / 2;
-  var color = d3.scaleOrdinal(d3.schemeCategory20b);
-
+  var width = 100;
+  var height = 100;
+  // Build the basic container for the chart
   var svg = d3.select(containerId)
+    .append("div")
+    .classed("svg-container", true)
     .append("svg")
-    .attr("width", width)
-    .attr("height", height)
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 " + width + " " + height + "")
+    .classed("svg-content-responsive", true)
     .append("g")
     .attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
+
+  // Preparations are done, now let's build the pie chart
+  var radius = Math.min(width, height) / 2;
+  var color = d3.scaleOrdinal(d3.schemeCategory10);
 
   var arc = d3.arc()
     .innerRadius(0)

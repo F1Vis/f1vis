@@ -1,5 +1,9 @@
 "use strict";
 
+/*
+ * This file defines functions that create d3 datasets from the rawData provided by preprocessor.getResults()
+ */
+
 var queries = {
 
   /*

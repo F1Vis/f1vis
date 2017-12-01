@@ -12,6 +12,7 @@ var loadingDialog = {
   progressItemsDone: 0,
   // Initialize+Show the loading dialog with a number of items to progress
   show: function(progressItems = 1) {
+    console.log("show");
     this.progressItems = progressItems;
     this.progressItemsDone = 0;
     this._updateProgressBar();
@@ -19,11 +20,13 @@ var loadingDialog = {
   },
   // Function to signal that another item was progressed
   itemFinished: function() {
+
     this.progressItemsDone++;
     this._updateProgressBar();
   },
   // Hide the dialog
   hide: function() {
+    console.log("hide");
     $(this.id).modal('hide');
   },
   // Private function to update the progress bar shown

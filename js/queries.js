@@ -37,4 +37,21 @@ var queries = {
     return dataset;
   },
 
+ /*
+   * TODO
+   */
+  getLapDataByRaceID: function(raceid) {
+    var rawData = preprocessor.getResults();
+    var raceID = raceid;
+    var lapTimes = rawData['lapTimes'].filter((val) => {return val['raceId'] == raceID;});
+    var groupedLapTimes = {};
+    lapTimes.forEach(function(d,i) {
+        var lapNum = d["lap"];
+        var driverId = d["driverId"];
+        if(groupedLapTimes[lapNum] === undefined) groupedLapTimes[lapNum] = {};
+        groupedLapTimes[lapNum][driverId] = d["milliseconds"];
+    });
+    return groupedLapTimes;
+  }
+
 };

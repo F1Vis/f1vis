@@ -40,33 +40,57 @@ var queries = {
 
   getDriverById: function(driverId) {
     var rawData = preprocessor.getResults();
-
-    var result = null;
-
-    var tempList = rawData.drivers.filter((cur) => (cur.driverId == driverId));
-    if(tempList.length > 0){
-      result = tempList[0];    
-    }
-
-    // Return d3 dataset
-    return result;
+    return rawData.drivers[driverId];
   },
 
   getDriversByRaceId: function(raceId) {
     var rawData = preprocessor.getResults();
 
+    var result = queries.getResultsByRaceId(raceId).map((cur) => queries.getDriverById(cur.driverId));
 
-    var tempList = rawData.results.filter((cur) => (cur.raceId == raceId));
-
-    var result = tempList.map((cur) => queries.getDriverById(cur.driverId));
-
-    // Return d3 dataset
     return result;
+  },
+
+  getResultsByRaceId: function(raceId) {
+    var rawData = preprocessor.getResults();
+
+    var tempList = [];
+    for(var key in rawData.results){
+      if(rawData.results[key].raceId == raceId){
+        tempList.push(rawData.results[key]);
+      }
+    }
+
+    tempList.sort((o1,o2) => o1["positionOrder"] - o2["positionOrder"]);
+
+    return tempList;
+  },
+
+  getPitStopsByRaceId: function(raceId) {
+    var rawData = preprocessor.getResults();
+
+    var tempList = [];
+    for(var key in rawData.pitStops){
+      if(rawData.pitStops[key].raceId == raceId){
+        tempList.push(rawData.pitStops[key]);
+      }
+    }
+
+    //var tempList = rawData.pitStops.filter(cur => cur.raceId == raceId);
+
+    return tempList;
   },
 
   getLapDataByRaceId: function(raceId) {
     var rawData = preprocessor.getResults();
-    var lapTimes = rawData['lapTimes'].filter((val) => val['raceId'] == raceId);
+
+    var lapTimes = [];
+    for(var key in rawData.lapTimes){
+      if(rawData.lapTimes[key].raceId == raceId){
+        lapTimes.push(rawData.lapTimes[key]);
+      }
+    }
+
     var myMap = new Map();
     lapTimes.forEach(function(d,i) {
         var lapNum = d["lap"];
@@ -86,10 +110,17 @@ var queries = {
   },
 
   getQualifingDataByRaceId: function(raceId) {
-     var rawData = preprocessor.getResults();
-     var result = rawData.qualifying.filter((cur) => (cur.raceId == raceId));
-     result.sort((o1,o2) => o1["position"] - o2["position"]);
-     return result;
+    var rawData = preprocessor.getResults();
+
+    var qualifingData = [];
+    for(var key in rawData.qualifying){
+      if(rawData.qualifying[key].raceId == raceId){
+        qualifingData.push(rawData.qualifying[key]);
+      }
+    }
+     //var result = rawData.qualifying.filter((cur) => (cur.raceId == raceId));
+     qualifingData.sort((o1,o2) => o1["position"] - o2["position"]);
+     return qualifingData;
   }
 
 };

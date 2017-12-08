@@ -109,6 +109,26 @@ var queries = {
     return myMap;
   },
 
+  getRaceById: function(raceId){
+    var rawData = preprocessor.getResults();
+    return rawData.races[raceId];    
+  },
+
+  getRacesByYear: function(year){
+    var rawData = preprocessor.getResults();
+
+    var races = [];
+    for(var key in rawData.races){
+      if(rawData.races[key].year == year){
+        races.push(rawData.races[key]);
+      }
+    }
+    races.sort((o1,o2) => o1["round"] - o2["round"]);
+
+    return races;
+    
+  },
+
   getQualifingDataByRaceId: function(raceId) {
     var rawData = preprocessor.getResults();
 

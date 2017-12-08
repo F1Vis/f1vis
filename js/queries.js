@@ -37,21 +37,58 @@ var queries = {
     return dataset;
   },
 
- /*
-   * TODO
-   */
-  getLapDataByRaceID: function(raceid) {
+  getDriverById: function(driverId) {
     var rawData = preprocessor.getResults();
-    var raceID = raceid;
-    var lapTimes = rawData['lapTimes'].filter((val) => {return val['raceId'] == raceID;});
-    var groupedLapTimes = {};
+
+    var result = null;
+
+    var tempList = rawData.drivers.filter((cur) => (cur.driverId == driverId));
+    if(tempList.length > 0){
+      result = tempList[0];    
+    }
+
+    // Return d3 dataset
+    return result;
+  },
+
+  getDriversByRaceId: function(raceId) {
+    var rawData = preprocessor.getResults();
+
+
+    var tempList = rawData.results.filter((cur) => (cur.raceId == raceId));
+
+    var result = tempList.map((cur) => queries.getDriverById(cur.driverId));
+
+    // Return d3 dataset
+    return result;
+  },
+
+  getLapDataByRaceId: function(raceId) {
+    var rawData = preprocessor.getResults();
+    var lapTimes = rawData['lapTimes'].filter((val) => val['raceId'] == raceId);
+    var myMap = new Map();
     lapTimes.forEach(function(d,i) {
         var lapNum = d["lap"];
         var driverId = d["driverId"];
-        if(groupedLapTimes[lapNum] === undefined) groupedLapTimes[lapNum] = {};
-        groupedLapTimes[lapNum][driverId] = d["milliseconds"];
+        if(!myMap.has(lapNum)){
+            var data = [];
+            myMap.set(lapNum,data);
+        }
+        var dt = myMap.get(lapNum);
+        dt.push(d);       
+        myMap.set(lapNum,dt);
     });
-    return groupedLapTimes;
+
+    myMap.forEach((d,i) => d.sort((o1,o2) => o1["position"] - o2["position"]));
+
+    return myMap;
+  },
+
+  getQualifingDataByRaceId: function(raceId) {
+     var rawData = preprocessor.getResults();
+     var result = rawData.qualifying.filter((cur) => (cur.raceId == raceId));
+     result.sort((o1,o2) => o1["position"] - o2["position"]);
+     return result;
   }
 
 };

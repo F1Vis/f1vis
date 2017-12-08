@@ -14,14 +14,15 @@ var queries = {
  
     // Extract interesting data from raw data.
     var nationalities = {};
-    rawData.drivers.forEach(function(d, i) {
+    for(var i in rawData.drivers) {
+      var d = rawData.drivers[i];
       var nationality = d["nationality"];
       if(nationalities[nationality] === undefined) {
         nationalities[nationality] = 1;
       } else {
         nationalities[nationality] += 1;
       }
-    });
+    }
 
     // Transform into d3 dataset format
     var dataset = [];

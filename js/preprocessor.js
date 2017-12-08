@@ -27,14 +27,17 @@ var preprocessor = {
   // data/circuits.csv
   fetchCircuits: function (callback) {
     d3.csv('data/circuits.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["circuitId"] = parseInt(d["circuitId"]);
         d["lat"] = parseFloat(d["lat"]);
         d["lng"] = parseFloat(d["lng"]);
         d["alt"] = parseInt(d["alt"]);
+        // store processed data by its primary key in an object
+        result[d["circuitId"]] = d;
       });
-      preprocessor.results.circuits = data; // Store results
+      preprocessor.results.circuits = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -43,6 +46,7 @@ var preprocessor = {
   // data/constructorResults.csv
   fetchConstructorResults: function (callback) {
     d3.csv('data/constructorResults.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["constructorId"] = parseInt(d["constructorId"]);
@@ -50,8 +54,10 @@ var preprocessor = {
         d["points"] = parseInt(d["points"]);
         d["raceId"] = parseInt(d["raceId"]);
         d["status"] = parseInt(d["status"]);
+        // store processed data by its primary key in an object
+        result[d["constructorResultsId"]] = d;
       });
-      preprocessor.results.constructorResults = data; // Store results
+      preprocessor.results.constructorResults = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -60,11 +66,14 @@ var preprocessor = {
   // data/constructors.csv
   fetchConstructors: function (callback) {
     d3.csv('data/constructors.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["constructorId"] = parseInt(d["constructorId"]);
+        // store processed data by its primary key in an object
+        result[d["constructorId"]] = d;
       });
-      preprocessor.results.constructors = data; // Store results
+      preprocessor.results.constructors = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -73,6 +82,7 @@ var preprocessor = {
   // data/constructorStandings.csv
   fetchConstructorStandings: function (callback) {
     d3.csv('data/constructorStandings.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["constructorId"] = parseInt(d["constructorId"]);
@@ -81,8 +91,10 @@ var preprocessor = {
         d["position"] = parseInt(d["position"]);
         d["raceId"] = parseInt(d["raceId"]);
         d["wins"] = parseInt(d["wins"]);
+        // store processed data by its primary key in an object
+        result[d["constructorStandingsId"]] = d;
       });
-      preprocessor.results.constructorStandings = data; // Store results
+      preprocessor.results.constructorStandings = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -91,13 +103,16 @@ var preprocessor = {
   // data/drivers.csv
   fetchDrivers: function (callback) {
     d3.csv('data/drivers.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["dob"] = new Date(d["dob"]);
         d["driverId"] = parseInt(d["driverId"]);
         d["number"] = parseInt(d["number"]);
+        // store processed data by its primary key in an object
+        result[d["driverId"]] = d;
       });
-      preprocessor.results.drivers = data; // Store results
+      preprocessor.results.drivers = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -106,6 +121,7 @@ var preprocessor = {
   // data/driverStandings.csv
   fetchDriverStandings: function (callback) {
     d3.csv('data/driverStandings.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["driverId"] = parseInt(d["driverId"]);
@@ -114,8 +130,10 @@ var preprocessor = {
         d["position"] = parseInt(d["position"]);
         d["raceID"] = parseInt(d["raceId"]);
         d["wins"] = parseInt(d["wins"]);
+        // store processed data by its primary key in an object
+        result[d["driverStandingsId"]] = d;
       });
-      preprocessor.results.driverStandings = data; // Store results
+      preprocessor.results.driverStandings = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -159,6 +177,7 @@ var preprocessor = {
   // data/qualifying.csv
   fetchQualifying: function (callback) {
     d3.csv('data/qualifying.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["constructorId"] = parseInt(d["constructorId"]);
@@ -170,8 +189,10 @@ var preprocessor = {
         d["q3"] = new Date(d["q3"]);
         d["qualifyId"] = parseInt(d["qualifyId"]);
         d["raceId"] = parseInt(d["raceId"]);
+        // store processed data by its primary key in an object
+        result[d["qualifyId"]] = d;
       });
-      preprocessor.results.qualifying = data; // Store results
+      preprocessor.results.qualifying = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -180,6 +201,7 @@ var preprocessor = {
   // data/races.csv
   fetchRaces: function (callback) {
     d3.csv('data/races.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["circuitId"] = parseInt(d["circuitId"]);
@@ -188,8 +210,10 @@ var preprocessor = {
         d["round"] = parseInt(d["round"]);
         d["time"] = new Date(d["time"]);
         d["year"] = parseInt(d["year"]);
+        // store processed data by its primary key in an object
+        result[d["raceId"]] = d;
       });
-      preprocessor.results.races = data; // Store results
+      preprocessor.results.races = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -198,6 +222,7 @@ var preprocessor = {
   // data/results.csv
   fetchResults: function (callback) {
     d3.csv('data/results.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["constructorId"] = parseInt(d["constructorId"]);
@@ -217,8 +242,10 @@ var preprocessor = {
         d["resultId"] = parseInt(d["resultId"]);
         d["statusId"] = parseInt(d["statusId"]);
         d["time"] = new Date(d["time"]);
+        // store processed data by its primary key in an object
+        result[d["resultId"]] = d;
       });
-      preprocessor.results.results = data; // Store results
+      preprocessor.results.results = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -227,11 +254,14 @@ var preprocessor = {
   // data/seasons.csv
   fetchSeasons: function (callback) {
     d3.csv('data/seasons.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["year"] = parseInt(d["year"]);
+        // store processed data by its primary key in an object
+        result[d["year"]] = d;
       });
-      preprocessor.results.seasons = data; // Store results
+      preprocessor.results.seasons = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -240,11 +270,14 @@ var preprocessor = {
   // data/status.csv
   fetchStatus: function (callback) {
     d3.csv('data/status.csv', function(data) {
+      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["statusId"] = parseInt(d["statusId"]);
+        // store processed data by its primary key in an object
+        result[d["statusId"]] = d;
       });
-      preprocessor.results.status = data; // Store results
+      preprocessor.results.status = result; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });

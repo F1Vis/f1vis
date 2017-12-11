@@ -1,6 +1,6 @@
 "use strict";
 
-/* 
+/*
  * This file contains utility functions, data structures and
  * stuff not related to what this project actually does.
  */
@@ -34,6 +34,31 @@ var loadingDialog = {
     var percentage = (this.progressItemsDone / this.progressItems) * 100;
     if(percentage < 0 || isNaN(percentage)) percentage = 0;
     if(percentage > 100) percentage = 100;
-    $(this.id + " .progress-bar").attr("style", "width: " + percentage + "%;");    
+    $(this.id + " .progress-bar").attr("style", "width: " + percentage + "%;");
   },
 };
+
+//Gets the position of Driver with driverid in specific lap
+function getPositionOfDriver(driver, lap, defaultReturn){
+  var lapEntryWithDrivId =lap.filter( drivLap => drivLap.driverId == driver.driverId );
+  if(lapEntryWithDrivId.length > 0){
+    return lapEntryWithDrivId[0].position;
+  }else{
+    return defaultReturn;
+  }
+}
+
+// transforms the raceData to a format, with which lineDataDefinition can work
+function raceDataToLineData(raceData){
+  // define the lines
+  var lineData = [];
+  raceData.drivers.forEach((driver, drivIn)=>{
+    lineData.push();
+    var lapsOfDriverInLineDataFormat = [];
+    raceData.lapTimes.forEach((lap, lapIn) => {
+        lapsOfDriverInLineDataFormat.push({ 'lap': lapIn, 'position':  getPositionOfDriver(driver, lap, raceData.drivers.length)});
+    });
+    lineData.splice(drivIn, 0, lapsOfDriverInLineDataFormat);
+  });
+  return lineData;
+}

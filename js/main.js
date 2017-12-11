@@ -10,7 +10,5 @@ preprocessor.load(function(data) {
   var seasons = preprocessor.getResults().seasons;
   for(var year in seasons) yearSelector.append("<option>" + year + "</option>");
 
-  // No more test chart
-  //createTestPieChart("#testchartbox", queries.getDriversByNationality());
-
+  createLineGraph("#lineGraphBox", processor.getRace(1));
 });

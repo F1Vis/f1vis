@@ -31,3 +31,9 @@ body {
   top: 0; /* not 10px, but 0 instead */
   left: 0;
 }
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}

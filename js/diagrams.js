@@ -1,80 +1,58 @@
 "use strict";
 
-/*
- * This may be restructured in the future - code to create diagrams will live here.
- */
+// https://bl.ocks.org/mbostock/3884955
+function createLineGraph(containerId, raceData){
 
-function createTestPieChart(containerId, dataset) {
-  var width = 1000;
   var height = 1000;
-  // Build the basic container for the chart
-  var svg = d3.select(containerId)
-    .append("div")
-    .classed("svg-container", true)
-    .append("svg")
-    .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 " + width + " " + height + "")
-    .classed("svg-content-responsive", true)
+  var width = 1000;
+
+  // set the dimensions and margins of the graph
+  var margin = {top: 20, right: 20, bottom: 30, left: 50},
+      width = width - margin.left - margin.right,
+      height = height - margin.top - margin.bottom;
+
+  // set the ranges
+  var x = d3.scaleLinear().range([0, width]);
+  var y = d3.scaleLinear().range([height, 0]);
+
+  var allLineData = raceDataToLineData(raceData);
+
+  // defines how the passed in Data, at "svg.append" shall be interpreted
+  var lineDataDefinition = d3.line()
+    .x(function(d) { return x(d.lap); })
+    .y(function(d) { return y(d.position); });
+
+  // append the svg obgect to the body of the page
+  // appends a 'group' element to 'svg'
+  // moves the 'group' element to the top left margin
+  var svg = d3.select(containerId).append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .classed("main-group", true)
-    .attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
 
-  var arcs = svg.append("g").classed("pie-chart-arcs", true);
-  var labels = svg.append("g").classed("pie-chart-labels", true);
-  var lines = svg.append("g").classed("pie-chart-lines", true);
+  // Scale the range of the data
+  x.domain([0, raceData.lapTimes.size]);
+  y.domain([raceData.drivers.length, 1]);
 
-  // Preparations are done, now let's build the pie chart
-  var maxRadius = Math.min(width, height) / 2;
-  var radius = maxRadius * 0.4;
-  var color = d3.scaleOrdinal(d3.schemeCategory10);
+  // Adds all lines
+  allLineData.forEach((singleLineData) => {
+    svg.append("path")
+        .data([singleLineData])
+        .attr("class", "line")
+        .attr("d", lineDataDefinition);
+  });
 
-  var arc = d3.arc()
-    .innerRadius(radius*0.4)
-    .outerRadius(radius);
+  // Add the X Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
 
-  var pie = d3.pie()
-    .sort(function(a, b) { return b.count - a.count })
-    .value(function(d) { return d.count; });
-
-  arcs.selectAll("path")
-    .data(pie(dataset))
-    .enter()
-    .append("path")
-    .attr("d", arc)
-    .attr("fill", function(d, i) {
-      return color(d.data.label);
-    });
-
-  labels.selectAll("text")
-    .data(pie(dataset))
-    .enter()
-    .append("text")
-    .attr("dy", ".35em")
-    .text(function(d) {
-      console.log(d);
-      return d.data.label;
-    });
-
-  function midAngle(d) {
-    return d.startAngle + (d.endAngle - d.startAngle) / 2;
-  }
-
-  lines.selectAll("polyline")
-    .data(pie(dataset))
-    .enter()
-    .append("polyline")
-    .transition()
-      .duration(1000)
-      .attrTween("points", function(d) {
-        this._current = this._current || d;
-        var interpolate = d3.interpolate(this._current, d);
-        this._current = interpolate(0);
-        return function(t) {
-          var d2 = interpolate(t);
-          var pos = outerArc.centroid(d2);
-          pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
-          return [arc.centroid(d2), outerArc.centroid(d2), pos];
-        };
-      })
-
+  // Add the Y Axis on both sides
+  svg.append("g")
+      .call(d3.axisLeft(y));
+  svg.append("g")
+      .call(d3.axisRight(y))
+      .attr("transform", "translate( " + (width) + ", 0 )");
 }

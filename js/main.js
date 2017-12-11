@@ -6,6 +6,6 @@
 
 preprocessor.load(function(data) {
 
-  createTestPieChart("#testchartbox", queries.getDriversByNationality());
+  createLineGraph("#lineGraphBox", processor.getRace(1));
 
 });

@@ -38,27 +38,37 @@ var loadingDialog = {
   },
 };
 
-//Gets the position of Driver with driverid in specific lap
-function getPositionOfDriver(driver, lap, defaultReturn){
-  var lapEntryWithDrivId =lap.filter( drivLap => drivLap.driverId == driver.driverId );
-  if(lapEntryWithDrivId.length > 0){
-    return lapEntryWithDrivId[0].position;
-  }else{
-    return defaultReturn;
-  }
-}
-
 // transforms the raceData to a format, with which lineDataDefinition can work
-function raceDataToLineData(raceData){
+function transformRaceDataToLineData(raceData){
   // define the lines
   var lineData = [];
   raceData.drivers.forEach((driver, drivIn)=>{
     lineData.push();
     var lapsOfDriverInLineDataFormat = [];
+    lapsOfDriverInLineDataFormat.push({'lap': 0, 'position': getPositionOfQualifying(raceData, driver) });
     raceData.lapTimes.forEach((lap, lapIn) => {
-        lapsOfDriverInLineDataFormat.push({ 'lap': lapIn, 'position':  getPositionOfDriver(driver, lap, raceData.drivers.length)});
+      var drivPos = processor.getPositionOfDriver(driver, lap, raceData.drivers.length + 1 );
+      if( drivPos < raceData.drivers.length + 1 ){
+        lapsOfDriverInLineDataFormat.push({ 'lap': lapIn, 'position':  processor.getPositionOfDriver(driver, lap, raceData.drivers.length + 1 )});
+      }
     });
     lineData.splice(drivIn, 0, lapsOfDriverInLineDataFormat);
   });
   return lineData;
+}
+
+function getPositionOfQualifying(raceData, driver){
+  var qualData = raceData.qualifying.filter( qualData => qualData.driverId == driver.driverId);
+  return qualData[0].position;
+}
+
+function getColorValue(index, all){
+  var r = 0;
+  var g = 0;
+  var b = 0;
+
+  var step = 255*3 / all;
+  var colorValue = index * step;
+
+  return "hsl(" + colorValue + ", " + 100 + "%, 35% )";
 }

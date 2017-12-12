@@ -15,7 +15,7 @@ function createLineGraph(containerId, raceData){
   var x = d3.scaleLinear().range([0, width]);
   var y = d3.scaleLinear().range([height, 0]);
 
-  var allLineData = raceDataToLineData(raceData);
+  var allLineData = transformRaceDataToLineData(raceData);
 
   // defines how the passed in Data, at "svg.append" shall be interpreted
   var lineDataDefinition = d3.line()
@@ -37,10 +37,11 @@ function createLineGraph(containerId, raceData){
   y.domain([raceData.drivers.length, 1]);
 
   // Adds all lines
-  allLineData.forEach((singleLineData) => {
+  allLineData.forEach((singleLineData, i) => {
     svg.append("path")
         .data([singleLineData])
         .attr("class", "line")
+        .attr("stroke", getColorValue(i, allLineData.length) )
         .attr("d", lineDataDefinition);
   });
 

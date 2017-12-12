@@ -29,7 +29,7 @@ var processor = {
 
   //Gets the position of Driver with driverid in specific lap
   getPositionOfDriver: function(driver, lap, defaultReturn){
-    var lapEntryWithDrivId =lap.filter( drivLap => drivLap.driverId == driver.driverId );
+    var lapEntryWithDrivId = lap.filter( drivLap => drivLap.driverId == driver.driverId );
     if(lapEntryWithDrivId.length > 0){
       return lapEntryWithDrivId[0].position;
     }else{

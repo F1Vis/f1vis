@@ -56,4 +56,15 @@ function createLineGraph(containerId, raceData){
   svg.append("g")
       .call(d3.axisRight(y))
       .attr("transform", "translate( " + (width) + ", 0 )");
+
+console.log(transformPitStopDataToPointData(raceData));
+  // 12. Appends a circle for each datapoint
+  svg.selectAll(".dot")
+      .data(transformPitStopDataToPointData(raceData))
+    .enter().append("circle") // Uses the enter().append() method
+      .attr("class", "dot") // Assign a class for styling
+      .attr("cx", function(d, i) { return x(d.lap) })
+      .attr("cy", function(d) { return y(d.position) })
+      .attr("r", 5);
+
 }

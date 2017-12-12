@@ -49,7 +49,7 @@ function transformRaceDataToLineData(raceData){
     raceData.lapTimes.forEach((lap, lapIn) => {
       var drivPos = processor.getPositionOfDriver(driver, lap, raceData.drivers.length + 1 );
       if( drivPos < raceData.drivers.length + 1 ){
-        lapsOfDriverInLineDataFormat.push({ 'lap': lapIn, 'position':  processor.getPositionOfDriver(driver, lap, raceData.drivers.length + 1 )});
+        lapsOfDriverInLineDataFormat.push({ 'lap': lapIn, 'position':  processor.getPositionOfDriver(driver, lap, raceData.drivers.length + 1 ), 'driverId': driver.driverId});
       }
     });
     lineData.splice(drivIn, 0, lapsOfDriverInLineDataFormat);
@@ -57,9 +57,34 @@ function transformRaceDataToLineData(raceData){
   return lineData;
 }
 
+function transformPitStopDataToPointData(raceData){
+  var pointData = [];
+  raceData.pitStops.forEach(pitStop => {
+    var driver = queries.getDriverById(pitStop.driverId);
+    var lap = raceData.lapTimes.get(pitStop.lap);
+    pointData.push({'position': processor.getPositionOfDriver(driver, lap , raceData.drivers.length + 1), "lap": pitStop.lap});
+  });
+  return pointData;
+}
+
 function getPositionOfQualifying(raceData, driver){
   var qualData = raceData.qualifying.filter( qualData => qualData.driverId == driver.driverId);
   return qualData[0].position;
+}
+
+// eigentlich war für TickData gedacht
+function getDriverCodeAndPositionArray(raceData, lapNumber){
+  var posDriverCode = [];
+  if(lapNumber == 0){
+    raceData.qualifying.forEach(qualData => {
+      posDriverCode.push(getDriverCodeById(raceData, qualData.driverId) + " " + qualData.position)
+    });
+  }
+  return posDriverCode;
+}
+
+function getDriverCodeById(raceData,driverId){
+  return raceData.drivers.filter(driv=> driv.driverId == driverId)[0].code;
 }
 
 function getColorValue(index, all){

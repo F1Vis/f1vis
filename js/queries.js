@@ -11,7 +11,7 @@ var queries = {
    */
   getDriversByNationality: function() {
     var rawData = preprocessor.getResults();
- 
+
     // Extract interesting data from raw data.
     var nationalities = {};
     for(var i in rawData.drivers) {
@@ -100,7 +100,7 @@ var queries = {
             myMap.set(lapNum,data);
         }
         var dt = myMap.get(lapNum);
-        dt.push(d);       
+        dt.push(d);
         myMap.set(lapNum,dt);
     });
 
@@ -111,7 +111,7 @@ var queries = {
 
   getRaceById: function(raceId){
     var rawData = preprocessor.getResults();
-    return rawData.races[raceId];    
+    return rawData.races[raceId];
   },
 
   getRacesByYear: function(year){
@@ -126,7 +126,7 @@ var queries = {
     races.sort((o1,o2) => o1["round"] - o2["round"]);
 
     return races;
-    
+
   },
 
   getQualifingDataByRaceId: function(raceId) {

@@ -9,7 +9,8 @@ var processor = {
       pitStops: null,
       qualifying: null,
       results: null,
-      raceInfo: null
+      raceInfo: null,
+      
     };
 
     race.drivers = queries.getDriversByRaceId(raceId);
@@ -22,14 +23,44 @@ var processor = {
     return race;
   },
 
+getEnhancedLapDataPerDriver: function(raceData) {
+            var result = [];
+            raceData.drivers.forEach((driver) => {
+                var lapData = {
+                    driver: null,
+                    laps: [],
+                };
+                lapData.driver = driver;
+                raceData.lapTimes.forEach(lap => {
+                    lap.forEach(curLap => {
+                        if( curLap.driverId == driver.driverId ){
+                             var pitstop = raceData.pitStops.filter(pitstop => pitstop.driverId == driver.driverId && pitstop.lap == curLap.lap);                                              
+                             if(pitstop.length > 0){
+                                curLap.pitStop = pitstop[0];
+                             }
+                             
+                             lapData.laps.push(curLap);
+                        }
+                    });
+                });
+
+                
+               
+                
+                result.push(lapData);
+            });
+            return result;
+      },
+
   getRacesByYear: function(year) {
     var races = queries.getRacesByYear(year);
     return races.map(race => processor.getRace(race.raceId));
   },
 
   //Gets the position of Driver with driverid in specific lap
-  getPositionOfDriver: function(driver, lap, defaultReturn){
-    var lapEntryWithDrivId = lap.filter( drivLap => drivLap.driverId == driver.driverId );
+  // lapData: an array of the lap data for one lap 
+  getPositionOfDriver: function(driver, lapData, defaultReturn){
+    var lapEntryWithDrivId = lapData.filter( drivLap => drivLap.driverId == driver.driverId );
     if(lapEntryWithDrivId.length > 0){
       return lapEntryWithDrivId[0].position;
     }else{

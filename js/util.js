@@ -60,9 +60,17 @@ function transformRaceDataToLineData(raceData){
 function transformPitStopDataToPointData(raceData){
   var pointData = [];
   raceData.pitStops.forEach(pitStop => {
-    var driver = queries.getDriverById(pitStop.driverId);
-    var lap = raceData.lapTimes.get(pitStop.lap);
-    pointData.push({'position': processor.getPositionOfDriver(driver, lap , raceData.drivers.length + 1), "lap": pitStop.lap});
+
+ var randomData = raceData['lapTimes'].get(pitStop.lap);
+ var position = null; //TODO
+for(var i = 0; i<  randomData.length;i++){
+    if(randomData[i].driverId == pitStop.driverId){
+        position = randomData[i].position;
+        break;    
+    }
+}
+//console.log(position);
+    pointData.push({'position': position, "lap": pitStop.lap});
   });
   return pointData;
 }

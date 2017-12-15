@@ -10,5 +10,5 @@ preprocessor.load(function(data) {
   var seasons = preprocessor.getResults().seasons;
   for(var year in seasons) yearSelector.append("<option>" + year + "</option>");
 
-  createLineGraph("#lineGraphBox", processor.getRace(864));
+  createLineGraph("#lineGraphBox", processor.getRace(970));
 });

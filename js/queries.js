@@ -76,6 +76,7 @@ var queries = {
       }
     }
 
+    tempList.sort((o1,o2) => o1["stop"] - o2["stop"]);
     //var tempList = rawData.pitStops.filter(cur => cur.raceId == raceId);
 
     return tempList;

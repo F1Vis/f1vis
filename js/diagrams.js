@@ -42,7 +42,8 @@ function createLineGraph(containerId, raceData){
         .data([singleLineData])
         .attr("class", "line")
         .attr("stroke", getColorValue(i, allLineData.length) )
-        .attr("d", lineDataDefinition);
+        .attr("d", lineDataDefinition)
+        ;
   });
 
   // Add the X Axis

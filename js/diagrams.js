@@ -3,6 +3,8 @@
 // https://bl.ocks.org/mbostock/3884955
 function createLineGraph(containerId, raceData){
 
+  console.log(raceData);
+
   var height = 1000;
   var width = 1000;
 
@@ -14,8 +16,6 @@ function createLineGraph(containerId, raceData){
   // set the ranges
   var x = d3.scaleLinear().range([0, width]);
   var y = d3.scaleLinear().range([height, 0]);
-
-  var allLineData = transformRaceDataToLineData(raceData);
 
   // defines how the passed in Data, at "svg.append" shall be interpreted
   var lineDataDefinition = d3.line()
@@ -36,14 +36,29 @@ function createLineGraph(containerId, raceData){
   x.domain([0, raceData.lapTimes.size]);
   y.domain([raceData.drivers.length, 1]);
 
+  var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
+  console.log(enhancedLapData);
+
   // Adds all lines
-  allLineData.forEach((singleLineData, i) => {
-    svg.append("path")
-        .data([singleLineData])
-        .attr("class", "line")
-        .attr("stroke", getColorValue(i, allLineData.length) )
-        .attr("d", lineDataDefinition)
-        ;
+  enhancedLapData.forEach((driverLapData, driverIndex) => {
+      svg.append("path")
+          .data([driverLapData.laps])
+          .attr("class", "line")
+          .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
+          .attr("d", lineDataDefinition)
+
+      //Appends a circle for each datapoint
+      svg.selectAll(".linepoint")
+          .data(driverLapData.laps)
+          .enter().append("circle") // Uses the enter().append() method
+          .attr("class", "dot") // Assign a class for styling
+          .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
+          .attr("cx", function(d, i) {return x(d.lap) })
+          .attr("cy", function(d, i) { return y(d.position) })
+          .attr("r", 3)
+          .on("mouseover", handleMouseOverLinePoint)
+          .on("mouseout", handleMouseOutLinePoint);
+
   });
 
   // Add the X Axis
@@ -58,14 +73,35 @@ function createLineGraph(containerId, raceData){
       .call(d3.axisRight(y))
       .attr("transform", "translate( " + (width) + ", 0 )");
 
-console.log(transformPitStopDataToPointData(raceData));
-  // 12. Appends a circle for each datapoint
-  svg.selectAll(".dot")
-      .data(transformPitStopDataToPointData(raceData))
-    .enter().append("circle") // Uses the enter().append() method
-      .attr("class", "dot") // Assign a class for styling
-      .attr("cx", function(d, i) { return x(d.lap) })
-      .attr("cy", function(d) { return y(d.position) })
-      .attr("r", 5);
+  function handleMouseOverLinePoint(d, i) {
+    console.log(d);
+    console.log(i);
+    // Add interactivity
+    // Use D3 to select element, change color and size
+    d3.select(this).attr({
+      fill: "orange",
+      r: 3 * 2
+    });
+
+    // Specify where to put label of text
+    svg.append("text")
+    .attr("id", "t" + d.lap + "-" + d.positon + "-" + i)// Create an id for text so we can select it later for removing on mouseout
+    .attr("x", function() { return x(d.lap) - 30; })
+    .attr("y", function() { return y(d.position) - 15; })
+    .text(function() {
+      return [d.lap, d.position];  // Value of the text
+    });
+  }
+
+  function handleMouseOutLinePoint(d, i) {
+    // Use D3 to select element, change color back to normal
+    d3.select(this).attr({
+      fill: "black",
+      r: 3
+    });
+
+    // Select text by id and then remove
+    d3.select("#t" + d.lap + "-" + d.positon + "-" + i).remove();  // Remove text location
+  }
 
 }

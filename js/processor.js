@@ -10,7 +10,7 @@ var processor = {
       qualifying: null,
       results: null,
       raceInfo: null,
-      
+
     };
 
     race.drivers = queries.getDriversByRaceId(raceId);
@@ -31,22 +31,21 @@ getEnhancedLapDataPerDriver: function(raceData) {
                     laps: [],
                 };
                 lapData.driver = driver;
+                //Attach Qualifying Data
+                lapData.qualifying = processor.getQualifyingForDriver(raceData, driver);
+                //add Qualifying Data to the Laps
+                lapData.laps.push({'driverId': driver.driverId, 'lap': 0, 'position': lapData.qualifying.position})
                 raceData.lapTimes.forEach(lap => {
                     lap.forEach(curLap => {
                         if( curLap.driverId == driver.driverId ){
-                             var pitstop = raceData.pitStops.filter(pitstop => pitstop.driverId == driver.driverId && pitstop.lap == curLap.lap);                                              
+                             var pitstop = raceData.pitStops.filter(pitstop => pitstop.driverId == driver.driverId && pitstop.lap == curLap.lap);
                              if(pitstop.length > 0){
                                 curLap.pitStop = pitstop[0];
                              }
-                             
                              lapData.laps.push(curLap);
                         }
                     });
                 });
-
-                
-               
-                
                 result.push(lapData);
             });
             return result;
@@ -58,7 +57,7 @@ getEnhancedLapDataPerDriver: function(raceData) {
   },
 
   //Gets the position of Driver with driverid in specific lap
-  // lapData: an array of the lap data for one lap 
+  // lapData: an array of the lap data for one lap
   getPositionOfDriver: function(driver, lapData, defaultReturn){
     var lapEntryWithDrivId = lapData.filter( drivLap => drivLap.driverId == driver.driverId );
     if(lapEntryWithDrivId.length > 0){
@@ -67,5 +66,10 @@ getEnhancedLapDataPerDriver: function(raceData) {
       return defaultReturn;
     }
   },
+
+  getQualifyingForDriver: function(raceData, driver){
+    var qualData = raceData.qualifying.filter( qualData => qualData.driverId == driver.driverId);
+    return qualData[0];
+  }
 
 };

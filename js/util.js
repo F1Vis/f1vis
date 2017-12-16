@@ -66,18 +66,13 @@ function transformPitStopDataToPointData(raceData){
 for(var i = 0; i<  randomData.length;i++){
     if(randomData[i].driverId == pitStop.driverId){
         position = randomData[i].position;
-        break;    
+        break;
     }
 }
 //console.log(position);
     pointData.push({'position': position, "lap": pitStop.lap});
   });
   return pointData;
-}
-
-function getPositionOfQualifying(raceData, driver){
-  var qualData = raceData.qualifying.filter( qualData => qualData.driverId == driver.driverId);
-  return qualData[0].position;
 }
 
 // eigentlich war für TickData gedacht

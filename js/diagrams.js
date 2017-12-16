@@ -2,6 +2,7 @@
 
 // https://bl.ocks.org/mbostock/3884955
 function createLineGraph(containerId, raceData){
+  var linePointSize = 4;
 
   console.log(raceData);
 
@@ -41,11 +42,12 @@ function createLineGraph(containerId, raceData){
 
   // Adds all lines
   enhancedLapData.forEach((driverLapData, driverIndex) => {
+    console.log(driverLapData);
       svg.append("path")
           .data([driverLapData.laps])
           .attr("class", "line")
           .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
-          .attr("d", lineDataDefinition)
+          .attr("d", lineDataDefinition);
 
       //Appends a circle for each datapoint
       svg.selectAll(".linepoint")
@@ -55,9 +57,26 @@ function createLineGraph(containerId, raceData){
           .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
           .attr("cx", function(d, i) {return x(d.lap) })
           .attr("cy", function(d, i) { return y(d.position) })
-          .attr("r", 3)
+          .attr("r", linePointSize)
           .on("mouseover", handleMouseOverLinePoint)
-          .on("mouseout", handleMouseOutLinePoint);
+          .on("mouseout", handleMouseOutLinePoint)
+          .style("opacity", 0);
+
+      driverLapData.laps.forEach((singleLap, singleLapIndex)=> {
+        if(singleLap.pitStop){
+          //Appends a circle for each datapoint
+          svg.selectAll(".pitstoppoint")
+              .data([singleLap])
+              .enter().append("circle") // Uses the enter().append() method
+              .attr("class", "dot") // Assign a class for styling
+              .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
+              .attr("cx", function(d, i) {return x(d.lap) })
+              .attr("cy", function(d, i) { return y(d.position) })
+              .attr("r", linePointSize * 1.2)
+              .on("mouseover", handleMouseOverLinePoint)
+              .on("mouseout", handleMouseOutLinePoint);
+        }
+      });
 
   });
 
@@ -74,34 +93,77 @@ function createLineGraph(containerId, raceData){
       .attr("transform", "translate( " + (width) + ", 0 )");
 
   function handleMouseOverLinePoint(d, i) {
-    console.log(d);
-    console.log(i);
     // Add interactivity
     // Use D3 to select element, change color and size
-    d3.select(this).attr({
-      fill: "orange",
-      r: 3 * 2
+    if(!d.pitStop){
+      d3.select(this)
+        .style("opacity", 1);
+    }else{
+      d3.select(this)
+        .attr("r", linePointSize * 2);
+    }
+
+    //depending on Pitstop and lap different Texts
+    var textArr = [];
+    if(d.pitStop){
+      textArr = getPitStopTextArray(raceData,d);
+    }else{
+      textArr = getLapTextArray(raceData,d);
+    }
+
+    //Necessary to add Text for each Line
+    textArr.forEach((text, textIndex) =>{
+      // Specify where to put label of text
+      svg.append("text")
+        .attr("id", "t" + d.lap + "-" + d.position + "-" + i + "-" + textIndex)// Create an id for text so we can select it later for removing on mouseout
+        .attr("x", function() { return x(d.lap) - 70; })
+        .attr("y", function() { return y(d.position) - 15; })
+        .attr("dy", textIndex + "em")
+        .text(function() {
+          return text;  // Value of the text
+        });
     });
 
-    // Specify where to put label of text
-    svg.append("text")
-    .attr("id", "t" + d.lap + "-" + d.positon + "-" + i)// Create an id for text so we can select it later for removing on mouseout
-    .attr("x", function() { return x(d.lap) - 30; })
-    .attr("y", function() { return y(d.position) - 15; })
-    .text(function() {
-      return [d.lap, d.position];  // Value of the text
-    });
   }
 
   function handleMouseOutLinePoint(d, i) {
     // Use D3 to select element, change color back to normal
-    d3.select(this).attr({
-      fill: "black",
-      r: 3
-    });
+    if(!d.pitStop){
+      d3.select(this)
+        .attr("r", linePointSize)
+        .style("opacity", 0);
+    }else{
+      d3.select(this)
+        .attr("r", linePointSize);
+    }
 
-    // Select text by id and then remove
-    d3.select("#t" + d.lap + "-" + d.positon + "-" + i).remove();  // Remove text location
+    //depending on Pitstop and lap different Texts
+    var textArr = [];
+    if(d.pitStop){
+      textArr = getPitStopTextArray(raceData,d);
+    }else{
+      textArr = getLapTextArray(raceData,d);
+    }
+
+    textArr.forEach((text, textIndex)=> {
+      // Select text by id and then remove
+      d3.select("#t" + d.lap + "-" + d.position + "-" + i + "-" + textIndex).remove();  // Remove text location
+    });
+  }
+
+  function getLapTextArray(raceData, d){
+    var driverText = getDriverCodeById(raceData,d.driverId)
+    var lapText = "Lap: " + d.lap;
+    var posText = "Pos: " + d.position;
+    var timeText = "Time: " + d.time;
+    return [driverText, lapText, posText, timeText];
+  }
+
+  function getPitStopTextArray(raceData, d){
+    var lapTextArr = getLapTextArray(raceData,d);
+    lapTextArr.push("Stop Nr: " + d.pitStop.stop);
+    lapTextArr.push("Duration: " + d.pitStop.duration);
+    return lapTextArr;
   }
 
 }

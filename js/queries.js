@@ -129,6 +129,25 @@ var queries = {
     return races;
 
   },
+  
+   getSeasons: function(){
+    var rawData = preprocessor.getResults();
+    return rawData.seasons;
+  },
+  
+  getLapTimes: function(){
+    var rawData = preprocessor.getResults();
+    return rawData.lapTimes;
+  },
+  
+  getRaces: function(){
+    var rawData = preprocessor.getResults();   
+    return rawData.races;
+  },
+  
+  getRaceIdWithLapTimes: function(){
+    return queries.getLapTimes().map(time => time.raceId).reduce(removeDuplicates,[]);
+  },
 
   getQualifingDataByRaceId: function(raceId) {
     var rawData = preprocessor.getResults();

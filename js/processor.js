@@ -79,6 +79,16 @@ var processor = {
   getQualifyingForDriver: function(raceData, driver){
     var qualData = raceData.qualifying.filter( qualData => qualData.driverId == driver.driverId);
     return qualData[0];
+  },
+  
+  getSeasonsWithLapData: function(){
+    var seasons = queries.getSeasons();
+    var raceIds = queries.getRaceIdWithLapTimes();
+    var races = queries.getRaces().filter(race => raceIds.includes(race.raceId));
+    
+    var seasonsWithLapData = seasons.filter((season) => races.filter(race => race.year == season.year).length > 0).reduce(removeDuplicates,[]);
+    seasonsWithLapData.sort((o1,o2) => o1["year"] - o2["year"]);
+    return seasonsWithLapData;
   }
 
 };

@@ -6,11 +6,11 @@ function createLineGraph(containerId, raceData){
 
   console.log(raceData);
 
-  var height = 1000;
-  var width = 1000;
+  var height = 720;
+  var width = 1080;
 
   // set the dimensions and margins of the graph
-  var margin = {top: 20, right: 20, bottom: 30, left: 50},
+  var margin = {top: 50, right: 100, bottom: 50, left: 100},
       width = width - margin.left - margin.right,
       height = height - margin.top - margin.bottom;
 

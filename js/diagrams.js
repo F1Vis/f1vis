@@ -47,7 +47,7 @@ function createLineGraph(containerId, raceData){
           .data([driverLapData.laps])
           .attr("class", "line")
           .attr("data-line", driverLapData.driver.driverId)// custom data to Specify the line
-          .attr("data-highlightable", 1)
+          .attr("data-opacitychange", 1)
           .attr("data-highlighted", 0)
           .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
           .attr("d", lineDataDefinition);
@@ -58,7 +58,7 @@ function createLineGraph(containerId, raceData){
           .enter().append("circle") // Uses the enter().append() method
           .attr("class", "dot linedot") // Assign a class for styling
           .attr("data-line", driverLapData.driver.driverId)
-          .attr("data-highlightable", 0)
+          .attr("data-opacitychange", 0)
           .attr("data-highlighted", 0)
           .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
           .attr("cx", function(d, i) {return x(d.lap) })
@@ -77,7 +77,7 @@ function createLineGraph(containerId, raceData){
               .enter().append("circle") // Uses the enter().append() method
               .attr("class", "dot pitstopdot") // Assign a class for styling
               .attr("data-line", driverLapData.driver.driverId)
-              .attr("data-highlightable", 1)
+              .attr("data-opacitychange", 1)
               .attr("data-highlighted", 0)
               .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
               .attr("cx", function(d, i) {return x(d.lap) })
@@ -104,32 +104,34 @@ function createLineGraph(containerId, raceData){
       .attr("transform", "translate( " + (width) + ", 0 )");
 
   function handleClickOnPoint(d,i){
-      console.log(this);
+
       //select elements that are highlightable but are not highlighted
-      d3.selectAll("[data-highlightable='" + 1 +"'][data-highlighted='" + 0 +"']")
+      d3.selectAll("[data-opacitychange='" + 1 +"'][data-highlighted='" + 0 +"']")
         .style("opacity", 0.3);
 
       // if clicked on already highlighted line, remove highlight
       if(this.getAttribute("data-highlighted") == 1){
-        d3.selectAll("[data-line='" +  d.driverId  +"'][data-highlightable='" + 1 +"']")
-          .attr("data-highlighted", 0)
+        d3.selectAll("[data-line='" +  d.driverId  +"'][data-opacitychange='" + 1 +"']")
           .style("opacity", 0.3);
+
+          d3.selectAll("[data-line='" +  d.driverId  +"']")
+            .attr("data-highlighted", 0);
       }else{
         //select elements that belong to line and are highlightable
-        d3.selectAll("[data-line='" +  d.driverId  +"'][data-highlightable='" + 1 +"']")
-          .attr("data-highlighted", 1)
+        d3.selectAll("[data-line='" +  d.driverId  +"'][data-opacitychange='" + 1 +"']")
           .style("opacity", 1);
+
+        d3.selectAll("[data-line='" +  d.driverId  +"']")
+          .attr("data-highlighted", 1);
       }
 
       // if no element highlighted, then everything normal again
-      var highlightedElements = d3.selectAll("[data-highlightable='" + 1 +"'][data-highlighted='" + 1 +"']");
-      console.log(highlightedElements);
+      var highlightedElements = d3.selectAll("[data-opacitychange='" + 1 +"'][data-highlighted='" + 1 +"']");
       if(highlightedElements.size() == 0){
         //select elements that are highlightable but are not highlighted
-        d3.selectAll("[data-highlightable='" + 1 +"'][data-highlighted='" + 0 +"']")
+        d3.selectAll("[data-opacitychange='" + 1 +"'][data-highlighted='" + 0 +"']")
           .style("opacity", 1);
       }
-
   }
 
   function handleMouseOverLinePoint(d, i) {

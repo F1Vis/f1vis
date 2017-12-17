@@ -201,7 +201,6 @@ var preprocessor = {
   // data/races.csv
   fetchRaces: function (callback) {
     d3.csv('data/races.csv', function(data) {
-      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["circuitId"] = parseInt(d["circuitId"]);
@@ -210,10 +209,8 @@ var preprocessor = {
         d["round"] = parseInt(d["round"]);
         d["time"] = new Date(d["time"]);
         d["year"] = parseInt(d["year"]);
-        // store processed data by its primary key in an object
-        result[d["raceId"]] = d;
       });
-      preprocessor.results.races = result; // Store results
+      preprocessor.results.races = data; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });
@@ -254,14 +251,11 @@ var preprocessor = {
   // data/seasons.csv
   fetchSeasons: function (callback) {
     d3.csv('data/seasons.csv', function(data) {
-      var result = {};
       // preprocess data
       data.forEach(function(d, i) {
         d["year"] = parseInt(d["year"]);
-        // store processed data by its primary key in an object
-        result[d["year"]] = d;
       });
-      preprocessor.results.seasons = result; // Store results
+      preprocessor.results.seasons = data; // Store results
       loadingDialog.itemFinished(); // Update loading dialog progress bar
       callback(null); // Tell the queue we're done.
     });

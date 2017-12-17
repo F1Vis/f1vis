@@ -16,7 +16,7 @@ var loadingDialog = {
     this.progressItems = progressItems;
     this.progressItemsDone = 0;
     this._updateProgressBar();
-    $(this.id).modal('show');
+    //$(this.id).modal('show');
   },
   // Function to signal that another item was progressed
   itemFinished: function() {
@@ -27,7 +27,7 @@ var loadingDialog = {
   // Hide the dialog
   hide: function() {
     console.log("hide");
-    $(this.id).modal('hide');
+    //$(this.id).modal('hide');
   },
   // Private function to update the progress bar shown
   _updateProgressBar: function() {
@@ -88,6 +88,11 @@ function getDriverCodeAndPositionArray(raceData, lapNumber){
 
 function getDriverCodeById(raceData,driverId){
   return raceData.drivers.filter(driv=> driv.driverId == driverId)[0].code;
+}
+
+function removeDuplicates(result,obj){ 
+  if (result.indexOf(obj) < 0 ) result.push(obj);
+  return result;
 }
 
 function getColorValue(index, all){

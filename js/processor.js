@@ -34,14 +34,24 @@ getEnhancedLapDataPerDriver: function(raceData) {
                 //Attach Qualifying Data
                 lapData.qualifying = processor.getQualifyingForDriver(raceData, driver);
                 //add Qualifying Data to the Laps
-                lapData.laps.push({'driverId': driver.driverId, 'lap': 0, 'position': lapData.qualifying.position})
+				var lap0 = {'driverId': driver.driverId, 'lap': 0, 'position': lapData.qualifying.position};                
+				var endResult = raceData.results.filter(res => res.driverId == driver.driverId && res.laps == 0);
+				if(endResult.length > 0){
+					lap0.finished = endResult[0];
+				}
+				lapData.laps.push(lap0);
                 raceData.lapTimes.forEach(lap => {
                     lap.forEach(curLap => {
                         if( curLap.driverId == driver.driverId ){
                              var pitstop = raceData.pitStops.filter(pitstop => pitstop.driverId == driver.driverId && pitstop.lap == curLap.lap);
+							 var endResult = raceData.results.filter(res => res.driverId == driver.driverId && res.laps == curLap.lap);
                              if(pitstop.length > 0){
                                 curLap.pitStop = pitstop[0];
                              }
+							 if(endResult.length > 0){
+								curLap.finished = endResult[0];
+							 }
+							 
                              lapData.laps.push(curLap);
                         }
                     });

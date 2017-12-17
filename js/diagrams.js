@@ -2,12 +2,12 @@
 
 // https://bl.ocks.org/mbostock/3884955
 function createLineGraph(containerId, raceData){
-  var linePointSize = 4;
-
   console.log(raceData);
 
   var height = 1000;
   var width = 1000;
+  var linePointSize = 5;
+  var amountClickedLines = 0;
 
   // set the dimensions and margins of the graph
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
@@ -42,10 +42,13 @@ function createLineGraph(containerId, raceData){
 
   // Adds all lines
   enhancedLapData.forEach((driverLapData, driverIndex) => {
-    console.log(driverLapData);
+    //console.log(driverLapData);
       svg.append("path")
           .data([driverLapData.laps])
           .attr("class", "line")
+          .attr("data-line", driverLapData.driver.driverId)// custom data to Specify the line
+          .attr("data-highlightable", 1)
+          .attr("data-highlighted", 0)
           .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
           .attr("d", lineDataDefinition);
 
@@ -53,11 +56,15 @@ function createLineGraph(containerId, raceData){
       svg.selectAll(".linepoint")
           .data(driverLapData.laps)
           .enter().append("circle") // Uses the enter().append() method
-          .attr("class", "dot") // Assign a class for styling
+          .attr("class", "dot linedot") // Assign a class for styling
+          .attr("data-line", driverLapData.driver.driverId)
+          .attr("data-highlightable", 0)
+          .attr("data-highlighted", 0)
           .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
           .attr("cx", function(d, i) {return x(d.lap) })
           .attr("cy", function(d, i) { return y(d.position) })
           .attr("r", linePointSize)
+          .on("click", handleClickOnPoint)
           .on("mouseover", handleMouseOverLinePoint)
           .on("mouseout", handleMouseOutLinePoint)
           .style("opacity", 0);
@@ -68,11 +75,15 @@ function createLineGraph(containerId, raceData){
           svg.selectAll(".pitstoppoint")
               .data([singleLap])
               .enter().append("circle") // Uses the enter().append() method
-              .attr("class", "dot") // Assign a class for styling
+              .attr("class", "dot pitstopdot") // Assign a class for styling
+              .attr("data-line", driverLapData.driver.driverId)
+              .attr("data-highlightable", 1)
+              .attr("data-highlighted", 0)
               .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
               .attr("cx", function(d, i) {return x(d.lap) })
               .attr("cy", function(d, i) { return y(d.position) })
               .attr("r", linePointSize * 1.2)
+              .on("click", handleClickOnPoint)
               .on("mouseover", handleMouseOverLinePoint)
               .on("mouseout", handleMouseOutLinePoint);
         }
@@ -91,6 +102,35 @@ function createLineGraph(containerId, raceData){
   svg.append("g")
       .call(d3.axisRight(y))
       .attr("transform", "translate( " + (width) + ", 0 )");
+
+  function handleClickOnPoint(d,i){
+      console.log(this);
+      //select elements that are highlightable but are not highlighted
+      d3.selectAll("[data-highlightable='" + 1 +"'][data-highlighted='" + 0 +"']")
+        .style("opacity", 0.3);
+
+      // if clicked on already highlighted line, remove highlight
+      if(this.getAttribute("data-highlighted") == 1){
+        d3.selectAll("[data-line='" +  d.driverId  +"'][data-highlightable='" + 1 +"']")
+          .attr("data-highlighted", 0)
+          .style("opacity", 0.3);
+      }else{
+        //select elements that belong to line and are highlightable
+        d3.selectAll("[data-line='" +  d.driverId  +"'][data-highlightable='" + 1 +"']")
+          .attr("data-highlighted", 1)
+          .style("opacity", 1);
+      }
+
+      // if no element highlighted, then everything normal again
+      var highlightedElements = d3.selectAll("[data-highlightable='" + 1 +"'][data-highlighted='" + 1 +"']");
+      console.log(highlightedElements);
+      if(highlightedElements.size() == 0){
+        //select elements that are highlightable but are not highlighted
+        d3.selectAll("[data-highlightable='" + 1 +"'][data-highlighted='" + 0 +"']")
+          .style("opacity", 1);
+      }
+
+  }
 
   function handleMouseOverLinePoint(d, i) {
     // Add interactivity

@@ -98,9 +98,24 @@ function createLineGraph(containerId, raceData){
 
   // Add the Y Axis on both sides
   svg.append("g")
-      .call(d3.axisLeft(y));
+    .call(
+      d3.axisLeft(y)
+        .ticks(raceData.drivers.length)
+        .tickFormat(function(d) {
+          console.log(getDriverCodeFromPosAndLap(raceData, 0, d) + " " + d);
+          return getDriverCodeFromPosAndLap(raceData, 0, d) + " " + d;
+        })
+    );
+
   svg.append("g")
-      .call(d3.axisRight(y))
+      .call(
+        d3.axisRight(y)
+          .ticks(raceData.drivers.length)
+          .tickFormat(function(d) {
+            console.log(getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) + " " + d);
+            return d + " " + getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) ;
+          })
+      )
       .attr("transform", "translate( " + (width) + ", 0 )");
 
   function handleClickOnPoint(d,i){
@@ -206,6 +221,23 @@ function createLineGraph(containerId, raceData){
     lapTextArr.push("Stop Nr: " + d.pitStop.stop);
     lapTextArr.push("Duration: " + d.pitStop.duration);
     return lapTextArr;
+  }
+
+  function getDriverCodeFromPosAndLap(raceData, lapNr, pos){
+    var driverCode = "";
+    if(lapNr == 0){
+      driverCode = getDriverCodeById(raceData, raceData.qualifying[pos - 1].driverId);
+    }else if(lapNr == raceData.lapTimes.size){
+      var resultPos = raceData.results[pos -1].position;
+      var resultLaps = raceData.results[pos -1].laps;
+      //making sure the Driver finished and drove all laps
+      if(resultPos && resultLaps == raceData.lapTimes.size){
+        driverCode =  getDriverCodeById(raceData,raceData.results[pos -1].driverId);
+      }
+    }else{
+      //TODO hier Adden
+    }
+    return driverCode;
   }
 
 }

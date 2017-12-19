@@ -86,11 +86,11 @@ function getDriverCodeAndPositionArray(raceData, lapNumber){
   return posDriverCode;
 }
 
-function getDriverCodeById(raceData,driverId){
-  return raceData.drivers.filter(driv=> driv.driverId == driverId)[0].code;
+function getDriverCodeById(raceData, driverId){
+  return raceData.drivers.filter(driv => driv.driverId == driverId)[0].code;
 }
 
-function removeDuplicates(result,obj){ 
+function removeDuplicates(result,obj){
   if (result.indexOf(obj) < 0 ) result.push(obj);
   return result;
 }

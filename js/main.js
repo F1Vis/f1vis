@@ -47,11 +47,16 @@ preprocessor.load(function(data) {
     var races = processor.getRacesByYear(selectedYear);
     $("#courseSelection").empty();
     for(var race in races) {      
-      $("#courseSelection").append("<li>" + races[race].raceInfo.name  +" " + races[race].raceInfo.date + "</li>");
+      $("#courseSelection").append("<li data=\"" + races[race].raceInfo.raceId + "\">" + races[race].raceInfo.name  +" " + races[race].raceInfo.date + "</li>");
     }
+    $("#courseSelection li").click(function(event) {
+       var race = event.target.attributes.data.value;
+       $("#lineGraphBox").empty();
+       createLineGraph("#lineGraphBox", processor.getRace(race));
+    });
     slyelement.obj.reload();
     var raceData = races[0];
-    createLineGraph("#lineGraphBox", processor.getRace(974));
+    
   });
 
   $(window).resize(function(e) {

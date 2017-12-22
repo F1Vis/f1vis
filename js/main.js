@@ -6,6 +6,7 @@
 
 var slyelement = {
   obj: {},
+  curRaces: {},
   el: '.frame',
   options: {
    horizontal: 1,
@@ -44,19 +45,19 @@ preprocessor.load(function(data) {
   // Someone chose a year
   yearSelector.change(function(event) {
     var selectedYear = $(event.target).val();
-    var races = processor.getRacesByYear(selectedYear);
+    slyelement.curRaces = processor.getRacesByYear(selectedYear);
     $("#courseSelection").empty();
-    for(var race in races) {      
-      $("#courseSelection").append("<li data=\"" + races[race].raceInfo.raceId + "\">" + races[race].raceInfo.name  +" " + races[race].raceInfo.date + "</li>");
+    for(var race in slyelement.curRaces) {
+        var raceD = slyelement.curRaces[race];
+      $("#courseSelection").append("<li data=\"" + raceD.raceInfo.raceId + "\">" + raceD.raceInfo.name  +" " + raceD.raceInfo.date + "</li>");
     }
     $("#courseSelection li").click(function(event) {
-       var race = event.target.attributes.data.value;
+       var raceI = event.target.attributes.data.value;
+       var rdata = slyelement.curRaces.filter(r => r.raceInfo.raceId == raceI)[0];
        $("#lineGraphBox").empty();
-       createLineGraph("#lineGraphBox", processor.getRace(race));
+       createLineGraph("#lineGraphBox", rdata);
     });
-    slyelement.obj.reload();
-    var raceData = races[0];
-    
+    slyelement.obj.reload();    
   });
 
   $(window).resize(function(e) {

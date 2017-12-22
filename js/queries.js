@@ -112,7 +112,12 @@ var queries = {
 
   getRaceById: function(raceId){
     var rawData = preprocessor.getResults();
-    return rawData.races[raceId];
+    for(var key in rawData.races){
+        if(rawData.races[key].raceId == raceId){
+            return rawData.races[key];
+        }
+    }
+    return null;
   },
 
   getRacesByYear: function(year){

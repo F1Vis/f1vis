@@ -2,7 +2,7 @@
 
 // https://bl.ocks.org/mbostock/3884955
 function createLineGraph(containerId, raceData){
-  console.log(raceData);
+  //console.log(raceData);
 
   var height = 720;
   var width = 1080;
@@ -38,7 +38,7 @@ function createLineGraph(containerId, raceData){
   y.domain([raceData.drivers.length, 1]);
 
   var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
-  console.log(enhancedLapData);
+  //console.log(enhancedLapData);
 
   // Adds all lines
   enhancedLapData.forEach((driverLapData, driverIndex) => {
@@ -102,7 +102,7 @@ function createLineGraph(containerId, raceData){
       d3.axisLeft(y)
         .ticks(raceData.drivers.length)
         .tickFormat(function(d) {
-          console.log(getDriverCodeFromPosAndLap(raceData, 0, d) + " " + d);
+          //console.log(getDriverCodeFromPosAndLap(raceData, 0, d) + " " + d);
           return getDriverCodeFromPosAndLap(raceData, 0, d) + " " + d;
         })
     );
@@ -112,7 +112,7 @@ function createLineGraph(containerId, raceData){
         d3.axisRight(y)
           .ticks(raceData.drivers.length)
           .tickFormat(function(d) {
-            console.log(getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) + " " + d);
+            //console.log(getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) + " " + d);
             return d + " " + getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) ;
           })
       )

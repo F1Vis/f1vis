@@ -72,7 +72,9 @@ var processor = {
 
   getRacesByYear: function(year) {
     var races = queries.getRacesByYear(year);
-    return races.map(race => processor.getRace(race.raceId));
+    var racesUnsorted = races.map(race => processor.getRace(race.raceId));
+    racesUnsorted.sort((o1,o2) => o1["raceInfo"]["round"] - o2["raceInfo"]["round"]);
+    return racesUnsorted;
   },
 
   //Gets the position of Driver with driverid in specific lap

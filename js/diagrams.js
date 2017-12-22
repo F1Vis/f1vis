@@ -2,6 +2,7 @@
 
 // https://bl.ocks.org/mbostock/3884955
 function createLineGraph(containerId, raceData){
+
   // Rough input validation
   if(raceData.raceInfo === undefined) {
     console.error(["Sorry, that raceData is empty. :-(", raceData]);
@@ -11,7 +12,7 @@ function createLineGraph(containerId, raceData){
   }
 
   var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
-  console.log(enhancedLapData);
+
 
   // Configuration
   var height = 720;
@@ -109,7 +110,7 @@ function createLineGraph(containerId, raceData){
       d3.axisLeft(y)
         .ticks(raceData.drivers.length)
         .tickFormat(function(d) {
-          console.log(getDriverCodeFromPosAndLap(raceData, 0, d) + " " + d);
+          //console.log(getDriverCodeFromPosAndLap(raceData, 0, d) + " " + d);
           return getDriverCodeFromPosAndLap(raceData, 0, d) + " " + d;
         })
     );
@@ -119,7 +120,7 @@ function createLineGraph(containerId, raceData){
         d3.axisRight(y)
           .ticks(raceData.drivers.length)
           .tickFormat(function(d) {
-            console.log(getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) + " " + d);
+            //console.log(getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) + " " + d);
             return d + " " + getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) ;
           })
       )

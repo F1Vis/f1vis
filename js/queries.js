@@ -38,6 +38,11 @@ var queries = {
     return dataset;
   },
 
+  getStatusById: function(statusId){
+    var rawData = preprocessor.getResults();
+    return rawData.drivers[driverId];
+  },
+
   getDriverById: function(driverId) {
     var rawData = preprocessor.getResults();
     return rawData.drivers[driverId];
@@ -129,22 +134,27 @@ var queries = {
     return races;
 
   },
-  
+
    getSeasons: function(){
     var rawData = preprocessor.getResults();
     return rawData.seasons;
   },
-  
+
   getLapTimes: function(){
     var rawData = preprocessor.getResults();
     return rawData.lapTimes;
   },
-  
+
   getRaces: function(){
-    var rawData = preprocessor.getResults();   
+    var rawData = preprocessor.getResults();
     return rawData.races;
   },
-  
+
+  getStatus: function(){
+    var rawData = preprocessor.getResults();
+    return rawData.status;
+  },
+
   getRaceIdWithLapTimes: function(){
     return queries.getLapTimes().map(time => time.raceId).reduce(removeDuplicates,[]);
   },

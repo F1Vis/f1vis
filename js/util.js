@@ -95,6 +95,19 @@ function removeDuplicates(result,obj){
   return result;
 }
 
+function getValidEndingStatusIds(){
+  var results = [];
+  var allStatus = queries.getStatus();
+  results.push(1);
+  for(var key in allStatus){
+    if(key === undefined) continue;
+    if(allStatus[key].status.match(/^\+[0-9]+/g)){
+        results.push(parseInt(key));
+    }
+  }
+  return results;
+}
+
 function getColorValue(index, all){
   var r = 0;
   var g = 0;

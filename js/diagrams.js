@@ -18,6 +18,7 @@ function createLineGraph(containerId, raceData){
   var height = 720;
   var width = 1080;
   var linePointSize = 5;
+  var rectSize = 10;
   var amountClickedLines = 0;
 
   // set the dimensions and margins of the graph
@@ -47,6 +48,9 @@ function createLineGraph(containerId, raceData){
   // Scale the range of the data
   x.domain([0, raceData.lapTimes.size]);
   y.domain([raceData.drivers.length, 1]);
+
+  var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
+  console.log(enhancedLapData);
 
   // Adds all lines
   enhancedLapData.forEach((driverLapData, driverIndex) => {
@@ -97,6 +101,40 @@ function createLineGraph(containerId, raceData){
         }
       });
 
+      // in case the driver ended the race too early, get the status why he quit
+      /*TODO: Mouseover for Rectangle*/
+      var resultOfDriver = raceData.results.filter((result) =>  { return result.driverId == driverLapData.driver.driverId; });
+      console.log(resultOfDriver);
+      if(resultOfDriver.length > 0 && getValidEndingStatusIds().indexOf(resultOfDriver[0].statusId) < 0){
+        console.log("not ended properly");
+        var triangle = d3.symbol()
+            .type(d3.symbolTriangle)
+            .size(25);
+        //get Data for last round
+        svg.selectAll(".endpoint")
+            .data([driverLapData.laps[driverLapData.laps.length - 1]])
+            .enter().append("rect") // Uses the enter().append() method
+            .attr("class", "dot pitstopdot") // Assign a class for styling
+            .attr("data-line", driverLapData.driver.driverId)
+            .attr("data-opacitychange", 1)
+            .attr("data-highlighted", 0)
+            .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
+            .attr("x", function(d, i) {return x(d.lap) - rectSize * 1/2 })
+            .attr("y", function(d, i) { return y(d.position) - rectSize * 1/2 })
+            .attr("height", rectSize)
+            .attr("width", rectSize);
+
+        /* tried with Cross, didn't work, don't  know why
+        svg.selectAll(".endpoint")
+            .data([driverLapData.laps[driverLapData.laps.length - 1]])
+            .enter().append("symbolCircle") // Uses the enter().append() method
+            .attr("size", 300)
+            .attr("class", "endpoint") // Assign a class for styling
+            .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
+            .attr("transform", function(d) { return "translate(" + x(d.lap) + "," + y(d.position) + ")"; });
+        */
+      }
+
   });
 
   // Add the X Axis
@@ -110,7 +148,6 @@ function createLineGraph(containerId, raceData){
       d3.axisLeft(y)
         .ticks(raceData.drivers.length)
         .tickFormat(function(d) {
-          //console.log(getDriverCodeFromPosAndLap(raceData, 0, d) + " " + d);
           return getDriverCodeFromPosAndLap(raceData, 0, d) + " " + d;
         })
     );
@@ -120,7 +157,6 @@ function createLineGraph(containerId, raceData){
         d3.axisRight(y)
           .ticks(raceData.drivers.length)
           .tickFormat(function(d) {
-            //console.log(getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) + " " + d);
             return d + " " + getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) ;
           })
       )

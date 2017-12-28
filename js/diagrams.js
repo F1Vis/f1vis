@@ -2,8 +2,19 @@
 
 // https://bl.ocks.org/mbostock/3884955
 function createLineGraph(containerId, raceData){
-  console.log(raceData);
 
+  // Rough input validation
+  if(raceData.raceInfo === undefined) {
+    console.error(["Sorry, that raceData is empty. :-(", raceData]);
+    return; // early return to avoid errors
+  } else {
+    console.log(raceData);
+  }
+
+  var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
+
+
+  // Configuration
   var height = 720;
   var width = 1080;
   var linePointSize = 5;

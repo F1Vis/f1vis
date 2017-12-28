@@ -34,7 +34,17 @@ var processor = {
       //Attach Qualifying Data
       lapData.qualifying = processor.getQualifyingForDriver(raceData, driver);
       //add Qualifying Data to the Laps
-      var lap0 = {'driverId': driver.driverId, 'lap': 0, 'position': lapData.qualifying.position};                
+      var lap0 = {'driverId': driver.driverId, 'lap': 0};
+      // Figure out the position of that driver
+      if (lapData.qualifying !== undefined) {
+        // Use qualifying data, if available
+        lap0['position'] = lapData.qualifying.position;
+      } else {
+        // TODO: Easy fallback.
+        // Maybe just take result from first lap - Future: Perhaps leave out that data point at all
+        lap0['position'] = 0;
+      }
+
       var endResult = raceData.results.filter(res => res.driverId == driver.driverId && res.laps == 0);
       if(endResult.length > 0){
         lap0.finished = endResult[0];
@@ -55,6 +65,7 @@ var processor = {
           }
         });
       });
+      lapData.laps.sort((o1,o2) => o1["lap"] - o2["lap"]);
       result.push(lapData);
     });
     return result;
@@ -62,7 +73,9 @@ var processor = {
 
   getRacesByYear: function(year) {
     var races = queries.getRacesByYear(year);
-    return races.map(race => processor.getRace(race.raceId));
+    var racesUnsorted = races.map(race => processor.getRace(race.raceId));
+    racesUnsorted.sort((o1,o2) => o1["raceInfo"]["round"] - o2["raceInfo"]["round"]);
+    return racesUnsorted;
   },
 
   //Gets the position of Driver with driverid in specific lap

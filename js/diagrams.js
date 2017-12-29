@@ -69,6 +69,7 @@ function createLineGraph(containerId, raceData){
           .data(driverLapData.laps)
           .enter().append("circle") // Uses the enter().append() method
           .attr("class", "dot linedot") // Assign a class for styling
+          .attr("id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
           .attr("data-line", driverLapData.driver.driverId)
           .attr("data-opacitychange", 0)
           .attr("data-highlighted", 0)
@@ -76,6 +77,21 @@ function createLineGraph(containerId, raceData){
           .attr("cx", function(d, i) {return x(d.lap) })
           .attr("cy", function(d, i) { return y(d.position) })
           .attr("r", linePointSize)
+          .style("opacity", 0);
+
+      //Appends a circle for each datapoint
+      svg.selectAll(".invisiblelinepoint")
+          .data(driverLapData.laps)
+          .enter().append("circle") // Uses the enter().append() method
+          .attr("class", "dot linedot") // Assign a class for styling
+          .attr("circle-id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
+          .attr("data-line", driverLapData.driver.driverId)
+          .attr("data-opacitychange", 0)
+          .attr("data-highlighted", 0)
+          .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
+          .attr("cx", function(d, i) {return x(d.lap) })
+          .attr("cy", function(d, i) { return y(d.position) })
+          .attr("r", linePointSize*2.4)
           .on("click", handleClickOnPoint)
           .on("mouseover", handleMouseOverLinePoint)
           .on("mouseout", handleMouseOutLinePoint)
@@ -194,13 +210,16 @@ function createLineGraph(containerId, raceData){
   }
 
   function handleMouseOverLinePoint(d, i) {
+    var circleId = "circle-linepoint-" + d.lap + "-" + d.driverId;
+    var circle = d3.select("#" + circleId);
+
     // Add interactivity
     // Use D3 to select element, change color and size
     if(!d.pitStop){
-      d3.select(this)
+      circle
         .style("opacity", 1);
     }else{
-      d3.select(this)
+      circle
         .attr("r", linePointSize * 2);
     }
 
@@ -228,13 +247,15 @@ function createLineGraph(containerId, raceData){
   }
 
   function handleMouseOutLinePoint(d, i) {
+    var circleId = "circle-linepoint-" + d.lap + "-" + d.driverId;
+    var circle = d3.select("#" + circleId);
     // Use D3 to select element, change color back to normal
     if(!d.pitStop){
-      d3.select(this)
+      circle
         .attr("r", linePointSize)
         .style("opacity", 0);
     }else{
-      d3.select(this)
+      circle
         .attr("r", linePointSize);
     }
 

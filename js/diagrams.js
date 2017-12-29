@@ -4,7 +4,7 @@
 function createLineGraph(containerId, raceData){
 
   // Rough input validation
-  if(raceData.raceInfo === undefined) {
+  if(raceData === undefined || raceData.raceInfo === undefined) {
     console.error(["Sorry, that raceData is empty. :-(", raceData]);
     return; // early return to avoid errors
   } else {
@@ -97,6 +97,7 @@ function createLineGraph(containerId, raceData){
           .attr("data-line", driverLapData.driver.driverId)
           .attr("data-opacitychange", 0)
           .attr("data-highlighted", 0)
+          .attr("data-elemtype", elemTypes.linepoint)
           .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
           .attr("cx", function(d, i) {return x(d.lap) })
           .attr("cy", function(d, i) { return y(d.position) })
@@ -108,6 +109,7 @@ function createLineGraph(containerId, raceData){
 
       driverLapData.laps.forEach((singleLap, singleLapIndex)=> {
         if(singleLap.pitStop){
+          console.log("Got a pitstop");
           //Appends a circle for each datapoint
           svg.selectAll(".pitstoppoint")
               .data([singleLap])
@@ -229,7 +231,7 @@ function createLineGraph(containerId, raceData){
 
   function handleMouseOverLinePoint(d, i) {
 
-    var dataType = d3.select(this).attr("data-elemtype");
+    var elemType = d3.select(this).attr("data-elemtype");
     //depending on Pitstop and lap different Texts
     var textArr = [];
     var circleId = "circle-linepoint-" + d.lap + "-" + d.driverId;
@@ -237,15 +239,15 @@ function createLineGraph(containerId, raceData){
     
     // Add interactivity
     // Use D3 to select element, change color and size
-    if(dataType === elemTypes.linepoint){
+    if(elemType === elemTypes.linepoint){
       circle
         .style("opacity", 1);
       textArr = getLapTextArray(raceData,d);
-    }else if(dataType === elemTypes.pitstoppoint){
+    }else if(elemType === elemTypes.pitstoppoint){
       circle
         .attr("r", linePointSize * 2);
       textArr = getPitStopTextArray(raceData,d);
-    }else if(dataType === elemTypes.endpoint){
+    }else if(elemType === elemTypes.endpoint){
       d3.select(this)
         .attr("height", rectSize * 1.3)
         .attr("width", rectSize * 1.3);

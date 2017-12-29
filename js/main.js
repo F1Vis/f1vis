@@ -12,15 +12,15 @@ var slyelement = {
    horizontal: 1,
 	itemNav: 'basic',
 	smart: 1,
-	activateOn: 'click',
-	mouseDragging: 1,
+	//activateOn: 'click',
+	//activatePageOn: 'click',
+	mouseDragging: 0,
 	touchDragging: 1,
-	releaseSwing: 1,
+	releaseSwing: 0,
 	startAt: 3,
 	scrollBar: $('.strecken-selector').parent().find('.scrollbar'),
 	scrollBy: 1,
 	pagesBar: $('.strecken-selector').parent().find('.pages'),
-	activatePageOn: 'click',
 	speed: 300,
 	elasticBounds: 1,
 	dragHandle: 1,
@@ -60,16 +60,17 @@ preprocessor.load(function(data) {
                     + "</div>"
                     + raceD1.raceInfo.date.toLocaleDateString("en-US") +                 
                 "</li>");
+	    $("#courseSelection li").click(function(event) {
+	       var raceI = event.currentTarget.attributes.data.value;
+	       var rdata = slyelement.curRaces.filter(r => r.raceInfo.raceId == raceI)[0];
+	       $("#lineGraphBox").empty();
+	       createLineGraph("#lineGraphBox", rdata);
+	    });
             slyelement.obj.reload();
         });
       
     }
-    $("#courseSelection li").click(function(event) {
-       var raceI = event.target.attributes.data.value;
-       var rdata = slyelement.curRaces.filter(r => r.raceInfo.raceId == raceI)[0];
-       $("#lineGraphBox").empty();
-       createLineGraph("#lineGraphBox", rdata);
-    });
+
     slyelement.obj.reload();
   });
 

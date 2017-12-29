@@ -255,14 +255,23 @@ function createLineGraph(containerId, raceData){
       textArr = getEndPointTextArray(raceData,d);
     }
 
+    var tooltipGroup = svg.append("g")
+      .attr("id", "t" + d.lap + "-" + d.position + "-" + i); // Unique id so it can be removed later
+
+    tooltipGroup.append("rect")
+      .attr("style", "fill:rgb(225,225,225);stroke:black;stroke-width:2;")
+      .attr("width", "150")
+      .attr("height", "80")
+      .attr("x", function() { return x(d.lap) + 10; })
+      .attr("y", function() { return y(d.position) + 10; });
+
     //Necessary to add Text for each Line
     textArr.forEach((text, textIndex) =>{
       // Specify where to put label of text
-      svg.append("text")
-        .attr("id", "t" + d.lap + "-" + d.position + "-" + i + "-" + textIndex)// Create an id for text so we can select it later for removing on mouseout
-        .attr("x", function() { return x(d.lap) - 70; })
-        .attr("y", function() { return y(d.position) - 15; })
-        .attr("dy", textIndex + "em")
+        tooltipGroup.append("text")
+        .attr("dy", (textIndex + 1) + "em")
+        .attr("x", function() { return x(d.lap) + 15; })
+        .attr("y", function() { return y(d.position) + 15; })
         .text(function() {
           return text;  // Value of the text
         });
@@ -297,22 +306,19 @@ function createLineGraph(containerId, raceData){
 
     textArr.forEach((text, textIndex)=> {
       // Select text by id and then remove
-      d3.select("#t" + d.lap + "-" + d.position + "-" + i + "-" + textIndex).remove();  // Remove text location
+      d3.select("#t" + d.lap + "-" + d.position + "-" + i).remove();  // Remove text location
     });
   }
 
   function getLapTextArray(raceData, d){
-
     var driverText = getDriverCodeById(raceData,d.driverId);
     var lapText = "Lap: " + d.lap;
     var posText = "Pos: " + d.position;
-
     var returnArr = [driverText, lapText, posText];
     if(d.time){
         var timeText = "Time: " + d.time;
         returnArr.push(timeText);
     }
-
     return returnArr;
   }
 
@@ -327,17 +333,13 @@ function createLineGraph(containerId, raceData){
     var status = "";
     var endTextArr = getLapTextArray(raceData,d);
     var allStatus = queries.getStatus();
-
     for(var key in allStatus){
       if(key === undefined) continue;
       if(allStatus[key].statusId === d.finished.statusId){
           status = allStatus[key].status;
       }
     }
-
-
     endTextArr.push("Reason: " + status);
-
     return endTextArr;
   }
 

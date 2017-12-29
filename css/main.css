@@ -15,6 +15,14 @@ body {
   /*border: 1px solid grey;*/
 }
 
+#courseSelection li.hover {
+  background-color: #e2eaff;
+}
+
+#courseSelection li.selected {
+  border-color: #aaaaff;
+}
+
 /* This container will allow scaling svg, so we don't need to care about it in d3.js */
 .svg-container {
   display: inline-block;

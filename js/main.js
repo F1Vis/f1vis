@@ -44,8 +44,9 @@ preprocessor.load(function(data) {
   yearSelector.change(function(event) {
     var selectedYear = $(event.target).val();
     slyelement.curRaces = processor.getRacesByYear(selectedYear);
+    // Empty the course selector
     $("#courseSelection").empty();
-    // Add all the races to the selector
+    // ... and fill it with fresh races to choose from
     for(var race in slyelement.curRaces) {
         var raceD = slyelement.curRaces[race];
           $("#courseSelection").append("<li data=\"" + raceD.raceInfo.raceId + "\">" +
@@ -53,6 +54,11 @@ preprocessor.load(function(data) {
             "<div class=\"courseimagecontainer\"></div>" + raceD.raceInfo.date.toLocaleDateString("de-DE") + "</li>");
 
 	  $("#courseSelection li").click(function(event) {
+            // Clear previously selected courses
+            $("#courseSelection .selected").removeClass("selected");
+            // Mark selected course
+            $(event.currentTarget).addClass("selected");
+            // Hand off to diagram rendering
 	    var raceI = event.currentTarget.attributes.data.value;
             if(slyelement.curRaceId == raceI){ return; }
             slyelement.curRaceId = raceI;
@@ -62,7 +68,16 @@ preprocessor.load(function(data) {
 	});
         slyelement.obj.reload();
     }
+    // Refresh carousell after building the selector
     slyelement.obj.reload();
+    // Register hover event
+    $("#courseSelection li").hover(function(event){
+      // handlerIn
+      $(event.currentTarget).addClass("hover");
+    }, function(event) {
+      // handlerOut
+      $(event.currentTarget).removeClass("hover");
+    });
 
     // TODO: Now add all the images without disturbing the user
     for(var race in slyelement.curRaces) {

@@ -65,7 +65,7 @@ preprocessor.load(function(data) {
             // Fetch race data
 	    var rdata = slyelement.curRaces.filter(r => r.raceInfo.raceId == raceI)[0];
             // Put information about race into info box
-            $("#race-infobox").html("joah");
+            $("#race-infobox").html(renderRaceInfoBox(rdata)); // See util.js
             // Hand off to diagram rendering
 	    $("#lineGraphBox").empty();
   	    createLineGraph("#lineGraphBox", rdata);
@@ -126,4 +126,6 @@ preprocessor.load(function(data) {
   // Select most recent year by default
   $("#seasonByYearSelector").val($("#seasonByYearSelector option").first().val()).change();
 
+  // Enable tooltips
+  $('[data-toggle="tooltip"]').tooltip()
 });

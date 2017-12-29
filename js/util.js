@@ -147,3 +147,15 @@ function getImageFromWikipedia(data,pageName,imagesize,callback){
         }
     });
 };
+
+function renderRaceInfoBox(race) {
+  var raceInfo = race.raceInfo;
+  //console.log(raceInfo);
+  var content = "";
+
+  content = "<h1 data-toggle=\"tooltip\" data-placement=\"top\" title=\"#"+raceInfo.raceId+"\">"+raceInfo.name+"</h1>";
+  content += "<h5>"+raceInfo.date.toLocaleDateString("de-DE")+"</h5>";
+  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+raceInfo.url+"\" role=\"button\">See on Wikipedia</a>";
+
+  return content;
+}

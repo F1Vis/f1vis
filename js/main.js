@@ -82,4 +82,6 @@ preprocessor.load(function(data) {
     slyelement.obj.reload();
   });
 
+  $("#seasonByYearSelector").trigger("change");
+
 });

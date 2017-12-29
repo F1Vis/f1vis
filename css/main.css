@@ -73,6 +73,10 @@ body {
     margin-right: auto;
 }
 
+#toggle-btn{
+  text-align: center;
+}
+
 #icon-up-arrow{
   width: 1%;
   height: 1%;

@@ -31,8 +31,8 @@ var slyelement = {
 };
 
 
-preprocessor.load(function(data) {    
-    slyelement.obj = new Sly($(slyelement.el), slyelement.options);  
+preprocessor.load(function(data) {
+    slyelement.obj = new Sly($(slyelement.el), slyelement.options);
     slyelement.obj.init();
 
   // Some sample code for a year selector - TODO: Improve a lot and move somewhere else
@@ -41,7 +41,7 @@ preprocessor.load(function(data) {
   var seasons = processor.getSeasonsWithLapData();
 
   for(var season in seasons){ yearSelector.append("<option>" + seasons[season].year + "</option>"); }
-  
+
   // Someone chose a year
   yearSelector.change(function(event) {
     var selectedYear = $(event.target).val();
@@ -62,7 +62,7 @@ preprocessor.load(function(data) {
 	    $("#lineGraphBox").empty();
   	    createLineGraph("#lineGraphBox", rdata);
 	});
-        slyelement.obj.reload();   
+        slyelement.obj.reload();
     }
     slyelement.obj.reload();
 
@@ -80,6 +80,30 @@ preprocessor.load(function(data) {
 
   $(window).resize(function(e) {
     slyelement.obj.reload();
+  });
+
+  $( "#toggle-btn" ).click(function() {
+    if ( $( "#selector-card .card-body" ).is( ":hidden" ) ) {
+      $( "#selector-card .card-body" ).slideDown();
+      $('#icon-up-arrow').animate({  borderSpacing: 0 - 90 }, {
+         step: function(now,fx) {
+           $(this).css('-webkit-transform','rotate('+now+'deg)');
+           $(this).css('-moz-transform','rotate('+now+'deg)');
+           $(this).css('transform','rotate('+now+'deg)');
+         },
+         duration: 150
+      },'linear');
+    } else {
+      $( "#selector-card .card-body" ).slideUp();
+      $('#icon-up-arrow').animate({  borderSpacing: 180 - 90 }, {
+         step: function(now,fx) {
+           $(this).css('-webkit-transform','rotate('+now+'deg)');
+           $(this).css('-moz-transform','rotate('+now+'deg)');
+           $(this).css('transform','rotate('+now+'deg)');
+         },
+         duration: 150
+      },'linear');
+    }
   });
 
   $("#seasonByYearSelector").trigger("change");

@@ -35,12 +35,10 @@ preprocessor.load(function(data) {
     slyelement.obj = new Sly($(slyelement.el), slyelement.options);
     slyelement.obj.init();
 
-  // Some sample code for a year selector - TODO: Improve a lot and move somewhere else
+  // Create list of available years in descending order
   var yearSelector = $("#seasonByYearSelector");
-
   var seasons = processor.getSeasonsWithLapData();
-
-  for(var season in seasons){ yearSelector.append("<option>" + seasons[season].year + "</option>"); }
+  for(var season in seasons){ yearSelector.prepend("<option>" + seasons[season].year + "</option>"); }
 
   // Someone chose a year
   yearSelector.change(function(event) {
@@ -106,6 +104,7 @@ preprocessor.load(function(data) {
     }
   });
 
-  $("#seasonByYearSelector").trigger("change");
+  // Select most recent year by default
+  $("#seasonByYearSelector").val($("#seasonByYearSelector option").first().val()).change();
 
 });

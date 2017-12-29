@@ -13,13 +13,20 @@ function createLineGraph(containerId, raceData){
 
   var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
 
-
   // Configuration
   var height = 720;
   var width = 1080;
   var linePointSize = 5;
   var rectSize = 10;
   var amountClickedLines = 0;
+
+  //ElemTypes of this graph
+  var elemTypes = {
+    line: "line",
+    linepoint: "linepoint",
+    pitstoppoint: "pitstoppoint",
+    endpoint: "endpoint"
+  };
 
   // set the dimensions and margins of the graph
   var margin = {top: 50, right: 100, bottom: 50, left: 100},
@@ -61,6 +68,7 @@ function createLineGraph(containerId, raceData){
           .attr("data-line", driverLapData.driver.driverId)// custom data to Specify the line
           .attr("data-opacitychange", 1)
           .attr("data-highlighted", 0)
+          .attr("data-elemtype", elemTypes.line)
           .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
           .attr("d", lineDataDefinition);
 
@@ -72,6 +80,7 @@ function createLineGraph(containerId, raceData){
           .attr("data-line", driverLapData.driver.driverId)
           .attr("data-opacitychange", 0)
           .attr("data-highlighted", 0)
+          .attr("data-elemtype", elemTypes.linepoint)
           .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
           .attr("cx", function(d, i) {return x(d.lap) })
           .attr("cy", function(d, i) { return y(d.position) })
@@ -87,10 +96,11 @@ function createLineGraph(containerId, raceData){
           svg.selectAll(".pitstoppoint")
               .data([singleLap])
               .enter().append("circle") // Uses the enter().append() method
-              .attr("class", "dot pitstopdot") // Assign a class for styling
+              .attr("class", "dot pitstoppoint") // Assign a class for styling
               .attr("data-line", driverLapData.driver.driverId)
               .attr("data-opacitychange", 1)
               .attr("data-highlighted", 0)
+              .attr("data-elemtype", elemTypes.pitstoppoint)
               .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
               .attr("cx", function(d, i) {return x(d.lap) })
               .attr("cy", function(d, i) { return y(d.position) })
@@ -112,15 +122,19 @@ function createLineGraph(containerId, raceData){
         svg.selectAll(".endpoint")
             .data([driverLapData.laps[driverLapData.laps.length - 1]])
             .enter().append("rect") // Uses the enter().append() method
-            .attr("class", "dot pitstopdot") // Assign a class for styling
+            //.attr("class", "endpoint") // Assign a class for styling
             .attr("data-line", driverLapData.driver.driverId)
             .attr("data-opacitychange", 1)
             .attr("data-highlighted", 0)
+            .attr("data-elemtype", elemTypes.endpoint)
             .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
             .attr("x", function(d, i) {return x(d.lap) - rectSize * 1/2 })
             .attr("y", function(d, i) { return y(d.position) - rectSize * 1/2 })
             .attr("height", rectSize)
-            .attr("width", rectSize);
+            .attr("width", rectSize)
+            .on("click", handleClickOnPoint)
+            .on("mouseover", handleMouseOverLinePoint)
+            .on("mouseout", handleMouseOutLinePoint);
 
         /* tried with Cross, didn't work, don't  know why
         svg.selectAll(".endpoint")
@@ -167,7 +181,7 @@ function createLineGraph(containerId, raceData){
       .attr("transform", "translate( " + (width) + ", 0 )");
 
   function handleClickOnPoint(d,i){
-
+      console.log(d);
       //select elements that are highlightable but are not highlighted
       d3.selectAll("[data-opacitychange='" + 1 +"'][data-highlighted='" + 0 +"']")
         .style("opacity", 0.3);
@@ -198,22 +212,25 @@ function createLineGraph(containerId, raceData){
   }
 
   function handleMouseOverLinePoint(d, i) {
-    // Add interactivity
-    // Use D3 to select element, change color and size
-    if(!d.pitStop){
-      d3.select(this)
-        .style("opacity", 1);
-    }else{
-      d3.select(this)
-        .attr("r", linePointSize * 2);
-    }
-
+    var dataType = d3.select(this).attr("data-elemtype");
     //depending on Pitstop and lap different Texts
     var textArr = [];
-    if(d.pitStop){
-      textArr = getPitStopTextArray(raceData,d);
-    }else{
+
+    // Add interactivity
+    // Use D3 to select element, change color and size
+    if(dataType === elemTypes.linepoint){
+      d3.select(this)
+        .style("opacity", 1);
       textArr = getLapTextArray(raceData,d);
+    }else if(dataType === elemTypes.pitstoppoint){
+      d3.select(this)
+        .attr("r", linePointSize * 2);
+      textArr = getPitStopTextArray(raceData,d);
+    }else if(dataType === elemTypes.endpoint){
+      d3.select(this)
+        .attr("height", rectSize * 1.3)
+        .attr("width", rectSize * 1.3);
+      textArr = getEndPointTextArray(raceData,d);
     }
 
     //Necessary to add Text for each Line
@@ -232,22 +249,25 @@ function createLineGraph(containerId, raceData){
   }
 
   function handleMouseOutLinePoint(d, i) {
+    var dataType = d3.select(this).attr("data-elemtype");
+    //depending on Pitstop and lap different Texts
+    var textArr = [];
+
     // Use D3 to select element, change color back to normal
-    if(!d.pitStop){
+    if(dataType === elemTypes.linepoint){
       d3.select(this)
         .attr("r", linePointSize)
         .style("opacity", 0);
-    }else{
+      textArr = getLapTextArray(raceData,d);
+    }else if(dataType === elemTypes.pitstoppoint){
       d3.select(this)
         .attr("r", linePointSize);
-    }
-
-    //depending on Pitstop and lap different Texts
-    var textArr = [];
-    if(d.pitStop){
       textArr = getPitStopTextArray(raceData,d);
-    }else{
-      textArr = getLapTextArray(raceData,d);
+    }else if(dataType === elemTypes.endpoint){
+      d3.select(this)
+        .attr("height", rectSize)
+        .attr("width", rectSize);
+      textArr = getEndPointTextArray(raceData,d);
     }
 
     textArr.forEach((text, textIndex)=> {
@@ -257,7 +277,7 @@ function createLineGraph(containerId, raceData){
   }
 
   function getLapTextArray(raceData, d){
-    var driverText = getDriverCodeById(raceData,d.driverId)
+    var driverText = getDriverCodeById(raceData,d.driverId);
     var lapText = "Lap: " + d.lap;
     var posText = "Pos: " + d.position;
     var timeText = "Time: " + d.time;
@@ -269,6 +289,24 @@ function createLineGraph(containerId, raceData){
     lapTextArr.push("Stop Nr: " + d.pitStop.stop);
     lapTextArr.push("Duration: " + d.pitStop.duration);
     return lapTextArr;
+  }
+
+  function getEndPointTextArray(raceData, d){
+    var status = "";
+    var endTextArr = getLapTextArray(raceData,d);
+    var allStatus = queries.getStatus();
+
+    for(var key in allStatus){
+      if(key === undefined) continue;
+      if(allStatus[key].statusId === d.finished.statusId){
+          status = allStatus[key].status;
+      }
+    }
+
+
+    endTextArr.push("Reason: " + status);
+
+    return endTextArr;
   }
 
   function getDriverCodeFromPosAndLap(raceData, lapNr, pos){

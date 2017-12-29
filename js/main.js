@@ -54,15 +54,19 @@ preprocessor.load(function(data) {
             "<div class=\"courseimagecontainer\"></div>" + raceD.raceInfo.date.toLocaleDateString("de-DE") + "</li>");
 
 	  $("#courseSelection li").click(function(event) {
+	    var raceI = event.currentTarget.attributes.data.value;
+            // Internal check if element was already selected
+            if(slyelement.curRaceId == raceI){ return true; }
+            slyelement.curRaceId = raceI;
             // Clear previously selected courses
             $("#courseSelection .selected").removeClass("selected");
             // Mark selected course
             $(event.currentTarget).addClass("selected");
-            // Hand off to diagram rendering
-	    var raceI = event.currentTarget.attributes.data.value;
-            if(slyelement.curRaceId == raceI){ return; }
-            slyelement.curRaceId = raceI;
+            // Fetch race data
 	    var rdata = slyelement.curRaces.filter(r => r.raceInfo.raceId == raceI)[0];
+            // Put information about race into info box
+            $("#race-infobox").html("joah");
+            // Hand off to diagram rendering
 	    $("#lineGraphBox").empty();
   	    createLineGraph("#lineGraphBox", rdata);
 	});

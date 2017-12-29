@@ -43,7 +43,7 @@ body {
 
 .scrollbar {
     width: 100%;
-    height: 16px; 
+    height: 16px;
     margin-top: 4px;
     background-color: hsl(0, 0%, 94.1%);
     border: 1px solid hsl(0, 0%, 50.0%);
@@ -71,4 +71,9 @@ body {
 .courseimage {
     margin-left: auto;
     margin-right: auto;
+}
+
+#icon-up-arrow{
+  width: 1%;
+  height: 1%;
 }

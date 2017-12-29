@@ -34,27 +34,37 @@
       </div>
     </nav>
 
-
     <main role="main" class="container">
-      <div class="content-box">
-        <form>
-          <div class="form-group">
-            <label for="seasonByYearSelector">Wähle ein Jahr aus!</label>
-            <select class="form-control" id="seasonByYearSelector">
-              <!-- This is filled using JS. -->
-            </select>
+      <div id="selection-box">
+        <div class="content-box jahres-selector">
+          <form>
+            <div class="form-group">
+              <label for="seasonByYearSelector">Wähle ein Jahr aus!</label>
+              <select class="form-control" id="seasonByYearSelector">
+                <!-- This is filled using JS. -->
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="content-box strecken-selector">
+          <div class="frame">
+  	        <ul class="slidee" id="courseSelection">
+  	        </ul>
           </div>
-        </form>
-      </div>
-      <div class="content-box strecken-selector">
-        <div class="frame">
-	        <ul class="slidee" id="courseSelection">
-	        </ul>
-        </div>
-        <div class="scrollbar">
-	        <div class="handle"></div>
+          <div class="scrollbar">
+  	        <div class="handle"></div>
+          </div>
         </div>
       </div>
+
+      <button type="button" class="btn btn-info btn-block" data-toggle="collapse" data-target="#selection-box">
+        <svg id="icon-up-arrow" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 8 8" xml:space="preserve">
+          <rect x="0.016" y="1.68" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 6.2428 2.2389)" width="5.283" height="1.466"/>
+          <rect x="3.161" y="1.604" width="1.683" height="6.375"/>
+          <rect x="2.709" y="1.674" transform="matrix(0.7073 0.7069 -0.7069 0.7073 3.2674 -3.0786)" width="5.284" height="1.465"/>
+        </svg>
+        Collapse
+      </button>
 
       <div class="content-box chart-box">
         <div id="lineGraphBox"></div>

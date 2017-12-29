@@ -104,9 +104,7 @@ function createLineGraph(containerId, raceData){
       // in case the driver ended the race too early, get the status why he quit
       /*TODO: Mouseover for Rectangle*/
       var resultOfDriver = raceData.results.filter((result) =>  { return result.driverId == driverLapData.driver.driverId; });
-      console.log(resultOfDriver);
       if(resultOfDriver.length > 0 && getValidEndingStatusIds().indexOf(resultOfDriver[0].statusId) < 0){
-        console.log("not ended properly");
         var triangle = d3.symbol()
             .type(d3.symbolTriangle)
             .size(25);
@@ -157,7 +155,13 @@ function createLineGraph(containerId, raceData){
         d3.axisRight(y)
           .ticks(raceData.drivers.length)
           .tickFormat(function(d) {
-            return d + " " + getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d) ;
+            var driverCode = "";
+            if(getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d)){
+              driverCode = getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d);
+            }else{
+              driverCode = getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size - 1, d);
+            }
+            return d + " " + driverCode ;
           })
       )
       .attr("transform", "translate( " + (width) + ", 0 )");
@@ -279,7 +283,9 @@ function createLineGraph(containerId, raceData){
         driverCode =  getDriverCodeById(raceData,raceData.results[pos -1].driverId);
       }
     }else{
-      //TODO hier Adden
+      if(raceData.lapTimes.get(lapNr)[pos-1]){
+        driverCode = getDriverCodeById(raceData, raceData.lapTimes.get(lapNr)[pos-1].driverId);
+      }
     }
     return driverCode;
   }

@@ -34,7 +34,6 @@ var slyelement = {
 preprocessor.load(function(data) {    
     slyelement.obj = new Sly($(slyelement.el), slyelement.options);  
     slyelement.obj.init();
-   
 
   // Some sample code for a year selector - TODO: Improve a lot and move somewhere else
   var yearSelector = $("#seasonByYearSelector");
@@ -48,33 +47,37 @@ preprocessor.load(function(data) {
     var selectedYear = $(event.target).val();
     slyelement.curRaces = processor.getRacesByYear(selectedYear);
     $("#courseSelection").empty();
+    // Add all the races to the selector
     for(var race in slyelement.curRaces) {
         var raceD = slyelement.curRaces[race];
-        
+          $("#courseSelection").append("<li data=\"" + raceD.raceInfo.raceId + "\">" +
+            "<span class=\"coursename\">" + raceD.raceInfo.name  +"</span>"+
+            "<div class=\"courseimagecontainer\"></div>"
+            + raceD.raceInfo.date.toLocaleDateString("en-US") +                 
+            "</li>");
+
+	  $("#courseSelection li").click(function(event) {
+	    var raceI = event.currentTarget.attributes.data.value;
+            if(slyelement.curRaceId == raceI){ return; }
+            slyelement.curRaceId = raceI;
+	    var rdata = slyelement.curRaces.filter(r => r.raceInfo.raceId == raceI)[0];
+	    $("#lineGraphBox").empty();
+  	    createLineGraph("#lineGraphBox", rdata);
+	});
+        slyelement.obj.reload();   
+    }
+    slyelement.obj.reload();
+
+    // TODO: Now add all the images without disturbing the user
+    for(var race in slyelement.curRaces) {
+        var raceD = slyelement.curRaces[race];
         var url = raceD.raceInfo.url;
         var pathName = url.substring(url.lastIndexOf("/")+1);
         getImageFromWikipedia(raceD,pathName,100,(raceD1,imageURL) => {
-            $("#courseSelection").append("<li data=\"" + raceD1.raceInfo.raceId + "\">" +
-                "<span class=\"coursename\">" + raceD1.raceInfo.name  +"</span>"+
-                    "<div class=courseimagecontainer>" +
-                        "<img src=\"" + imageURL + "\"class=\"courseimage\"/> "
-                    + "</div>"
-                    + raceD1.raceInfo.date.toLocaleDateString("en-US") +                 
-                "</li>");
-	    $("#courseSelection li").click(function(event) {
-	       var raceI = event.currentTarget.attributes.data.value;
-           if(slyelement.curRaceId == raceI){ return; }
-           slyelement.curRaceId = raceI;
-	       var rdata = slyelement.curRaces.filter(r => r.raceInfo.raceId == raceI)[0];
-	       $("#lineGraphBox").empty();
-	       createLineGraph("#lineGraphBox", rdata);
-	    });
-            slyelement.obj.reload();
+          var imageTag = "<img src=\"" + imageURL + "\"class=\"courseimage\"/> ";
+          $("#courseSelection li[data="+raceD1.raceInfo.raceId+"] .courseimagecontainer").append(imageTag);
         });
-      
     }
-
-    slyelement.obj.reload();
   });
 
   $(window).resize(function(e) {

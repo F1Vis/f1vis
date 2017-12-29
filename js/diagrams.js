@@ -8,7 +8,7 @@ function createLineGraph(containerId, raceData){
     console.error(["Sorry, that raceData is empty. :-(", raceData]);
     return; // early return to avoid errors
   } else {
-    console.log(raceData);
+    console.log(["raceData", raceData]);
   }
 
   var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
@@ -57,7 +57,7 @@ function createLineGraph(containerId, raceData){
   y.domain([raceData.drivers.length, 1]);
 
   var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
-  console.log(enhancedLapData);
+  console.log(["enhancedLapData", enhancedLapData]);
 
   // Adds all lines
   enhancedLapData.forEach((driverLapData, driverIndex) => {
@@ -109,7 +109,6 @@ function createLineGraph(containerId, raceData){
 
       driverLapData.laps.forEach((singleLap, singleLapIndex)=> {
         if(singleLap.pitStop){
-          console.log("Got a pitstop");
           //Appends a circle for each datapoint
           svg.selectAll(".pitstoppoint")
               .data([singleLap])
@@ -199,7 +198,6 @@ function createLineGraph(containerId, raceData){
       .attr("transform", "translate( " + (width) + ", 0 )");
 
   function handleClickOnPoint(d,i){
-      console.log(d);
       //select elements that are highlightable but are not highlighted
       d3.selectAll("[data-opacitychange='" + 1 +"'][data-highlighted='" + 0 +"']")
         .style("opacity", 0.3);

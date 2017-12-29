@@ -234,7 +234,7 @@ function createLineGraph(containerId, raceData){
     var textArr = [];
     var circleId = "circle-linepoint-" + d.lap + "-" + d.driverId;
     var circle = d3.select("#" + circleId);
-    
+
     // Add interactivity
     // Use D3 to select element, change color and size
     if(elemType === elemTypes.linepoint){
@@ -299,11 +299,18 @@ function createLineGraph(containerId, raceData){
   }
 
   function getLapTextArray(raceData, d){
+
     var driverText = getDriverCodeById(raceData,d.driverId);
     var lapText = "Lap: " + d.lap;
     var posText = "Pos: " + d.position;
-    var timeText = "Time: " + d.time;
-    return [driverText, lapText, posText, timeText];
+
+    var returnArr = [driverText, lapText, posText];
+    if(d.time){
+        var timeText = "Time: " + d.time;
+        returnArr.push(timeText);
+    }
+
+    return returnArr;
   }
 
   function getPitStopTextArray(raceData, d){

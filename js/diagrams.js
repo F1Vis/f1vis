@@ -203,12 +203,12 @@ function createLineGraph(containerId, raceData){
   function handleClickOnPoint(d,i){
       //select elements that are highlightable but are not highlighted
       d3.selectAll("[data-opacitychange='" + 1 +"'][data-highlighted='" + 0 +"']")
-        .style("opacity", 0.3);
+        .style("opacity", 0.10);
 
       // if clicked on already highlighted line, remove highlight
       if(this.getAttribute("data-highlighted") == 1){
         d3.selectAll("[data-line='" +  d.driverId  +"'][data-opacitychange='" + 1 +"']")
-          .style("opacity", 0.3);
+          .style("opacity", 0.10);
 
           d3.selectAll("[data-line='" +  d.driverId  +"']")
             .attr("data-highlighted", 0);

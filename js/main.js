@@ -49,7 +49,20 @@ preprocessor.load(function(data) {
     $("#courseSelection").empty();
     for(var race in slyelement.curRaces) {
         var raceD = slyelement.curRaces[race];
-      $("#courseSelection").append("<li data=\"" + raceD.raceInfo.raceId + "\">" + raceD.raceInfo.name  +" " + raceD.raceInfo.date + "</li>");
+        
+        var url = raceD.raceInfo.url;
+        var pathName = url.substring(url.lastIndexOf("/")+1);
+        getImageFromWikipedia(raceD,pathName,100,(raceD1,imageURL) => {
+            $("#courseSelection").append("<li data=\"" + raceD1.raceInfo.raceId + "\">" +
+                "<span class=\"coursename\">" + raceD1.raceInfo.name  +"</span>"+
+                    "<div class=courseimagecontainer>" +
+                        "<img src=\"" + imageURL + "\"class=\"courseimage\"/> "
+                    + "</div>"
+                    + raceD1.raceInfo.date.toLocaleDateString("en-US") +                 
+                "</li>");
+            slyelement.obj.reload();
+        });
+      
     }
     $("#courseSelection li").click(function(event) {
        var raceI = event.target.attributes.data.value;
@@ -57,7 +70,7 @@ preprocessor.load(function(data) {
        $("#lineGraphBox").empty();
        createLineGraph("#lineGraphBox", rdata);
     });
-    slyelement.obj.reload();    
+    slyelement.obj.reload();
   });
 
   $(window).resize(function(e) {

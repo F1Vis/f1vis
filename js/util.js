@@ -118,3 +118,32 @@ function getColorValue(index, all){
 
   return "hsl(" + colorValue + ", " + 100 + "%, 35% )";
 }
+
+/**
+
+data - own user data
+pagename - the page where the image will be taken from
+imagesize - target image size
+callback(data,imageURL) - callback that will be called. Arguments are the provided
+                          user data (data) and the final imageURL.
+
+**/
+function getImageFromWikipedia(data,pageName,imagesize,callback){
+    $.ajax({
+        url: "https://en.wikipedia.org/w/api.php",
+        data: {
+            format: "json",
+            action: "query",
+            titles: pageName,
+            prop:"pageimages",
+            pithumbsize:imagesize,
+        },
+        dataType: 'jsonp',
+        success: function (dataResult) {
+    		for(var key in dataResult.query.pages){
+        	    var d = dataResult.query.pages[key];
+                callback(data,d.thumbnail.source);
+            }
+        }
+    });
+};

@@ -263,7 +263,7 @@ function createLineGraph(containerId, raceData){
     tooltipGroup.append("rect")
       .attr("style", "fill:rgb(225,225,225);stroke:black;stroke-width:2;")
       .attr("width", "150")
-      .attr("height", "100")
+      .attr("height", (textArr.length + 1) + "em")
       .attr("x", function() { return x(d.lap) + 10; })
       .attr("y", function() { return y(d.position) + 10; });
 

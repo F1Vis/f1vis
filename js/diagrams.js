@@ -91,6 +91,8 @@ function createLineGraph(containerId, raceData){
               .on("click", handleClickOnPoint)
               .on("mouseover", handleMouseOverLinePoint)
               .on("mouseout", handleMouseOutLinePoint);
+          // Remove data from driverLapData, since we don't need a generic datapoint for this
+          driverLapData.laps[singleLapIndex] = {};
         }
       });
 

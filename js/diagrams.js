@@ -57,7 +57,7 @@ function createLineGraph(containerId, raceData){
   y.domain([raceData.drivers.length, 1]);
 
   var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
-  console.log(["enhancedLapData", enhancedLapData]);
+  //console.log(["enhancedLapData", enhancedLapData]);
 
   // Adds all lines
   enhancedLapData.forEach((driverLapData, driverIndex) => {
@@ -71,6 +71,28 @@ function createLineGraph(containerId, raceData){
           .attr("data-elemtype", elemTypes.line)
           .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
           .attr("d", lineDataDefinition);
+
+      driverLapData.laps.forEach((singleLap, singleLapIndex)=> {
+        //console.log(["driverLaps.forEach", singleLap, singleLapIndex]);
+        if(singleLap.pitStop){
+          //Appends a circle for each datapoint
+          svg.selectAll(".pitstoppoint")
+              .data([singleLap])
+              .enter().append("circle") // Uses the enter().append() method
+              .attr("class", "dot pitstopdot") // Assign a class for styling
+              .attr("data-line", driverLapData.driver.driverId)
+              .attr("data-opacitychange", 1)
+              .attr("data-highlighted", 0)
+              .attr("data-elemtype", elemTypes.pitstoppoint)
+              .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
+              .attr("cx", function(d, i) {return x(d.lap) })
+              .attr("cy", function(d, i) { return y(d.position) })
+              .attr("r", linePointSize * 1.2)
+              .on("click", handleClickOnPoint)
+              .on("mouseover", handleMouseOverLinePoint)
+              .on("mouseout", handleMouseOutLinePoint);
+        }
+      });
 
       //Appends a circle for each datapoint
       svg.selectAll(".linepoint")
@@ -107,26 +129,7 @@ function createLineGraph(containerId, raceData){
           .on("mouseout", handleMouseOutLinePoint)
           .style("opacity", 0);
 
-      driverLapData.laps.forEach((singleLap, singleLapIndex)=> {
-        if(singleLap.pitStop){
-          //Appends a circle for each datapoint
-          svg.selectAll(".pitstoppoint")
-              .data([singleLap])
-              .enter().append("circle") // Uses the enter().append() method
-              .attr("class", "dot pitstoppoint") // Assign a class for styling
-              .attr("data-line", driverLapData.driver.driverId)
-              .attr("data-opacitychange", 1)
-              .attr("data-highlighted", 0)
-              .attr("data-elemtype", elemTypes.pitstoppoint)
-              .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
-              .attr("cx", function(d, i) {return x(d.lap) })
-              .attr("cy", function(d, i) { return y(d.position) })
-              .attr("r", linePointSize * 1.2)
-              .on("click", handleClickOnPoint)
-              .on("mouseover", handleMouseOverLinePoint)
-              .on("mouseout", handleMouseOutLinePoint);
-        }
-      });
+
 
       // in case the driver ended the race too early, get the status why he quit
       /*TODO: Mouseover for Rectangle*/

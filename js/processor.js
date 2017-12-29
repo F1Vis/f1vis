@@ -68,6 +68,7 @@ var processor = {
       lapData.laps.sort((o1,o2) => o1["lap"] - o2["lap"]);
       result.push(lapData);
     });
+
     return result;
   },
 

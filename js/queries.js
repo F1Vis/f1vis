@@ -76,14 +76,12 @@ var queries = {
 
     var tempList = [];
     for(var key in rawData.pitStops){
-      if(rawData.pitStops[key].raceId == raceId){
+      if(rawData.pitStops[key].raceId == raceId) {
         tempList.push(rawData.pitStops[key]);
       }
     }
-
     tempList.sort((o1,o2) => o1["stop"] - o2["stop"]);
     //var tempList = rawData.pitStops.filter(cur => cur.raceId == raceId);
-
     return tempList;
   },
 

@@ -7,6 +7,7 @@
 var slyelement = {
   obj: {},
   curRaces: {},
+  curRaceId: 0,
   el: '.frame',
   options: {
    horizontal: 1,
@@ -62,6 +63,8 @@ preprocessor.load(function(data) {
                 "</li>");
 	    $("#courseSelection li").click(function(event) {
 	       var raceI = event.currentTarget.attributes.data.value;
+           if(slyelement.curRaceId == raceI){ return; }
+           slyelement.curRaceId = raceI;
 	       var rdata = slyelement.curRaces.filter(r => r.raceInfo.raceId == raceI)[0];
 	       $("#lineGraphBox").empty();
 	       createLineGraph("#lineGraphBox", rdata);

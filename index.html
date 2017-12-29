@@ -34,35 +34,52 @@
       </div>
     </nav>
 
-
     <main role="main" class="container">
-      <div class="content-box">
-        <form>
-          <div class="form-group">
-            <label for="seasonByYearSelector">Wähle ein Jahr aus!</label>
-            <select class="form-control" id="seasonByYearSelector">
-              <!-- This is filled using JS. -->
-            </select>
-          </div>
-        </form>
-      </div>
-      <div class="content-box strecken-selector">
-        <div class="frame">
-	        <ul class="slidee" id="courseSelection">
-	        </ul>
-        </div>
-        <div class="scrollbar">
-	        <div class="handle"></div>
-        </div>
-      </div>
 
-      <div class="content-box chart-box">
-        <div id="lineGraphBox"></div>
-      </div>
+      <!-- Navigation card -->
+      <div class="card" id="selector-card">
+        <div class="card-header">Welches Rennen interessiert dich?</div>
+        <div class="card-body">
+          <!-- Year selector -->
+          <form>
+            <div class="form-group">
+              <label for="seasonByYearSelector">Wähle ein Jahr aus!</label>
+              <select class="form-control" id="seasonByYearSelector">
+                <!-- This is filled using JS. -->
+              </select>
+            </div>
+          </form>
+
+          <!-- Course selector -->
+          <div class="content-box strecken-selector">
+            <div class="frame">
+	      <ul class="slidee" id="courseSelection"><!-- This will be filled by JS. --></ul>
+            </div>
+            <div class="scrollbar">
+              <div class="handle"></div>
+            </div>
+          </div>
+        
+        </div> <!-- card-body -->
+      </div> <!-- card -->
+
+      <br>
+
+      <!-- Diagram card -->
+      <div class="card" id="diagram-card">
+        <div class="card-header">Diagramm</div>
+        <div class="card-body">
+
+          <div class="content-box chart-box">
+            <div id="lineGraphBox"></div>
+          </div>
+
+        </div> <!-- card-body -->
+      </div> <!-- card -->
 
     </main><!-- /.container -->
 
-
+    <!-- Other utility infrastructure -->
     <div id="loading-dialog" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">
       <div class="modal-dialog modal-m">
         <div class="modal-content">

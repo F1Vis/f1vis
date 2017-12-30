@@ -162,7 +162,7 @@ function createLineGraph(containerId, raceData){
               .attr("r", linePointSize * 0.5)
               .attr("d", lineDataDefinitionSmall);
           // Remove data from driverLapData, since we don't need a generic datapoint for this
-          driverLapData.laps[singleLapIndex] = {};
+          //driverLapData.laps[singleLapIndex] = {};
         }
       });
 

@@ -13,6 +13,8 @@ function createLineGraph(containerId, raceData){
 
   var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
 
+  attachRaceStatistics(enhancedLapData, raceData);
+
   // Configuration
   var height = 720;
   var width = 1080;

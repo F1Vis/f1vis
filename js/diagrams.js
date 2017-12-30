@@ -17,7 +17,7 @@ function createLineGraph(containerId, raceData){
 
   // Configuration
   var svgHeight = 720;
-  var svgWidth = 1080;
+  var svgWidth = 1300;
   var linePointSize = 5;
   var rectSize = 16;
   var amountClickedLines = 0;

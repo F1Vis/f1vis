@@ -16,8 +16,8 @@ function createLineGraph(containerId, raceData){
   attachRaceStatistics(enhancedLapData, raceData);
 
   // Configuration
-  var height = 720;
-  var width = 1080;
+  var svgHeight = 720;
+  var svgWidth = 1080;
   var linePointSize = 5;
   var rectSize = 16;
   var amountClickedLines = 0;
@@ -30,14 +30,47 @@ function createLineGraph(containerId, raceData){
     endpoint: "endpoint"
   };
 
+// -----------------------------------------------------------------------
   // set the dimensions and margins of the graph
-  var margin = {top: 50, right: 100, bottom: 50, left: 100},
-      width = width - margin.left - margin.right,
-      height = height - margin.top - margin.bottom;
+  var margin = {top: 28.8, right: 28.8, bottom: 158.4, left: 57.6},
+      margin2 = {top: 619.2, right: 28.8, bottom: 43.2, left: 57.6},
+      width = svgWidth - margin.left - margin.right,
+      height = svgHeight - margin.top - margin.bottom,
+      height2 = svgHeight - margin2.top - margin2.bottom;
 
   // set the ranges
-  var x = d3.scaleLinear().range([0, width]);
-  var y = d3.scaleLinear().range([height, 0]);
+  var x = d3.scaleLinear().range([0, width]),
+      x2 = d3.scaleTime().range([0, width]),
+      y = d3.scaleLinear().range([height, 0]),
+      y2 = d3.scaleLinear().range([height2, 0]);
+
+  var xAxis = d3.axisBottom(x),
+      xAxis2 = d3.axisBottom(x2),
+      yAxis = d3.axisLeft(y);
+
+  var brush = d3.brushX()
+    .extent([[0, 0], [width, height2]])
+    .on("brush end", brushed);
+
+  var zoom = d3.zoom()
+    .scaleExtent([1, Infinity])
+    .translateExtent([[0, 0], [width, height]])
+    .extent([[0, 0], [width, height]])
+    .on("zoom", zoomed);
+
+  var area = d3.area()
+      .curve(d3.curveMonotoneX)
+      .x(function(d) { return x(d.lap); })
+      .y0(height)
+      .y1(function(d) { return y(d.position); });
+
+  var area2 = d3.area()
+      .curve(d3.curveMonotoneX)
+      .x(function(d) { return x2(d.lap); })
+      .y0(height2)
+      .y1(function(d) { return y2(d.position); });
+
+// -----------------------------------------------------------------------
 
   // defines how the passed in Data, at "svg.append" shall be interpreted
   var lineDataDefinition = d3.line()
@@ -48,15 +81,31 @@ function createLineGraph(containerId, raceData){
   // appends a 'group' element to 'svg'
   // moves the 'group' element to the top left margin
   var svg = d3.select(containerId).append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+      .attr("width", svgWidth + margin.left + margin.right)
+      .attr("height", svgHeight + margin.top + margin.bottom);
+  //----------------------------------------------------------------------
+  svg.append("defs").append("clipPath")
+    .attr("id", "clip")
+    .append("rect")
+      .attr("width", width)
+      .attr("height", height);
+
+  var focus = svg.append("g")
+      .attr("class", "focus")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var context = svg.append("g")
+      .attr("class", "context")
+      .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+
+  // -----------------------------------------------------------------------
 
   // Scale the range of the data
   x.domain([0, raceData.lapTimes.size]);
   y.domain([raceData.drivers.length, 1]);
+  x2.domain(x.domain());
+  y2.domain(y.domain());
 
   var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
   //console.log(["enhancedLapData", enhancedLapData]);
@@ -64,7 +113,7 @@ function createLineGraph(containerId, raceData){
   // Adds all lines
   enhancedLapData.forEach((driverLapData, driverIndex) => {
     //console.log(driverLapData);
-      svg.append("path")
+      focus.append("path")
           .data([driverLapData.laps])
           .attr("class", "line")
           .attr("data-line", driverLapData.driver.driverId) // custom data to specify the line
@@ -78,7 +127,7 @@ function createLineGraph(containerId, raceData){
         //console.log(["driverLaps.forEach", singleLap, singleLapIndex]);
         if(singleLap.pitStop){
           //Appends a circle for each datapoint
-          svg.selectAll(".pitstoppoint")
+          focus.selectAll(".pitstoppoint")
               .data([singleLap])
               .enter().append("circle") // Uses the enter().append() method
               .attr("class", "dot pitstopdot") // Assign a class for styling
@@ -100,7 +149,7 @@ function createLineGraph(containerId, raceData){
       });
 
       //Appends a circle for each datapoint
-      svg.selectAll(".linepoint")
+      focus.selectAll(".linepoint")
           .data(driverLapData.laps)
           .enter().append("circle") // Uses the enter().append() method
           .attr("class", "dot linedot") // Assign a class for styling
@@ -116,7 +165,7 @@ function createLineGraph(containerId, raceData){
           .style("opacity", 0);
 
       //Appends a circle for each datapoint
-      svg.selectAll(".invisiblelinepoint")
+      focus.selectAll(".invisiblelinepoint")
           .data(driverLapData.laps)
           .enter().append("circle") // Uses the enter().append() method
           .attr("class", "dot linedot") // Assign a class for styling
@@ -145,7 +194,7 @@ function createLineGraph(containerId, raceData){
             .type(d3.symbolTriangle)
             .size(25);
         //get Data for last round
-        svg.selectAll(".endpoint")
+        focus.selectAll(".endpoint")
             .data([driverLapData.laps[driverLapData.laps.length - 1]])
             .enter().append("rect") // Uses the enter().append() method
             //.attr("class", "endpoint") // Assign a class for styling
@@ -177,12 +226,12 @@ function createLineGraph(containerId, raceData){
   });
 
   // Add the X Axis
-  svg.append("g")
+  focus.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x));
 
   // Add the Y Axis on both sides
-  svg.append("g")
+  focus.append("g")
     .call(
       d3.axisLeft(y)
         .ticks(raceData.drivers.length)
@@ -192,7 +241,7 @@ function createLineGraph(containerId, raceData){
     );
 
   // Add gridlines on x axis to better figure out laps
-  svg.append("g")			
+  focus.append("g")
     .attr("class", "grid")
     .attr("transform", "translate(0," + height + ")")
     .style("opacity", 0.06)
@@ -203,7 +252,7 @@ function createLineGraph(containerId, raceData){
     );
 
   // Add clickable ticklines so people can scale things
-  svg.append("g")
+  focus.append("g")
     .attr("class", "grid")
     .attr("transform", "translate(0," + height + ")")
     .style("opacity", 0.5)
@@ -213,7 +262,7 @@ function createLineGraph(containerId, raceData){
       .tickFormat("")
     );
 
-  svg.append("g")
+  focus.append("g")
       .call(
         d3.axisRight(y)
           .ticks(raceData.drivers.length)
@@ -228,6 +277,28 @@ function createLineGraph(containerId, raceData){
           })
       )
       .attr("transform", "translate( " + (width) + ", 0 )");
+
+//----------------------------
+
+
+  context.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(d3.axisBottom(x2));
+
+  context.append("g")
+      .attr("class", "brush")
+      .call(brush)
+      .call(brush.move, x.range());
+
+  svg.append("rect")
+      .attr("class", "zoom")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .call(zoom);
+
+  //---------------------------------------------------------------------------
 
   function handleClickOnPoint(d,i){
       //select elements that are highlightable but are not highlighted
@@ -395,6 +466,26 @@ function createLineGraph(containerId, raceData){
       }
     }
     return driverCode;
+  }
+
+  function brushed() {
+    if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+    var s = d3.event.selection || x2.range();
+    x.domain(s.map(x2.invert, x2));
+    focus.select(".area").attr("d", area);
+    focus.select(".axis--x").call(xAxis);
+    svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+        .scale(width / (s[1] - s[0]))
+        .translate(-s[0], 0));
+  }
+
+  function zoomed() {
+    if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
+    var t = d3.event.transform;
+    x.domain(t.rescaleX(x2).domain());
+    focus.select(".area").attr("d", area);
+    focus.select(".axis--x").call(xAxis);
+    context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
   }
 
 }

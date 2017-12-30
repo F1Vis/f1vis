@@ -58,7 +58,7 @@ function createLineGraph(containerId, raceData){
     .translateExtent([[0, 0], [graphPosWidth.width, graphPosWidth.height]])
     .extent([[0, 0], [graphPosWidth.width, graphPosWidth.height]])
     .on("zoom", zoomed);
-	  
+
 // -----------------------------------------------------------------------
 
   // defines how the passed in Data, at "svg.append" shall be interpreted

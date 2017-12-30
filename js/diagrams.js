@@ -509,8 +509,7 @@ function createLineGraph(containerId, raceData){
     var s = d3.event.selection || x2.range();
     x.domain(s.map(x2.invert, x2));
 	
-	//Update the x axis data
-    focus.select(".axis--x").call(xAxis);
+	updateElements();
 	
 	//Update the "preview" rectangle
     svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
@@ -524,6 +523,14 @@ function createLineGraph(containerId, raceData){
 	
 	x.domain(t.rescaleX(x2).domain());
 	
+	updateElements();
+	
+	//call the brush function
+    context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
+  }
+  
+  function updateElements(){
+	  
 	//scale the path axis
     focus.selectAll(".pathLines").call(xAxis);
 	
@@ -534,9 +541,6 @@ function createLineGraph(containerId, raceData){
 
 	//Update x-axis
 	focus.select(".axis--x").call(xAxis);
-	
-	//call the brush function
-    context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
   }
 
 }

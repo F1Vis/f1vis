@@ -16,7 +16,8 @@ function createLineGraph(containerId, raceData){
   attachRaceStatistics(enhancedLapData, raceData);
 
   // Configuration
-  var svgHeight = 720;
+  var graphHeight = 720;
+  var smallGraphHeight = 200;
   var svgWidth = 1300;
   var linePointSize = 5;
   var rectSize = 16;
@@ -32,42 +33,42 @@ function createLineGraph(containerId, raceData){
 
 // -----------------------------------------------------------------------
   // set the dimensions and margins of the graph
-  var margin = {top: 28.8, right: 28.8, bottom: 158.4, left: 57.6},
-      margin2 = {top: 619.2, right: 28.8, bottom: 43.2, left: 57.6},
-      width = svgWidth - margin.left - margin.right,
-      height = svgHeight - margin.top - margin.bottom,
-      height2 = svgHeight - margin2.top - margin2.bottom;
+  var marginGraph = {top: 28.8, right: 28.8, bottom: 10, left: 57.6},
+      marginSmallGraph = {top: 10, right: marginGraph.right, bottom: 50, left: marginGraph.left},
+      graphPosWidth = {posX: marginGraph.left, posY: marginGraph.top, width: svgWidth - (marginGraph.left + marginGraph.right), height : graphHeight, totalHeight: marginGraph.top + graphHeight + marginGraph.bottom},
+      smallGraphPosWidth = {posX: marginSmallGraph.left, posY: graphPosWidth.totalHeight + graphPosWidth.posY + marginSmallGraph.top, width: svgWidth - (marginSmallGraph.left + marginSmallGraph.right), height : smallGraphHeight , totalHeight: marginSmallGraph.top + smallGraphHeight + marginSmallGraph.bottom},
+	  svgHeight = smallGraphPosWidth.totalHeight + graphPosWidth.totalHeight;
 
   // set the ranges
-  var x = d3.scaleLinear().range([0, width]),
-      x2 = d3.scaleLinear().range([0, width]),
-      y = d3.scaleLinear().range([height, 0]),
-      y2 = d3.scaleLinear().range([height2, 0]);
+  var x = d3.scaleLinear().range([0, graphPosWidth.width]),
+      x2 = d3.scaleLinear().range([0, smallGraphPosWidth.width]),
+      y = d3.scaleLinear().range([graphPosWidth.height, 0]),
+      y2 = d3.scaleLinear().range([smallGraphPosWidth.height, 0]);
 
   var xAxis = d3.axisBottom(x),
       xAxis2 = d3.axisBottom(x2),
       yAxis = d3.axisLeft(y);
 
   var brush = d3.brushX()
-    .extent([[0, 0], [width, height2]])
+    .extent([[0, 0], [smallGraphPosWidth.width, smallGraphPosWidth.height]])
     .on("brush end", brushed);
 
   var zoom = d3.zoom()
-    .scaleExtent([1, Infinity])
-    .translateExtent([[0, 0], [width, height]])
-    .extent([[0, 0], [width, height]])
+    .scaleExtent([1, 10])
+    .translateExtent([[0, 0], [graphPosWidth.width, graphPosWidth.height]])
+    .extent([[0, 0], [graphPosWidth.width, graphPosWidth.height]])
     .on("zoom", zoomed);
 
   var area = d3.area()
       .curve(d3.curveMonotoneX)
       .x(function(d) { return x(d.lap); })
-      .y0(height)
+      .y0(graphPosWidth.height)
       .y1(function(d) { return y(d.position); });
 
   var area2 = d3.area()
       .curve(d3.curveMonotoneX)
       .x(function(d) { return x2(d.lap); })
-      .y0(height2)
+      .y0(smallGraphPosWidth.height)
       .y1(function(d) { return y2(d.position); });
 
 // -----------------------------------------------------------------------
@@ -81,23 +82,23 @@ function createLineGraph(containerId, raceData){
   // appends a 'group' element to 'svg'
   // moves the 'group' element to the top left margin
   var svg = d3.select(containerId).append("svg")
-      .attr("width", svgWidth + margin.left + margin.right)
-      .attr("height", svgHeight + margin.top + margin.bottom);
+      .attr("width", svgWidth)
+      .attr("height", svgHeight);
   //----------------------------------------------------------------------
   svg.append("defs").append("clipPath")
     .attr("id", "clip")
     .append("rect")
-      .attr("width", width)
-      .attr("height", height);
+      .attr("width", graphPosWidth.width)
+      .attr("height", graphPosWidth.height);
 
   var focus = svg.append("g")
       .attr("class", "focus")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + graphPosWidth.posX + "," + graphPosWidth.posY + ")");
 
   var context = svg.append("g")
       .attr("class", "context")
-      .attr("height", height2)
-      .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+      .attr("height", smallGraphPosWidth.height)
+      .attr("transform", "translate(" + smallGraphPosWidth.posX + "," + smallGraphPosWidth.posY + ")");
 
 
   // -----------------------------------------------------------------------
@@ -265,7 +266,7 @@ function createLineGraph(containerId, raceData){
 
   // Add the X Axis
   focus.append("g")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate(0," + graphPosWidth.height + ")")
       .call(d3.axisBottom(x));
 
   // Add the Y Axis on both sides
@@ -281,18 +282,18 @@ function createLineGraph(containerId, raceData){
   // Add gridlines on x axis to better figure out laps
   focus.append("g")
     .attr("class", "grid")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + graphPosWidth.height + ")")
     .style("opacity", 0.06)
     .call(d3.axisBottom(x)
       .ticks(raceData.lapTimes.size) // One gridline for each lap
-      .tickSize(-height)
+      .tickSize(-graphPosWidth.height)
       .tickFormat("")
     );
 
   // Add clickable ticklines so people can scale things
   focus.append("g")
     .attr("class", "grid")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + graphPosWidth.height + ")")
     .style("opacity", 0.5)
     .call(d3.axisBottom(x)
       .ticks(raceData.lapTimes.size) // One gridline for each lap
@@ -314,14 +315,14 @@ function createLineGraph(containerId, raceData){
             return d + " " + driverCode ;
           })
       )
-      .attr("transform", "translate( " + (width) + ", 0 )");
+      .attr("transform", "translate( " + (graphPosWidth.width) + ", 0 )");
 
 //----------------------------
 
 
   context.append("g")
       .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height2 + ")")
+      .attr("transform", "translate(0," + smallGraphPosWidth.height + ")")
       .call(d3.axisBottom(x2));
 
   context.append("g")
@@ -331,9 +332,9 @@ function createLineGraph(containerId, raceData){
 
   svg.append("rect")
       .attr("class", "zoom")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .attr("width", graphPosWidth.width)
+      .attr("height", graphPosWidth.height)
+      .attr("transform", "translate(" + graphPosWidth.posX + "," + graphPosWidth.posY + ")")
       .call(zoom);
 
   //---------------------------------------------------------------------------
@@ -515,7 +516,7 @@ function createLineGraph(containerId, raceData){
     focus.select(".area").attr("d", area);
     focus.select(".axis--x").call(xAxis);
     svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
-        .scale(width / (s[1] - s[0]))
+        .scale(graphPosWidth.width / (s[1] - s[0]))
         .translate(-s[0], 0));
   }
 

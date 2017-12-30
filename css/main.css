@@ -42,7 +42,7 @@ body {
 
 .frame { width: 100%; height: 185px; padding: 4px; border: 1px solid rgba(0,0,0,.125); border-radius: calc(.25rem - 1px); background-color: rgba(0,0,0,.03); }
 .frame .slidee { margin: 0; padding: 0; height: 100%; list-style: none; }
-.frame .slidee li { float: left; margin: 0 5px 0 0; padding: 0; width: 150px; height: 100%; border: 1px solid rgba(0,0,0,.125); background-color: white; }
+.frame .slidee li { float: left; margin: 0 5px 0 0; padding: 0; width: 150px; height: 100%; border: 1px solid rgba(0,0,0,.125); background-color: white; text-align: center; }
 
 .scrollbar {
     width: 100%;

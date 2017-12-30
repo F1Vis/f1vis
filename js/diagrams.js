@@ -523,6 +523,7 @@ function createLineGraph(containerId, raceData){
     focus.selectAll(".pathLines").attr("d", lineDataDefinition);
     focus.selectAll(".pitstopdot").attr("cx", function(d, i) {return x(d.lap) });
     focus.selectAll(".endpointdot").attr("x", function(d, i) { return x(d.lap) - rectSize * 1/2; });
+    focus.selectAll(".linedot").attr("cx", function(d, i) {return x(d.lap) });
     // Update xAxis
     focus.select(".axis--x").call(xAxis);
     // Update gridlines

@@ -20,11 +20,11 @@ body {
 }
 
 #courseSelection li.hover {
-  background-color: #e2eaff;
+  background-color: rgba(0, 123, 255, 0.3);
 }
 
 #courseSelection li.selected {
-  border-color: #aaaaff;
+  border-color: #007bff;
 }
 
 /* This container will allow scaling svg, so we don't need to care about it in d3.js */
@@ -49,21 +49,21 @@ body {
   stroke-width: 2px;
 }
 
-.frame { width: 100%; height: 185px; padding: 4px; border: 2px solid black; background-color: #EEEEEE;}
+.frame { width: 100%; height: 185px; padding: 4px; border: 2px solid black; border: 1px solid rgba(0,0,0,.125); border-radius: calc(.25rem - 1px); }
 .frame .slidee { margin: 0; padding: 0; height: 100%; list-style: none; }
-.frame .slidee li { float: left; margin: 0 5px 0 0; padding: 0; width: 150px; height: 100%; border: 2px solid gray; background-color: white; }
+.frame .slidee li { float: left; margin: 0 5px 0 0; padding: 0; width: 150px; height: 100%; border: 1px solid rgba(0,0,0,.125); background-color: white; }
 
 .scrollbar {
     width: 100%;
     height: 16px;
     margin-top: 4px;
-    background-color: hsl(0, 0%, 94.1%);
-    border: 1px solid hsl(0, 0%, 50.0%);
+    background-color: rgba(0,0,0,.03);
+    border: 1px solid rgba(0,0,0,.125);
 }
 .scrollbar .handle {
 	width: 100px; /* overriden if dynamicHandle: 1 */
 	height: 100%;
-	background: #222;
+	background: #868e96;
 }
 
 .coursename {

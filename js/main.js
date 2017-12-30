@@ -44,8 +44,9 @@ preprocessor.load(function(data) {
   yearSelector.change(function(event) {
     var selectedYear = $(event.target).val();
     slyelement.curRaces = processor.getRacesByYear(selectedYear);
+    // Empty the course selector
     $("#courseSelection").empty();
-    // Add all the races to the selector
+    // ... and fill it with fresh races to choose from
     for(var race in slyelement.curRaces) {
         var raceD = slyelement.curRaces[race];
           $("#courseSelection").append("<li data=\"" + raceD.raceInfo.raceId + "\">" +
@@ -54,15 +55,35 @@ preprocessor.load(function(data) {
 
 	  $("#courseSelection li").click(function(event) {
 	    var raceI = event.currentTarget.attributes.data.value;
-            if(slyelement.curRaceId == raceI){ return; }
+            // Internal check if element was already selected
+            if(slyelement.curRaceId == raceI){ return true; }
             slyelement.curRaceId = raceI;
+            // Clear previously selected courses
+            $("#courseSelection .selected").removeClass("selected");
+            // Mark selected course
+            $(event.currentTarget).addClass("selected");
+            // Fetch race data
 	    var rdata = slyelement.curRaces.filter(r => r.raceInfo.raceId == raceI)[0];
+            // Put information about race into race info box
+            $("#race-infobox").html(renderRaceInfoBox(rdata)); // See util.js
+             // Put information about drivers into driver info box
+            $("#driver-infobox").html(renderDriverInfoBox(rdata)); // See util.js
+           // Hand off to diagram rendering
 	    $("#lineGraphBox").empty();
   	    createLineGraph("#lineGraphBox", rdata);
 	});
         slyelement.obj.reload();
     }
+    // Refresh carousell after building the selector
     slyelement.obj.reload();
+    // Register hover event
+    $("#courseSelection li").hover(function(event){
+      // handlerIn
+      $(event.currentTarget).addClass("hover");
+    }, function(event) {
+      // handlerOut
+      $(event.currentTarget).removeClass("hover");
+    });
 
     // TODO: Now add all the images without disturbing the user
     for(var race in slyelement.curRaces) {
@@ -107,4 +128,6 @@ preprocessor.load(function(data) {
   // Select most recent year by default
   $("#seasonByYearSelector").val($("#seasonByYearSelector option").first().val()).change();
 
+  // Enable tooltips
+  $('[data-toggle="tooltip"]').tooltip()
 });

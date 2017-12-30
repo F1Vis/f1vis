@@ -147,3 +147,35 @@ function getImageFromWikipedia(data,pageName,imagesize,callback){
         }
     });
 };
+
+function renderRaceInfoBox(race) {
+  var raceInfo = race.raceInfo;
+  var circuit = preprocessor.getResults().circuits[raceInfo.circuitId];
+  //console.log(raceInfo);
+  var content = "";
+
+  content = "<h1 data-toggle=\"tooltip\" data-placement=\"top\" title=\"#"+raceInfo.raceId+"\">"+raceInfo.name+"</h1>";
+  content += "<h5>"+circuit.name+" ("+circuit.location+", "+circuit.country+")</h5>";
+  content += "<h6>"+raceInfo.date.toLocaleDateString("de-DE")+"</h6>"
+  content += "<div class=\"text-right\">";
+  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+raceInfo.url+"\" role=\"button\">See Race on Wikipedia</a> ";
+  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+circuit.url+"\" role=\"button\">See Circuit on Wikipedia</a>";
+  content += "</div>";
+  return content;
+}
+
+function renderDriverInfoBox(race) {
+  var raceInfo = race.raceInfo;
+  var circuit = preprocessor.getResults().circuits[raceInfo.circuitId];
+  console.log(raceInfo);
+  var content = "";
+
+  content = "<h1 data-toggle=\"tooltip\" data-placement=\"top\" title=\"#"+raceInfo.raceId+"\">"+raceInfo.name+"</h1>";
+  content += "<h5>"+circuit.name+" ("+circuit.location+", "+circuit.country+")</h5>";
+  content += "<h6>"+raceInfo.date.toLocaleDateString("de-DE")+"</h6>"
+  content += "<div class=\"text-right\">";
+  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+raceInfo.url+"\" role=\"button\">See Race on Wikipedia</a> ";
+  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+circuit.url+"\" role=\"button\">See Circuit on Wikipedia</a>";
+  content += "</div>";
+  return content;
+}

@@ -19,14 +19,6 @@ body {
   /*border: 1px solid grey;*/
 }
 
-#courseSelection li.hover {
-  background-color: rgba(0, 123, 255, 0.3);
-}
-
-#courseSelection li.selected {
-  border-color: #007bff;
-}
-
 /* This container will allow scaling svg, so we don't need to care about it in d3.js */
 .svg-container {
   display: inline-block;
@@ -49,7 +41,10 @@ body {
   stroke-width: 2px;
 }
 
-.frame { width: 100%; height: 185px; padding: 4px; border: 2px solid black; border: 1px solid rgba(0,0,0,.125); border-radius: calc(.25rem - 1px); }
+#courseSelection li.hover { background-color: rgba(0, 123, 255, 0.3); }
+#courseSelection li.selected { border-color: #007bff; }
+
+.frame { width: 100%; height: 185px; padding: 4px; border: 1px solid rgba(0,0,0,.125); border-radius: calc(.25rem - 1px); background-color: rgba(0,0,0,.03); }
 .frame .slidee { margin: 0; padding: 0; height: 100%; list-style: none; }
 .frame .slidee li { float: left; margin: 0 5px 0 0; padding: 0; width: 150px; height: 100%; border: 1px solid rgba(0,0,0,.125); background-color: white; }
 
@@ -65,6 +60,8 @@ body {
 	height: 100%;
 	background: #868e96;
 }
+
+.scrollbar .handle:hover { background-color: rgba(0, 123, 255, 1); }
 
 .coursename {
     font-size: 8pt;

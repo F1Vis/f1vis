@@ -267,7 +267,7 @@ function createLineGraph(containerId, raceData){
   });
 
   // Add the X Axis
-  focus.append("g")
+  var xAxis1 = focus.append("g")
       .attr("transform", "translate(0," + graphPosWidth.height + ")")
       .call(d3.axisBottom(x));
 
@@ -282,7 +282,7 @@ function createLineGraph(containerId, raceData){
     );
 
   // Add gridlines on x axis to better figure out laps
-  focus.append("g")
+  var xAxis2 = focus.append("g")
     .attr("class", "grid")
     .attr("transform", "translate(0," + graphPosWidth.height + ")")
     .style("opacity", 0.06)
@@ -293,7 +293,7 @@ function createLineGraph(containerId, raceData){
     );
 
   // Add clickable ticklines so people can scale things
-  focus.append("g")
+  var xAxis3 = focus.append("g")
     .attr("class", "grid")
     .attr("transform", "translate(0," + graphPosWidth.height + ")")
     .style("opacity", 0.5)
@@ -528,6 +528,11 @@ function createLineGraph(containerId, raceData){
     x.domain(t.rescaleX(x2).domain());
     focus.selectAll(".zoomable").attr("d", area);
     focus.selectAll(".axis--x").call(xAxis);
+	
+	xAxis1.call(xAxis.scale(d3.event.transform.rescaleX(x)));
+	xAxis2.call(xAxis.scale(d3.event.transform.rescaleX(x)));
+	xAxis3.call(xAxis.scale(d3.event.transform.rescaleX(x)));
+	
     context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
   }
 

@@ -33,7 +33,7 @@ function createLineGraph(containerId, raceData){
 
 // -----------------------------------------------------------------------
   // set the dimensions and margins of the graph
-  var marginGraph = {top: 28.8, right: 28.8, bottom: 10, left: 57.6},
+  var marginGraph = {top: 30.0, right: 50, bottom: 10, left: 50.0},
       marginSmallGraph = {top: 10, right: marginGraph.right, bottom: 50, left: marginGraph.left},
       graphPosWidth = {posX: marginGraph.left, posY: marginGraph.top, width: svgWidth - (marginGraph.left + marginGraph.right), height : graphHeight, totalHeight: marginGraph.top + graphHeight + marginGraph.bottom},
       smallGraphPosWidth = {posX: marginSmallGraph.left, posY: graphPosWidth.totalHeight + graphPosWidth.posY + marginSmallGraph.top, width: svgWidth - (marginSmallGraph.left + marginSmallGraph.right), height : smallGraphHeight , totalHeight: marginSmallGraph.top + smallGraphHeight + marginSmallGraph.bottom},
@@ -54,29 +54,21 @@ function createLineGraph(containerId, raceData){
     .on("brush end", brushed);
 
   var zoom = d3.zoom()
-    .scaleExtent([1, 10])
+    .scaleExtent([1, 5])
     .translateExtent([[0, 0], [graphPosWidth.width, graphPosWidth.height]])
     .extent([[0, 0], [graphPosWidth.width, graphPosWidth.height]])
     .on("zoom", zoomed);
-
-  var area = d3.area()
-      .curve(d3.curveMonotoneX)
-      .x(function(d) { return x(d.lap); })
-      .y0(graphPosWidth.height)
-      .y1(function(d) { return y(d.position); });
-
-  var area2 = d3.area()
-      .curve(d3.curveMonotoneX)
-      .x(function(d) { return x2(d.lap); })
-      .y0(smallGraphPosWidth.height)
-      .y1(function(d) { return y2(d.position); });
-
+	  
 // -----------------------------------------------------------------------
 
   // defines how the passed in Data, at "svg.append" shall be interpreted
   var lineDataDefinition = d3.line()
     .x(function(d) { return x(d.lap); })
     .y(function(d) { return y(d.position); });
+	
+  var lineDataDefinitionSmall = d3.line()
+    .x(function(d) { return x2(d.lap); })
+    .y(function(d) { return y2(d.position); });
 
   // append the svg obgect to the body of the page
   // appends a 'group' element to 'svg'
@@ -100,7 +92,6 @@ function createLineGraph(containerId, raceData){
       .attr("height", smallGraphPosWidth.height)
       .attr("transform", "translate(" + smallGraphPosWidth.posX + "," + smallGraphPosWidth.posY + ")");
 
-
   // -----------------------------------------------------------------------
 
   // Scale the range of the data
@@ -112,12 +103,13 @@ function createLineGraph(containerId, raceData){
   var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);
   //console.log(["enhancedLapData", enhancedLapData]);
 
+	
   // Adds all lines
   enhancedLapData.forEach((driverLapData, driverIndex) => {
     //console.log(driverLapData);
       focus.append("path")
           .data([driverLapData.laps])
-          .attr("class", "line zoomable")
+          .attr("class", "line pathLines")
           .attr("data-line", driverLapData.driver.driverId) // custom data to specify the line
           .attr("data-opacitychange", 1)
           .attr("data-highlighted", 0)
@@ -127,13 +119,13 @@ function createLineGraph(containerId, raceData){
 
       context.append("path")
           .data([driverLapData.laps])
-          .attr("class", "line-context zoomable")
+          .attr("class", "line-context")
           .attr("data-line", driverLapData.driver.driverId) // custom data to specify the line
           .attr("data-opacitychange", 1)
           .attr("data-highlighted", 0)
           .attr("data-elemtype", elemTypes.line)
           .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
-          .attr("d", area2);
+          .attr("d", lineDataDefinitionSmall);
 
       driverLapData.laps.forEach((singleLap, singleLapIndex)=> {
         //console.log(["driverLaps.forEach", singleLap, singleLapIndex]);
@@ -142,7 +134,7 @@ function createLineGraph(containerId, raceData){
           focus.selectAll(".pitstoppoint")
               .data([singleLap])
               .enter().append("circle") // Uses the enter().append() method
-              .attr("class", "dot pitstopdot zoomable") // Assign a class for styling
+              .attr("class", "pitstopdot") // Assign a class for styling
               .attr("data-line", driverLapData.driver.driverId)
               .attr("data-opacitychange", 1)
               .attr("data-highlighted", 0)
@@ -159,7 +151,7 @@ function createLineGraph(containerId, raceData){
           context.selectAll(".pitstoppoint-context")
               .data([singleLap])
               .enter().append("circle") // Uses the enter().append() method
-              .attr("class", "dot pitstopdot zoomable") // Assign a class for styling
+              .attr("class", "pitstopdot") // Assign a class for styling
               .attr("data-line", driverLapData.driver.driverId)
               .attr("data-opacitychange", 1)
               .attr("data-highlighted", 0)
@@ -168,7 +160,7 @@ function createLineGraph(containerId, raceData){
               .attr("cx", function(d, i) {return x2(d.lap) })
               .attr("cy", function(d, i) { return y2(d.position) })
               .attr("r", linePointSize * 0.5)
-              .attr("d", area2);
+              .attr("d", lineDataDefinitionSmall);
           // Remove data from driverLapData, since we don't need a generic datapoint for this
           driverLapData.laps[singleLapIndex] = {};
         }
@@ -178,7 +170,7 @@ function createLineGraph(containerId, raceData){
       focus.selectAll(".linepoint")
           .data(driverLapData.laps)
           .enter().append("circle") // Uses the enter().append() method
-          .attr("class", "dot linedot zoomable") // Assign a class for styling
+          .attr("class", "linedot") // Assign a class for styling
           .attr("id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
           .attr("data-line", driverLapData.driver.driverId)
           .attr("data-opacitychange", 0)
@@ -194,7 +186,7 @@ function createLineGraph(containerId, raceData){
       focus.selectAll(".invisiblelinepoint")
           .data(driverLapData.laps)
           .enter().append("circle") // Uses the enter().append() method
-          .attr("class", "dot linedot zoomable") // Assign a class for styling
+          .attr("class", "linedot") // Assign a class for styling
           .attr("circle-id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
           .attr("data-line", driverLapData.driver.driverId)
           .attr("data-opacitychange", 0)
@@ -221,8 +213,7 @@ function createLineGraph(containerId, raceData){
         focus.selectAll(".endpoint")
             .data([driverLapData.laps[driverLapData.laps.length - 1]])
             .enter().append("rect") // Uses the enter().append() method
-            //.attr("class", "endpoint") // Assign a class for styling
-            .attr("class", "zoomable")
+            .attr("class", "endpointdot") // Assign a class for styling
             .attr("data-line", driverLapData.driver.driverId)
             .attr("data-opacitychange", 1)
             .attr("data-highlighted", 0)
@@ -251,7 +242,7 @@ function createLineGraph(containerId, raceData){
             .attr("y", function(d, i) { return y2(d.position) - rectSize * 1/2; })
             .attr("height", rectSize * 0.4)
             .attr("width", rectSize * 0.4)
-            .attr("d", area2);
+            .attr("d", lineDataDefinition);
 
         /* tried with Cross, didn't work, don't  know why
         svg.selectAll(".endpoint")
@@ -267,7 +258,8 @@ function createLineGraph(containerId, raceData){
   });
 
   // Add the X Axis
-  var xAxis1 = focus.append("g")
+  focus.append("g")
+	  .attr("class", "axis axis--x")
       .attr("transform", "translate(0," + graphPosWidth.height + ")")
       .call(d3.axisBottom(x));
 
@@ -282,8 +274,8 @@ function createLineGraph(containerId, raceData){
     );
 
   // Add gridlines on x axis to better figure out laps
-  var xAxis2 = focus.append("g")
-    .attr("class", "grid")
+  focus.append("g")
+    .attr("class", "grid axis axis--x")
     .attr("transform", "translate(0," + graphPosWidth.height + ")")
     .style("opacity", 0.06)
     .call(d3.axisBottom(x)
@@ -293,8 +285,8 @@ function createLineGraph(containerId, raceData){
     );
 
   // Add clickable ticklines so people can scale things
-  var xAxis3 = focus.append("g")
-    .attr("class", "grid")
+  focus.append("g")
+    .attr("class", "grid axis axis--x")
     .attr("transform", "translate(0," + graphPosWidth.height + ")")
     .style("opacity", 0.5)
     .call(d3.axisBottom(x)
@@ -303,6 +295,7 @@ function createLineGraph(containerId, raceData){
       .tickFormat("")
     );
 
+	//Add driver information on the right side of the graph.
   focus.append("g")
       .call(
         d3.axisRight(y)
@@ -515,24 +508,34 @@ function createLineGraph(containerId, raceData){
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
     var s = d3.event.selection || x2.range();
     x.domain(s.map(x2.invert, x2));
-    focus.selectAll(".zoomable").attr("d", area);
-    focus.selectAll(".axis--x").call(xAxis);
+	
+	//Update the x axis data
+    focus.select(".axis--x").call(xAxis);
+	
+	//Update the "preview" rectangle
     svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
-        .scale(graphPosWidth.width / (s[1] - s[0]))
-        .translate(-s[0], 0));
+      .scale(graphPosWidth.width / (s[1] - s[0]))
+      .translate(-s[0], 0));
   }
 
   function zoomed() {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
     var t = d3.event.transform;
-    x.domain(t.rescaleX(x2).domain());
-    focus.selectAll(".zoomable").attr("d", area);
-    focus.selectAll(".axis--x").call(xAxis);
 	
-	xAxis1.call(xAxis.scale(d3.event.transform.rescaleX(x)));
-	xAxis2.call(xAxis.scale(d3.event.transform.rescaleX(x)));
-	xAxis3.call(xAxis.scale(d3.event.transform.rescaleX(x)));
+	x.domain(t.rescaleX(x2).domain());
 	
+	//scale the path axis
+    focus.selectAll(".pathLines").call(xAxis);
+	
+	//update the data!!
+    focus.selectAll(".pathLines").attr("d", lineDataDefinition);
+	focus.selectAll(".pitstopdot").attr("cx", function(d, i) {return x(d.lap) });
+	focus.selectAll(".endpointdot").attr("x", function(d, i) { return x(d.lap) - rectSize * 1/2; });
+
+	//Update x-axis
+	focus.select(".axis--x").call(xAxis);
+	
+	//call the brush function
     context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
   }
 

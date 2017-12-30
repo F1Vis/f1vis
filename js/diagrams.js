@@ -152,8 +152,8 @@ function createLineGraph(containerId, raceData){
             .attr("data-highlighted", 0)
             .attr("data-elemtype", elemTypes.endpoint)
             .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
-            .attr("x", function(d, i) {return x(d.lap) - rectSize * 1/2 })
-            .attr("y", function(d, i) { return y(d.position) - rectSize * 1/2 })
+            .attr("x", function(d, i) { return x(d.lap) - rectSize * 1/2; })
+            .attr("y", function(d, i) { return y(d.position) - rectSize * 1/2; })
             .attr("height", rectSize)
             .attr("width", rectSize)
             .on("click", handleClickOnPoint)
@@ -251,9 +251,12 @@ function createLineGraph(containerId, raceData){
         .attr("r", linePointSize * 2);
       textArr = getPitStopTextArray(raceData,d);
     }else if(elemType === elemTypes.endpoint){
+      var newRectSize = rectSize * 1.5;
       d3.select(this)
-        .attr("height", rectSize * 1.5)
-        .attr("width", rectSize * 1.5);
+        .attr("height", newRectSize)
+        .attr("width", newRectSize)
+        .attr("x", function(d, i) { return x(d.lap) - newRectSize * 1/2; })
+        .attr("y", function(d, i) { return y(d.position) - newRectSize * 1/2; });
       textArr = getEndPointTextArray(raceData,d);
     }
 
@@ -300,7 +303,9 @@ function createLineGraph(containerId, raceData){
     }else if(dataType === elemTypes.endpoint){
       d3.select(this)
         .attr("height", rectSize)
-        .attr("width", rectSize);
+        .attr("width", rectSize)
+        .attr("x", function(d, i) {return x(d.lap) - rectSize * 1/2 })
+        .attr("y", function(d, i) { return y(d.position) - rectSize * 1/2 });
       textArr = getEndPointTextArray(raceData,d);
     }
 

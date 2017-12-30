@@ -169,13 +169,17 @@ function renderRaceInfoBox(race) {
   //console.log(raceInfo);
   var content = "";
 
-  content = "<h1 data-toggle=\"tooltip\" data-placement=\"top\" title=\"#"+raceInfo.raceId+"\">"+raceInfo.name+" "+raceInfo.date.getFullYear()+"</h1>";
-  content += "<h5>"+circuit.name+" ("+circuit.location+", "+circuit.country+")</h5>";
-  content += "<h6>"+germanDateString(raceInfo.date)+"</h6>"
-  content += "<div class=\"text-right\">";
-  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+raceInfo.url+"\" role=\"button\">See Race on Wikipedia</a> ";
-  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+circuit.url+"\" role=\"button\">See Circuit on Wikipedia</a> ";
-  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\"https://www.google.com/maps/?q="+circuit.lat+","+circuit.lng+"\" role=\"button\">See Circuit on GoogleMaps</a>";
+  content = "<div class=\"row justify-content-center align-self-center\">";
+  content += "<div class=\"col\">";
+  content += "<h2 data-toggle=\"tooltip\" data-placement=\"top\" title=\"#"+raceInfo.raceId+"\">"+raceInfo.name+" "+raceInfo.date.getFullYear()+"</h1>";
+  content += "<h6>"+circuit.name+" ("+circuit.location+", "+circuit.country+")</h5>";
+  content += "<h7>"+germanDateString(raceInfo.date)+"</h6>";
+  content += "</div>";
+  content += "<div class=\"col justify-content-center align-self-center\">"
+  content += "<a class=\"btn btn-outline-primary\" target=\"_blank\" href=\""+raceInfo.url+"\" role=\"button\">See Race on Wikipedia</a> ";
+  content += "<a class=\"btn btn-outline-primary\" target=\"_blank\" href=\""+circuit.url+"\" role=\"button\">See Circuit on Wikipedia</a> ";
+  content += "<a class=\"btn btn-outline-primary\" target=\"_blank\" href=\"https://www.google.com/maps/?q="+circuit.lat+","+circuit.lng+"\" role=\"button\">See Circuit on GoogleMaps</a>";
+  content += "</div>";
   content += "</div>";
   return content;
 }

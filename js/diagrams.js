@@ -235,27 +235,25 @@ function createLineGraph(containerId, raceData){
   }
 
   function handleMouseOverLinePoint(d, i) {
-
     var elemType = d3.select(this).attr("data-elemtype");
     //depending on Pitstop and lap different Texts
     var textArr = [];
-    var circleId = "circle-linepoint-" + d.lap + "-" + d.driverId;
-    var circle = d3.select("#" + circleId);
-
     // Add interactivity
     // Use D3 to select element, change color and size
     if(elemType === elemTypes.linepoint){
+      var circleId = "circle-linepoint-" + d.lap + "-" + d.driverId;
+      var circle = d3.select("#" + circleId);
       circle
         .style("opacity", 1);
       textArr = getLapTextArray(raceData,d);
     }else if(elemType === elemTypes.pitstoppoint){
-      circle
+      d3.select(this)
         .attr("r", linePointSize * 2);
       textArr = getPitStopTextArray(raceData,d);
     }else if(elemType === elemTypes.endpoint){
       d3.select(this)
-        .attr("height", rectSize * 1.3)
-        .attr("width", rectSize * 1.3);
+        .attr("height", rectSize * 1.5)
+        .attr("width", rectSize * 1.5);
       textArr = getEndPointTextArray(raceData,d);
     }
 
@@ -284,21 +282,19 @@ function createLineGraph(containerId, raceData){
   }
 
   function handleMouseOutLinePoint(d, i) {
-
     var dataType = d3.select(this).attr("data-elemtype");
     //depending on Pitstop and lap different Texts
     var textArr = [];
-    var circleId = "circle-linepoint-" + d.lap + "-" + d.driverId;
-    var circle = d3.select("#" + circleId);
-
     // Use D3 to select element, change color back to normal
     if(dataType === elemTypes.linepoint){
+      var circleId = "circle-linepoint-" + d.lap + "-" + d.driverId;
+      var circle = d3.select("#" + circleId);
       circle
         .attr("r", linePointSize)
         .style("opacity", 0);
       textArr = getLapTextArray(raceData,d);
     }else if(dataType === elemTypes.pitstoppoint){
-      circle
+      d3.select(this)
         .attr("r", linePointSize);
       textArr = getPitStopTextArray(raceData,d);
     }else if(dataType === elemTypes.endpoint){

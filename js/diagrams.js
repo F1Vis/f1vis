@@ -388,16 +388,16 @@ function createLineGraph(containerId, raceData){
       .attr("style", "fill:rgb(225,225,225);stroke:black;stroke-width:2;")
       .attr("width", "150")
       .attr("height", (textArr.length + 1) + "em")
-      .attr("x", function() { return x(d.lap) + 10; })
-      .attr("y", function() { return y(d.position) + 10; });
+      .attr("x", function() { return d3.mouse(this)[0] + 10; })
+      .attr("y", function() { return d3.mouse(this)[1] + 10; });
 
     //Necessary to add Text for each Line
     textArr.forEach((text, textIndex) =>{
       // Specify where to put label of text
         tooltipGroup.append("text")
         .attr("dy", (textIndex + 1) + "em")
-        .attr("x", function() { return x(d.lap) + 15; })
-        .attr("y", function() { return y(d.position) + 15; })
+        .attr("x", function() { return d3.mouse(this)[0] + 15; })
+        .attr("y", function() { return d3.mouse(this)[1] + 15; })
         .text(function() {
           return text;  // Value of the text
         });

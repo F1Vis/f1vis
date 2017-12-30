@@ -507,10 +507,8 @@ function createLineGraph(containerId, raceData){
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
     var s = d3.event.selection || x2.range();
     x.domain(s.map(x2.invert, x2));
-	
-	updateElements();
-	
-	//Update the "preview" rectangle
+    updateElements();
+    // Update the "preview" rectangle
     svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
       .scale(graphPosWidth.width / (s[1] - s[0]))
       .translate(-s[0], 0));

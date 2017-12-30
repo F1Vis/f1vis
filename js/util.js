@@ -5,6 +5,21 @@
  * stuff not related to what this project actually does.
  */
 
+function germanDateString(inputDate) {
+  var dateString = "";
+  var d = inputDate.getDate();
+  var m = inputDate.getMonth()+1; // Don't ask.
+  var y = inputDate.getFullYear();
+  if(d < 10) dateString += "0";
+  dateString += d.toString();
+  dateString += ".";
+  if(m < 10) dateString += "0";
+  dateString += m.toString();
+  dateString += ".";
+  dateString += y.toString();
+  return dateString;
+}
+
 /* Define global structure for the loading dialog */
 var loadingDialog = {
   id: "#loading-dialog",
@@ -156,7 +171,7 @@ function renderRaceInfoBox(race) {
 
   content = "<h1 data-toggle=\"tooltip\" data-placement=\"top\" title=\"#"+raceInfo.raceId+"\">"+raceInfo.name+" "+raceInfo.date.getFullYear()+"</h1>";
   content += "<h5>"+circuit.name+" ("+circuit.location+", "+circuit.country+")</h5>";
-  content += "<h6>"+raceInfo.date.toLocaleDateString("de-DE")+"</h6>"
+  content += "<h6>"+germanDateString(raceInfo.date)+"</h6>"
   content += "<div class=\"text-right\">";
   content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+raceInfo.url+"\" role=\"button\">See Race on Wikipedia</a> ";
   content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+circuit.url+"\" role=\"button\">See Circuit on Wikipedia</a> ";
@@ -220,7 +235,7 @@ function renderDriverInfoBox(race) {
     content += "<td>"+driver.forename+"</td>";
     content += "<td>"+driver.surname+"</td>";
     content += "<td>"+driver.nationality+"</td>";
-    content += "<td>"+driver.dob.toLocaleDateString("de-DE")+"</td>";
+    content += "<td>"+germanDateString(driver.dob)+"</td>";
     content += "<td><a target=\"_blank\" href=\""+driver.url+"\">Wikipedia</a></td>";
     content += "</tr>";
   }

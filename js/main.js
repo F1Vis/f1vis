@@ -51,7 +51,7 @@ preprocessor.load(function(data) {
         var raceD = slyelement.curRaces[race];
           $("#courseSelection").append("<li data=\"" + raceD.raceInfo.raceId + "\">" +
             "<span class=\"coursename\">" + raceD.raceInfo.name  +"</span>"+
-            "<div class=\"courseimagecontainer\"></div>" + raceD.raceInfo.date.toLocaleDateString("de-DE") + "</li>");
+            "<div class=\"courseimagecontainer\"></div>" + germanDateString(raceD.raceInfo.date) + "</li>");
 
 	  $("#courseSelection li").click(function(event) {
 	    var raceI = event.currentTarget.attributes.data.value;

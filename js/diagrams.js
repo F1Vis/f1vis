@@ -279,7 +279,7 @@ function createLineGraph(containerId, raceData){
 
   // Add gridlines on x axis to better figure out laps
   focus.append("g")
-    .attr("class", "grid axis axis--x")
+    .attr("class", "xAxisGridlines")
     .attr("transform", "translate(0," + graphPosWidth.height + ")")
     .style("opacity", 0.06)
     .call(xAxisGridlines);
@@ -514,12 +514,14 @@ function createLineGraph(containerId, raceData){
   }
   
   function updateElements(){
-    //update the data!!
+    // Update the data!
     focus.selectAll(".pathLines").attr("d", lineDataDefinition);
     focus.selectAll(".pitstopdot").attr("cx", function(d, i) {return x(d.lap) });
     focus.selectAll(".endpointdot").attr("x", function(d, i) { return x(d.lap) - rectSize * 1/2; });
-    //Update xAxis
+    // Update xAxis
     focus.select(".axis--x").call(xAxis);
+    // Update gridlines
+    focus.select(".xAxisGridlines").call(xAxisGridlines);
   }
 
 }

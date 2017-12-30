@@ -235,7 +235,7 @@ function renderDriverInfoBox(race) {
     content += "<td>"+driver.forename+"</td>";
     content += "<td>"+driver.surname+"</td>";
     content += "<td>"+driver.nationality+"</td>";
-    content += "<td>"+germanDateString(driver.dob)+"</td>";
+    content += "<td data-sort=\""+driver.dob.toISOString()+"\">"+germanDateString(driver.dob)+"</td>";
     content += "<td><a target=\"_blank\" href=\""+driver.url+"\">Wikipedia</a></td>";
     content += "</tr>";
   }

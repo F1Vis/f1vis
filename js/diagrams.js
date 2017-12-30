@@ -381,7 +381,9 @@ function createLineGraph(containerId, raceData){
   function getDriverCodeFromPosAndLap(raceData, lapNr, pos){
     var driverCode = "";
     if(lapNr == 0){
-      driverCode = getDriverCodeById(raceData, raceData.qualifying[pos - 1].driverId);
+      var qualifying = raceData.qualifying[pos - 1];
+      if(qualifying === undefined) return "XXX"; // TODO: Do a real fix
+      driverCode = getDriverCodeById(raceData, qualifying.driverId);
     }else if(lapNr == raceData.lapTimes.size){
       var resultPos = raceData.results[pos -1].position;
       var resultLaps = raceData.results[pos -1].laps;

@@ -168,7 +168,6 @@ function createLineGraph(containerId, raceData){
               .attr("cy", function(d, i) { return y(d.position) })
               .attr("r", linePointSize * 1.2)
               .on("click", handleClickOnPoint)
-              .on("dblclick", handleDoubleClickOnPoint)
               .on("mouseover", handleMouseOverLinePoint)
               .on("mouseout", handleMouseOutLinePoint);
 
@@ -221,7 +220,6 @@ function createLineGraph(containerId, raceData){
           .attr("cy", function(d, i) { return y(d.position) })
           .attr("r", linePointSize*2.4)
           .on("click", handleClickOnPoint)
-          .on("dblclick", handleDoubleClickOnPoint)
           .on("mouseover", handleMouseOverLinePoint)
           .on("mouseout", handleMouseOutLinePoint)
           .style("opacity", 0);
@@ -248,7 +246,6 @@ function createLineGraph(containerId, raceData){
             .attr("height", rectSize)
             .attr("width", rectSize)
             .on("click", handleClickOnPoint)
-            .on("dblclick", handleDoubleClickOnPoint)
             .on("mouseover", handleMouseOverLinePoint)
             .on("mouseout", handleMouseOutLinePoint);
 
@@ -356,11 +353,6 @@ function createLineGraph(containerId, raceData){
         d3.selectAll("[data-opacitychange='" + 1 +"'][data-highlighted='" + 0 +"']")
           .style("opacity", 1);
       }
-  }
-
-  function handleDoubleClickOnPoint(d,i){
-    var lapNr = d.lap;
-    console.log(["doubleClick", d.lap]);
   }
 
   function handleMouseOverLinePoint(d, i) {

@@ -96,6 +96,7 @@ function createLineGraph(containerId, raceData){
 
   var context = svg.append("g")
       .attr("class", "context")
+      .attr("height", height2)
       .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
 
@@ -123,6 +124,16 @@ function createLineGraph(containerId, raceData){
           .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
           .attr("d", lineDataDefinition);
 
+      context.append("path")
+          .data([driverLapData.laps])
+          .attr("class", "line-context")
+          .attr("data-line", driverLapData.driver.driverId) // custom data to specify the line
+          .attr("data-opacitychange", 1)
+          .attr("data-highlighted", 0)
+          .attr("data-elemtype", elemTypes.line)
+          .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
+          .attr("d", area2);
+
       driverLapData.laps.forEach((singleLap, singleLapIndex)=> {
         //console.log(["driverLaps.forEach", singleLap, singleLapIndex]);
         if(singleLap.pitStop){
@@ -143,6 +154,20 @@ function createLineGraph(containerId, raceData){
               .on("dblclick", handleDoubleClickOnPoint)
               .on("mouseover", handleMouseOverLinePoint)
               .on("mouseout", handleMouseOutLinePoint);
+
+          context.selectAll(".pitstoppoint-context")
+              .data([singleLap])
+              .enter().append("circle") // Uses the enter().append() method
+              .attr("class", "dot pitstopdot") // Assign a class for styling
+              .attr("data-line", driverLapData.driver.driverId)
+              .attr("data-opacitychange", 1)
+              .attr("data-highlighted", 0)
+              .attr("data-elemtype", elemTypes.pitstoppoint)
+              .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
+              .attr("cx", function(d, i) {return x2(d.lap) })
+              .attr("cy", function(d, i) { return y2(d.position) })
+              .attr("r", linePointSize * 0.5)
+              .attr("d", area2);
           // Remove data from driverLapData, since we don't need a generic datapoint for this
           driverLapData.laps[singleLapIndex] = {};
         }
@@ -184,8 +209,6 @@ function createLineGraph(containerId, raceData){
           .on("mouseout", handleMouseOutLinePoint)
           .style("opacity", 0);
 
-
-
       // in case the driver ended the race too early, get the status why he quit
       /*TODO: Mouseover for Rectangle*/
       var resultOfDriver = raceData.results.filter((result) =>  { return result.driverId == driverLapData.driver.driverId; });
@@ -211,6 +234,21 @@ function createLineGraph(containerId, raceData){
             .on("dblclick", handleDoubleClickOnPoint)
             .on("mouseover", handleMouseOverLinePoint)
             .on("mouseout", handleMouseOutLinePoint);
+
+        context.selectAll(".endpoint")
+            .data([driverLapData.laps[driverLapData.laps.length - 1]])
+            .enter().append("rect") // Uses the enter().append() method
+            //.attr("class", "endpoint") // Assign a class for styling
+            .attr("data-line", driverLapData.driver.driverId)
+            .attr("data-opacitychange", 1)
+            .attr("data-highlighted", 0)
+            .attr("data-elemtype", elemTypes.endpoint)
+            .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
+            .attr("x", function(d, i) { return x2(d.lap) - rectSize * 1/2; })
+            .attr("y", function(d, i) { return y2(d.position) - rectSize * 1/2; })
+            .attr("height", rectSize * 0.4)
+            .attr("width", rectSize * 0.4)
+            .attr("d", area2);
 
         /* tried with Cross, didn't work, don't  know why
         svg.selectAll(".endpoint")

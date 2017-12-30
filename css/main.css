@@ -37,6 +37,11 @@ body {
   stroke-width: 2px;
 }
 
+.line-context {
+  fill: none;
+  stroke-width: 0.8px;
+}
+
 #courseSelection li.hover { background-color: rgba(0, 123, 255, 0.3); }
 #courseSelection li.selected { border-color: #007bff; }
 

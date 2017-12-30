@@ -48,6 +48,11 @@ function createLineGraph(containerId, raceData){
   var xAxis = d3.axisBottom(x),
       yAxis = d3.axisLeft(y);
 
+  var xAxisGridlines = d3.axisBottom(x)
+        .ticks(raceData.lapTimes.size) // One gridline for each lap
+        .tickSize(-graphPosWidth.height)
+        .tickFormat("");
+
   var brush = d3.brushX()
     .extent([[0, 0], [smallGraphPosWidth.width, smallGraphPosWidth.height]])
     .on("brush end", brushed);
@@ -258,9 +263,9 @@ function createLineGraph(containerId, raceData){
 
   // Add the X Axis
   focus.append("g")
-	  .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + graphPosWidth.height + ")")
-      .call(d3.axisBottom(x));
+    .attr("class", "axis axis--x")
+    .attr("transform", "translate(0," + graphPosWidth.height + ")")
+    .call(xAxis);
 
   // Add the Y Axis on both sides
   focus.append("g")
@@ -277,24 +282,9 @@ function createLineGraph(containerId, raceData){
     .attr("class", "grid axis axis--x")
     .attr("transform", "translate(0," + graphPosWidth.height + ")")
     .style("opacity", 0.06)
-    .call(d3.axisBottom(x)
-      .ticks(raceData.lapTimes.size) // One gridline for each lap
-      .tickSize(-graphPosWidth.height)
-      .tickFormat("")
-    );
+    .call(xAxisGridlines);
 
-  // Add clickable ticklines so people can scale things
-  focus.append("g")
-    .attr("class", "grid axis axis--x")
-    .attr("transform", "translate(0," + graphPosWidth.height + ")")
-    .style("opacity", 0.5)
-    .call(d3.axisBottom(x)
-      .ticks(raceData.lapTimes.size) // One gridline for each lap
-      .tickSize(8)
-      .tickFormat("")
-    );
-
-	//Add driver information on the right side of the graph.
+  //Add driver information on the right side of the graph.
   focus.append("g")
       .call(
         d3.axisRight(y)

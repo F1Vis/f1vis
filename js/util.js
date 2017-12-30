@@ -159,7 +159,8 @@ function renderRaceInfoBox(race) {
   content += "<h6>"+raceInfo.date.toLocaleDateString("de-DE")+"</h6>"
   content += "<div class=\"text-right\">";
   content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+raceInfo.url+"\" role=\"button\">See Race on Wikipedia</a> ";
-  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+circuit.url+"\" role=\"button\">See Circuit on Wikipedia</a>";
+  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+circuit.url+"\" role=\"button\">See Circuit on Wikipedia</a> ";
+  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\"https://www.google.com/maps/?q="+circuit.lat+","+circuit.lng+"\" role=\"button\">See Circuit on GoogleMaps</a>";
   content += "</div>";
   return content;
 }

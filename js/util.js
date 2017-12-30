@@ -154,7 +154,7 @@ function renderRaceInfoBox(race) {
   //console.log(raceInfo);
   var content = "";
 
-  content = "<h1 data-toggle=\"tooltip\" data-placement=\"top\" title=\"#"+raceInfo.raceId+"\">"+raceInfo.name+"</h1>";
+  content = "<h1 data-toggle=\"tooltip\" data-placement=\"top\" title=\"#"+raceInfo.raceId+"\">"+raceInfo.name+" "+raceInfo.date.getFullYear()+"</h1>";
   content += "<h5>"+circuit.name+" ("+circuit.location+", "+circuit.country+")</h5>";
   content += "<h6>"+raceInfo.date.toLocaleDateString("de-DE")+"</h6>"
   content += "<div class=\"text-right\">";

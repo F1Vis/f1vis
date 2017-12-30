@@ -63,7 +63,7 @@ function createLineGraph(containerId, raceData){
     .extent([[0, 0], [graphPosWidth.width, graphPosWidth.height]])
     .on("zoom", zoomed);
 
-// -----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
 
   // defines how the passed in Data, at "svg.append" shall be interpreted
   var lineDataDefinition = d3.line()
@@ -80,7 +80,15 @@ function createLineGraph(containerId, raceData){
   var svg = d3.select(containerId).append("svg")
       .attr("width", svgWidth)
       .attr("height", svgHeight);
+
   //----------------------------------------------------------------------
+  /*svg.append("rect")
+      .attr("class", "zoom")
+      .attr("width", graphPosWidth.width)
+      .attr("height", graphPosWidth.height)
+      .attr("transform", "translate(" + graphPosWidth.posX + "," + graphPosWidth.posY + ")")
+      .call(zoom);*/
+
   svg.append("defs").append("clipPath")
     .attr("id", "clip")
     .append("rect")
@@ -95,6 +103,18 @@ function createLineGraph(containerId, raceData){
       .attr("class", "context")
       .attr("height", smallGraphPosWidth.height)
       .attr("transform", "translate(" + smallGraphPosWidth.posX + "," + smallGraphPosWidth.posY + ")");
+
+  // -----------------------------------------------------------------------
+
+  context.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + smallGraphPosWidth.height + ")")
+      .call(d3.axisBottom(x2));
+
+  context.append("g")
+      .attr("class", "brush")
+      .call(brush)
+      .call(brush.move, x.range());
 
   // -----------------------------------------------------------------------
 
@@ -304,22 +324,7 @@ function createLineGraph(containerId, raceData){
 //----------------------------
 
 
-  context.append("g")
-      .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + smallGraphPosWidth.height + ")")
-      .call(d3.axisBottom(x2));
 
-  context.append("g")
-      .attr("class", "brush")
-      .call(brush)
-      .call(brush.move, x.range());
-
-  svg.append("rect")
-      .attr("class", "zoom")
-      .attr("width", graphPosWidth.width)
-      .attr("height", graphPosWidth.height)
-      .attr("transform", "translate(" + graphPosWidth.posX + "," + graphPosWidth.posY + ")")
-      .call(zoom);
 
   //---------------------------------------------------------------------------
 

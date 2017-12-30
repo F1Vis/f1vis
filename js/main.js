@@ -64,9 +64,11 @@ preprocessor.load(function(data) {
             $(event.currentTarget).addClass("selected");
             // Fetch race data
 	    var rdata = slyelement.curRaces.filter(r => r.raceInfo.raceId == raceI)[0];
-            // Put information about race into info box
+            // Put information about race into race info box
             $("#race-infobox").html(renderRaceInfoBox(rdata)); // See util.js
-            // Hand off to diagram rendering
+             // Put information about drivers into driver info box
+            $("#driver-infobox").html(renderDriverInfoBox(rdata)); // See util.js
+           // Hand off to diagram rendering
 	    $("#lineGraphBox").empty();
   	    createLineGraph("#lineGraphBox", rdata);
 	});

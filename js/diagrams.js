@@ -59,17 +59,15 @@ function createLineGraph(containerId, raceData){
     .extent([[0, 0], [graphPosWidth.width, graphPosWidth.height]])
     .on("zoom", zoomed);
 
-  var area = d3.area()
+  var area = d3.line()
       .curve(d3.curveMonotoneX)
       .x(function(d) { return x(d.lap); })
-      .y0(graphPosWidth.height)
-      .y1(function(d) { return y(d.position); });
+      .y(function(d) { return y(d.position); });
 
-  var area2 = d3.area()
+  var area2 = d3.line()
       .curve(d3.curveMonotoneX)
       .x(function(d) { return x2(d.lap); })
-      .y0(smallGraphPosWidth.height)
-      .y1(function(d) { return y2(d.position); });
+      .y(function(d) { return y2(d.position); });
 
 // -----------------------------------------------------------------------
 

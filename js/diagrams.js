@@ -519,12 +519,9 @@ function createLineGraph(containerId, raceData){
   function zoomed() {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
     var t = d3.event.transform;
-	
-	x.domain(t.rescaleX(x2).domain());
-	
-	updateElements();
-	
-	//call the brush function
+    x.domain(t.rescaleX(x2).domain());
+    updateElements();
+    //call the brush function
     context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
   }
   

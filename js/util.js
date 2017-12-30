@@ -201,8 +201,8 @@ function renderDriverInfoBox(race) {
   content += "<table id=\"driver-table\" class=\"table table-striped table-bordered\">";
   content += "<thead>";
   content += "<tr>";
-  content += "<th scope=\"col\">Rank</th>";
   content += "<th scope=\"col\">Position</th>";
+  content += "<th scope=\"col\">Rank</th>";
   content += "<th scope=\"col\">Code</th>";
   content += "<th scope=\"col\">Points</th>";
   content += "<th scope=\"col\">Fastest Lap Speed</th>";
@@ -229,8 +229,8 @@ function renderDriverInfoBox(race) {
     if(isNaN(driver.fastestLapSpeed)) driver.fastestLapSpeed = 0;
     //console.log(driver);
     content += "<tr>";
-    content += "<th scope=\"row\" data-sort=\""+driver.sortableRank+"\">"+driver.rank+"</th>";
-    content += "<td data-sort=\""+driver.sortablePosition+"\">"+driver.position+"</td>";
+    content += "<th scope=\"row\" data-sort=\""+driver.sortablePosition+"\">"+driver.position+"</th>";
+    content += "<td data-sort=\""+driver.sortableRank+"\">"+driver.rank+"</td>";
     content += "<td>"+driver.code+"</td>";
     content += "<td>"+driver.points+"</td>";
     content += "<td>"+driver.fastestLapSpeed+"</td>";

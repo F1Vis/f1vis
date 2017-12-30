@@ -6,6 +6,10 @@ body {
   padding-top: 5rem;
 }
 
+.container {
+  max-width: 1440px; /* Override bootstrap maximum width */
+}
+
 .content-box {
   padding: 1rem 0.5rem;
   text-align: center;

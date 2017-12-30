@@ -19,7 +19,7 @@ function createLineGraph(containerId, raceData){
   var height = 720;
   var width = 1080;
   var linePointSize = 5;
-  var rectSize = 10;
+  var rectSize = 16;
   var amountClickedLines = 0;
 
   //ElemTypes of this graph

@@ -102,7 +102,9 @@ function getDriverCodeAndPositionArray(raceData, lapNumber){
 }
 
 function getDriverCodeById(raceData, driverId){
-  return raceData.drivers.filter(driv => driv.driverId == driverId)[0].code;
+  var driverData = raceData.drivers.filter(driv => driv.driverId == driverId)[0];
+  if(driverData === undefined) return "XXX"; // TODO: Do a real fix instead of this quick fix
+  return driverData.code;
 }
 
 function removeDuplicates(result,obj){

@@ -202,6 +202,7 @@ function renderDriverInfoBox(race) {
   content += "<thead>";
   content += "<tr>";
   content += "<th scope=\"col\">Rank</th>";
+  content += "<th scope=\"col\">Position</th>";
   content += "<th scope=\"col\">Code</th>";
   content += "<th scope=\"col\">Points</th>";
   content += "<th scope=\"col\">Fastest Lap Speed</th>";
@@ -218,16 +219,18 @@ function renderDriverInfoBox(race) {
   content += "<tbody>";
   for(var di in drivers) {
     var driver = drivers[di];
-    // Replace NaN with something proper
-    if(isNaN(driver.position)) {
-      driver.position = "-/-";
-    }
+    // Replace NaN position with something proper
+    driver.sortablePosition = driver.position;
+    if(isNaN(driver.sortablePosition)) driver.sortablePosition = 999;
+    if(isNaN(driver.position)) driver.position = "-/-";
+    // Make ranks sortable, treat zero rank as very bad for sorting
     driver.sortableRank = driver.rank;
     if(driver.sortableRank < 1) driver.sortableRank = 999;
     if(isNaN(driver.fastestLapSpeed)) driver.fastestLapSpeed = 0;
     //console.log(driver);
     content += "<tr>";
     content += "<th scope=\"row\" data-sort=\""+driver.sortableRank+"\">"+driver.rank+"</th>";
+    content += "<td data-sort=\""+driver.sortablePosition+"\">"+driver.position+"</td>";
     content += "<td>"+driver.code+"</td>";
     content += "<td>"+driver.points+"</td>";
     content += "<td>"+driver.fastestLapSpeed+"</td>";

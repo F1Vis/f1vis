@@ -46,7 +46,6 @@ function createLineGraph(containerId, raceData){
       y2 = d3.scaleLinear().range([smallGraphPosWidth.height, 0]);
 
   var xAxis = d3.axisBottom(x),
-      xAxis2 = d3.axisBottom(x2),
       yAxis = d3.axisLeft(y);
 
   var brush = d3.brushX()

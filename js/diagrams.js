@@ -67,7 +67,7 @@ function createLineGraph(containerId, raceData){
       svg.append("path")
           .data([driverLapData.laps])
           .attr("class", "line")
-          .attr("data-line", driverLapData.driver.driverId)// custom data to Specify the line
+          .attr("data-line", driverLapData.driver.driverId) // custom data to specify the line
           .attr("data-opacitychange", 1)
           .attr("data-highlighted", 0)
           .attr("data-elemtype", elemTypes.line)
@@ -91,6 +91,7 @@ function createLineGraph(containerId, raceData){
               .attr("cy", function(d, i) { return y(d.position) })
               .attr("r", linePointSize * 1.2)
               .on("click", handleClickOnPoint)
+              .on("dblclick", handleDoubleClickOnPoint)
               .on("mouseover", handleMouseOverLinePoint)
               .on("mouseout", handleMouseOutLinePoint);
           // Remove data from driverLapData, since we don't need a generic datapoint for this
@@ -129,6 +130,7 @@ function createLineGraph(containerId, raceData){
           .attr("cy", function(d, i) { return y(d.position) })
           .attr("r", linePointSize*2.4)
           .on("click", handleClickOnPoint)
+          .on("dblclick", handleDoubleClickOnPoint)
           .on("mouseover", handleMouseOverLinePoint)
           .on("mouseout", handleMouseOutLinePoint)
           .style("opacity", 0);
@@ -157,6 +159,7 @@ function createLineGraph(containerId, raceData){
             .attr("height", rectSize)
             .attr("width", rectSize)
             .on("click", handleClickOnPoint)
+            .on("dblclick", handleDoubleClickOnPoint)
             .on("mouseover", handleMouseOverLinePoint)
             .on("mouseout", handleMouseOutLinePoint);
 
@@ -196,6 +199,17 @@ function createLineGraph(containerId, raceData){
     .call(d3.axisBottom(x)
       .ticks(raceData.lapTimes.size) // One gridline for each lap
       .tickSize(-height)
+      .tickFormat("")
+    );
+
+  // Add clickable ticklines so people can scale things
+  svg.append("g")
+    .attr("class", "grid")
+    .attr("transform", "translate(0," + height + ")")
+    .style("opacity", 0.5)
+    .call(d3.axisBottom(x)
+      .ticks(raceData.lapTimes.size) // One gridline for each lap
+      .tickSize(8)
       .tickFormat("")
     );
 
@@ -243,6 +257,11 @@ function createLineGraph(containerId, raceData){
         d3.selectAll("[data-opacitychange='" + 1 +"'][data-highlighted='" + 0 +"']")
           .style("opacity", 1);
       }
+  }
+
+  function handleDoubleClickOnPoint(d,i){
+    var lapNr = d.lap;
+    console.log(["doubleClick", d.lap]);
   }
 
   function handleMouseOverLinePoint(d, i) {

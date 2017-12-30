@@ -529,17 +529,12 @@ function createLineGraph(containerId, raceData){
   }
   
   function updateElements(){
-	  
-	//scale the path axis
-    focus.selectAll(".pathLines").call(xAxis);
-	
-	//update the data!!
+    //update the data!!
     focus.selectAll(".pathLines").attr("d", lineDataDefinition);
-	focus.selectAll(".pitstopdot").attr("cx", function(d, i) {return x(d.lap) });
-	focus.selectAll(".endpointdot").attr("x", function(d, i) { return x(d.lap) - rectSize * 1/2; });
-
-	//Update x-axis
-	focus.select(".axis--x").call(xAxis);
+    focus.selectAll(".pitstopdot").attr("cx", function(d, i) {return x(d.lap) });
+    focus.selectAll(".endpointdot").attr("x", function(d, i) { return x(d.lap) - rectSize * 1/2; });
+    //Update xAxis
+    focus.select(".axis--x").call(xAxis);
   }
 
 }

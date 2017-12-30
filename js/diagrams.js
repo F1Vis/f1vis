@@ -188,6 +188,17 @@ function createLineGraph(containerId, raceData){
         })
     );
 
+  // Add gridlines on x axis to better figure out laps
+  svg.append("g")			
+    .attr("class", "grid")
+    .attr("transform", "translate(0," + height + ")")
+    .style("opacity", 0.06)
+    .call(d3.axisBottom(x)
+      .ticks(raceData.lapTimes.size) // One gridline for each lap
+      .tickSize(-height)
+      .tickFormat("")
+    );
+
   svg.append("g")
       .call(
         d3.axisRight(y)

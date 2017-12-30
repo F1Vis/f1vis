@@ -221,7 +221,7 @@ function renderDriverInfoBox(race) {
     content += "<td>"+driver.surname+"</td>";
     content += "<td>"+driver.nationality+"</td>";
     content += "<td>"+driver.dob.toLocaleDateString("de-DE")+"</td>";
-    content += "<td><a class=\"btn btn-primary\" target=\"_blank\" href=\""+driver.url+"\" role=\"button\">Wikipedia</a></td>";
+    content += "<td><a target=\"_blank\" href=\""+driver.url+"\">Wikipedia</a></td>";
     content += "</tr>";
   }
   content += "</tbody>";

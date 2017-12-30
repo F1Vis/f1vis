@@ -21,7 +21,8 @@ var preprocessor = {
     qualifying: null,
     races: null,
     results: null,
-    seasons: null
+    seasons: null,
+    status: null
   },
 
   // data/circuits.csv

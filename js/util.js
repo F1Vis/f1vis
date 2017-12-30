@@ -168,7 +168,7 @@ function renderRaceInfoBox(race) {
 function renderDriverInfoBox(race) {
   var raceInfo = race.raceInfo;
   var drivers = race.drivers;
-
+  var statusData = preprocessor.getResults().status
   // Assign results to drivers
   for(var ri in race.results) {
     var driverResult = race.results[ri];
@@ -189,6 +189,8 @@ function renderDriverInfoBox(race) {
   content += "<th scope=\"col\">Rank</th>";
   content += "<th scope=\"col\">Code</th>";
   content += "<th scope=\"col\">Points</th>";
+  content += "<th scope=\"col\">Fastest Lap Speed</th>";
+  content += "<th scope=\"col\">Status</th>";
   content += "<th scope=\"col\">Forename</th>";
   content += "<th scope=\"col\">Surname</th>";
   content += "<th scope=\"col\">Nationality</th>";
@@ -205,12 +207,16 @@ function renderDriverInfoBox(race) {
     if(isNaN(driver.position)) {
       driver.position = "-/-";
     }
-
-    console.log(driver);
+    driver.sortableRank = driver.rank;
+    if(driver.sortableRank < 1) driver.sortableRank = 999;
+    if(isNaN(driver.fastestLapSpeed)) driver.fastestLapSpeed = 0;
+    //console.log(driver);
     content += "<tr>";
-    content += "<th scope=\"row\">"+driver.rank+"</th>";
+    content += "<th scope=\"row\" data-sort=\""+driver.sortableRank+"\">"+driver.rank+"</th>";
     content += "<td>"+driver.code+"</td>";
     content += "<td>"+driver.points+"</td>";
+    content += "<td>"+driver.fastestLapSpeed+"</td>";
+    content += "<td>"+statusData[driver.statusId].status+"</td>";
     content += "<td>"+driver.forename+"</td>";
     content += "<td>"+driver.surname+"</td>";
     content += "<td>"+driver.nationality+"</td>";

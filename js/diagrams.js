@@ -116,7 +116,7 @@ function createLineGraph(containerId, raceData){
     //console.log(driverLapData);
       focus.append("path")
           .data([driverLapData.laps])
-          .attr("class", "line")
+          .attr("class", "line zoomable")
           .attr("data-line", driverLapData.driver.driverId) // custom data to specify the line
           .attr("data-opacitychange", 1)
           .attr("data-highlighted", 0)
@@ -126,7 +126,7 @@ function createLineGraph(containerId, raceData){
 
       context.append("path")
           .data([driverLapData.laps])
-          .attr("class", "line-context")
+          .attr("class", "line-context zoomable")
           .attr("data-line", driverLapData.driver.driverId) // custom data to specify the line
           .attr("data-opacitychange", 1)
           .attr("data-highlighted", 0)
@@ -141,7 +141,7 @@ function createLineGraph(containerId, raceData){
           focus.selectAll(".pitstoppoint")
               .data([singleLap])
               .enter().append("circle") // Uses the enter().append() method
-              .attr("class", "dot pitstopdot") // Assign a class for styling
+              .attr("class", "dot pitstopdot zoomable") // Assign a class for styling
               .attr("data-line", driverLapData.driver.driverId)
               .attr("data-opacitychange", 1)
               .attr("data-highlighted", 0)
@@ -158,7 +158,7 @@ function createLineGraph(containerId, raceData){
           context.selectAll(".pitstoppoint-context")
               .data([singleLap])
               .enter().append("circle") // Uses the enter().append() method
-              .attr("class", "dot pitstopdot") // Assign a class for styling
+              .attr("class", "dot pitstopdot zoomable") // Assign a class for styling
               .attr("data-line", driverLapData.driver.driverId)
               .attr("data-opacitychange", 1)
               .attr("data-highlighted", 0)
@@ -177,7 +177,7 @@ function createLineGraph(containerId, raceData){
       focus.selectAll(".linepoint")
           .data(driverLapData.laps)
           .enter().append("circle") // Uses the enter().append() method
-          .attr("class", "dot linedot") // Assign a class for styling
+          .attr("class", "dot linedot zoomable") // Assign a class for styling
           .attr("id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
           .attr("data-line", driverLapData.driver.driverId)
           .attr("data-opacitychange", 0)
@@ -193,7 +193,7 @@ function createLineGraph(containerId, raceData){
       focus.selectAll(".invisiblelinepoint")
           .data(driverLapData.laps)
           .enter().append("circle") // Uses the enter().append() method
-          .attr("class", "dot linedot") // Assign a class for styling
+          .attr("class", "dot linedot zoomable") // Assign a class for styling
           .attr("circle-id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
           .attr("data-line", driverLapData.driver.driverId)
           .attr("data-opacitychange", 0)
@@ -221,6 +221,7 @@ function createLineGraph(containerId, raceData){
             .data([driverLapData.laps[driverLapData.laps.length - 1]])
             .enter().append("rect") // Uses the enter().append() method
             //.attr("class", "endpoint") // Assign a class for styling
+            .attr("class", "zoomable")
             .attr("data-line", driverLapData.driver.driverId)
             .attr("data-opacitychange", 1)
             .attr("data-highlighted", 0)
@@ -239,6 +240,7 @@ function createLineGraph(containerId, raceData){
             .data([driverLapData.laps[driverLapData.laps.length - 1]])
             .enter().append("rect") // Uses the enter().append() method
             //.attr("class", "endpoint") // Assign a class for styling
+            .attr("class", "zoomable")
             .attr("data-line", driverLapData.driver.driverId)
             .attr("data-opacitychange", 1)
             .attr("data-highlighted", 0)
@@ -512,8 +514,8 @@ function createLineGraph(containerId, raceData){
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
     var s = d3.event.selection || x2.range();
     x.domain(s.map(x2.invert, x2));
-    focus.select(".area").attr("d", area);
-    focus.select(".axis--x").call(xAxis);
+    focus.selectAll(".zoomable").attr("d", area);
+    focus.selectAll(".axis--x").call(xAxis);
     svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
         .scale(width / (s[1] - s[0]))
         .translate(-s[0], 0));
@@ -523,8 +525,8 @@ function createLineGraph(containerId, raceData){
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
     var t = d3.event.transform;
     x.domain(t.rescaleX(x2).domain());
-    focus.select(".area").attr("d", area);
-    focus.select(".axis--x").call(xAxis);
+    focus.selectAll(".zoomable").attr("d", area);
+    focus.selectAll(".axis--x").call(xAxis);
     context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
   }
 

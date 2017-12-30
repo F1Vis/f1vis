@@ -40,7 +40,7 @@ function createLineGraph(containerId, raceData){
 
   // set the ranges
   var x = d3.scaleLinear().range([0, width]),
-      x2 = d3.scaleTime().range([0, width]),
+      x2 = d3.scaleLinear().range([0, width]),
       y = d3.scaleLinear().range([height, 0]),
       y2 = d3.scaleLinear().range([height2, 0]);
 

@@ -167,15 +167,27 @@ function renderRaceInfoBox(race) {
 function renderDriverInfoBox(race) {
   var raceInfo = race.raceInfo;
   var drivers = race.drivers;
-  console.log(raceInfo);
-  var content = "";
 
+  // Assign results to drivers
+  for(var ri in race.results) {
+    var driverResult = race.results[ri];
+    for(var di in drivers) {
+      var driver = drivers[di];
+      // :-(
+      if(driverResult.driverId == driver.driverId) {
+        Object.assign(drivers[di], driverResult);
+      }
+    }
+  }
+
+  var content = "";
   // Table header
   content += "<table id=\"driver-table\" class=\"table table-striped table-bordered\">";
   content += "<thead>";
   content += "<tr>";
-  content += "<th scope=\"col\">#</th>";
+  content += "<th scope=\"col\">Rank</th>";
   content += "<th scope=\"col\">Code</th>";
+  content += "<th scope=\"col\">Points</th>";
   content += "<th scope=\"col\">Forename</th>";
   content += "<th scope=\"col\">Surname</th>";
   content += "<th scope=\"col\">Nationality</th>";
@@ -188,10 +200,16 @@ function renderDriverInfoBox(race) {
   content += "<tbody>";
   for(var di in drivers) {
     var driver = drivers[di];
+    // Replace NaN with something proper
+    if(isNaN(driver.position)) {
+      driver.position = "-/-";
+    }
+
     console.log(driver);
     content += "<tr>";
-    content += "<th scope=\"row\">"+driver.number+"</th>";
+    content += "<th scope=\"row\">"+driver.rank+"</th>";
     content += "<td>"+driver.code+"</td>";
+    content += "<td>"+driver.points+"</td>";
     content += "<td>"+driver.forename+"</td>";
     content += "<td>"+driver.surname+"</td>";
     content += "<td>"+driver.nationality+"</td>";

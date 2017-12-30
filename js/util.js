@@ -171,7 +171,7 @@ function renderDriverInfoBox(race) {
   var content = "";
 
   // Table header
-  content += "<table class=\"table table-striped table-bordered\">";
+  content += "<table id=\"driver-table\" class=\"table table-striped table-bordered\">";
   content += "<thead>";
   content += "<tr>";
   content += "<th scope=\"col\">#</th>";

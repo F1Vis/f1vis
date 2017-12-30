@@ -68,6 +68,7 @@ preprocessor.load(function(data) {
             $("#race-infobox").html(renderRaceInfoBox(rdata)); // See util.js
              // Put information about drivers into driver info box
             $("#driver-infobox").html(renderDriverInfoBox(rdata)); // See util.js
+            $('#driver-infobox table').DataTable({paging: false});
            // Hand off to diagram rendering
 	    $("#lineGraphBox").empty();
   	    createLineGraph("#lineGraphBox", rdata);

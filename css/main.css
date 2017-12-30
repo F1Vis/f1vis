@@ -15,10 +15,6 @@ body {
   text-align: center;
 }
 
-.chart-box {
-  /*border: 1px solid grey;*/
-}
-
 /* This container will allow scaling svg, so we don't need to care about it in d3.js */
 .svg-container {
   display: inline-block;

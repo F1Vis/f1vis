@@ -166,16 +166,41 @@ function renderRaceInfoBox(race) {
 
 function renderDriverInfoBox(race) {
   var raceInfo = race.raceInfo;
-  var circuit = preprocessor.getResults().circuits[raceInfo.circuitId];
+  var drivers = race.drivers;
   console.log(raceInfo);
   var content = "";
 
-  content = "<h1 data-toggle=\"tooltip\" data-placement=\"top\" title=\"#"+raceInfo.raceId+"\">"+raceInfo.name+"</h1>";
-  content += "<h5>"+circuit.name+" ("+circuit.location+", "+circuit.country+")</h5>";
-  content += "<h6>"+raceInfo.date.toLocaleDateString("de-DE")+"</h6>"
-  content += "<div class=\"text-right\">";
-  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+raceInfo.url+"\" role=\"button\">See Race on Wikipedia</a> ";
-  content += "<a class=\"btn btn-primary\" target=\"_blank\" href=\""+circuit.url+"\" role=\"button\">See Circuit on Wikipedia</a>";
-  content += "</div>";
+  // Table header
+  content += "<table class=\"table table-striped table-bordered\">";
+  content += "<thead>";
+  content += "<tr>";
+  content += "<th scope=\"col\">#</th>";
+  content += "<th scope=\"col\">Code</th>";
+  content += "<th scope=\"col\">Forename</th>";
+  content += "<th scope=\"col\">Surname</th>";
+  content += "<th scope=\"col\">Nationality</th>";
+  content += "<th scope=\"col\">Birthday</th>";
+  content += "<th scope=\"col\">Wikipedia</th>";
+  content += "</tr>";
+  content += "</thead>";
+
+  // Table body
+  content += "<tbody>";
+  for(var di in drivers) {
+    var driver = drivers[di];
+    console.log(driver);
+    content += "<tr>";
+    content += "<th scope=\"row\">"+driver.number+"</th>";
+    content += "<td>"+driver.code+"</td>";
+    content += "<td>"+driver.forename+"</td>";
+    content += "<td>"+driver.surname+"</td>";
+    content += "<td>"+driver.nationality+"</td>";
+    content += "<td>"+driver.dob.toLocaleDateString("de-DE")+"</td>";
+    content += "<td><a class=\"btn btn-primary\" target=\"_blank\" href=\""+driver.url+"\" role=\"button\">Wikipedia</a></td>";
+    content += "</tr>";
+  }
+  content += "</tbody>";
+  content += "</table>";
+
   return content;
 }

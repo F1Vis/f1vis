@@ -496,7 +496,7 @@ function createLineGraph(containerId, raceData){
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
     var s = d3.event.selection || x2.range();
     x.domain(s.map(x2.invert, x2));
-    updateElements();
+    updateElements();	
     // Update the "preview" rectangle
     svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
       .scale(graphPosWidth.width / (s[1] - s[0]))
@@ -508,6 +508,7 @@ function createLineGraph(containerId, raceData){
     var t = d3.event.transform;
     x.domain(t.rescaleX(x2).domain());
     updateElements();
+	
     //call the brush function
     context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
   }
@@ -520,30 +521,40 @@ function createLineGraph(containerId, raceData){
     focus.selectAll(".linedot").attr("cx", function(d, i) {return x(d.lap) });
     // Update xAxis
     focus.select(".axis--x").call(xAxis);
+	
+	updateYAxisText();
     
-	var xAxisValues = d3.extent(x.domain());
-	if(xAxisValues[1] > 1){
-		var startLap = Math.floor(xAxisValues[0]);
-		var endLap = Math.floor(xAxisValues[1]);
-		focus.select(".axis--y-left").call(d3.axisLeft(y).ticks(raceData.drivers.length).tickFormat(function(d) {
-          return getDriverCodeFromPosAndLap(raceData, startLap, d) + " " + d;
-        }));
-		
-		focus.select(".axis--y-right").call(		
-		 d3.axisRight(y)
-          .ticks(raceData.drivers.length)
-          .tickFormat(function(d) {
-            var driverCode = "";
-            if(getDriverCodeFromPosAndLap(raceData, endLap, d)){
-              driverCode = getDriverCodeFromPosAndLap(raceData, endLap, d);
-            }else{
-              driverCode = getDriverCodeFromPosAndLap(raceData, endLap - 1, d); // only if the driver has finished..
-            }
-            return d + " " + driverCode ;
-          }));
-	}
     // Update gridlines
     focus.select(".xAxisGridlines").call(xAxisGridlines);
+  }
+  
+  function updateYAxisText(){
+	console.log("lol");
+	var xAxisValues = d3.extent(x.domain());
+	if(xAxisValues[1] > 1){
+		// Get the min/max lap.
+		var startLap = Math.floor(xAxisValues[0]);
+		var endLap = Math.floor(xAxisValues[1]);
+		
+		// Redraw the left Y axis
+		focus.select(".axis--y-left").call(d3.axisLeft(y).ticks(raceData.drivers.length).tickFormat(function(d) {
+			return getDriverCodeFromPosAndLap(raceData, startLap, d) + " " + d;
+		}));
+
+		// Redraw the right Y axis
+		focus.select(".axis--y-right").call(		
+			d3.axisRight(y)
+			.ticks(raceData.drivers.length)
+			.tickFormat(function(d) {
+				var driverCode = "";
+				if(getDriverCodeFromPosAndLap(raceData, endLap, d)){
+				  driverCode = getDriverCodeFromPosAndLap(raceData, endLap, d);
+				}else{
+				  driverCode = getDriverCodeFromPosAndLap(raceData, endLap - 1, d); // TODO: only if the driver has finished..
+				}
+				return d + " " + driverCode ;
+			}));
+	}
   }
 
 }

@@ -363,6 +363,7 @@ function createLineGraph(containerId, raceData){
     var elemType = d3.select(this).attr("data-elemtype");
     //depending on Pitstop and lap different Texts
     var textArr = [];
+    var textMaxLength = 1;
     // Add interactivity
     // Use D3 to select element, change color and size
     if(elemType === elemTypes.linepoint){
@@ -385,12 +386,19 @@ function createLineGraph(containerId, raceData){
       textArr = getEndPointTextArray(raceData,d);
     }
 
+    // Calculate tooltip width based on text
+    for(var lineI in textArr) {
+      var line = textArr[lineI];
+      if(line.length > textMaxLength) textMaxLength = line.length;
+    }
+    textMaxLength = (2/3) * textMaxLength;
+
     var tooltipGroup = svg.append("g")
       .attr("id", "t" + d.lap + "-" + d.position + "-" + i); // Unique id so it can be removed later
 
     tooltipGroup.append("rect")
       .attr("style", "fill:rgb(225,225,225);stroke:black;stroke-width:2;")
-      .attr("width", "150")
+      .attr("width", textMaxLength + "em")
       .attr("height", (textArr.length + 1) + "em")
       .attr("x", function() { return d3.mouse(this)[0] + 10; })
       .attr("y", function() { return d3.mouse(this)[1] + 10; });

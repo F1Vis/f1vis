@@ -170,7 +170,7 @@ function createLineGraph(containerId, raceData){
               .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
               .attr("cx", function(d, i) {return x(d.lap) })
               .attr("cy", function(d, i) { return y(d.position) })
-              .attr("r", linePointSize * 1.2)
+              .attr("r", linePointSize * 1.4)
               .on("click", handleClickOnPoint)
               .on("mouseover", handleMouseOverLinePoint)
               .on("mouseout", handleMouseOutLinePoint);

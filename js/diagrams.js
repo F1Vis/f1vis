@@ -86,18 +86,6 @@ function createLineGraph(containerId, raceData){
       .attr("height", svgHeight);
 
   //----------------------------------------------------------------------
-  /*svg.append("rect")
-      .attr("class", "zoom")
-      .attr("width", graphPosWidth.width)
-      .attr("height", graphPosWidth.height)
-      .attr("transform", "translate(" + graphPosWidth.posX + "," + graphPosWidth.posY + ")")
-      .call(zoom);*/
-
-  svg.append("defs").append("clipPath")
-    .attr("id", "clip")
-    .append("rect")
-      .attr("width", graphPosWidth.width)
-      .attr("height", graphPosWidth.height);
 
   var focus = svg.append("g")
       .attr("class", "focus")

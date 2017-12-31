@@ -96,11 +96,11 @@ body {
   pointer-events: all;
 }
 
-#toggle-btn{
+#toggle-btn-selection, #toggle-btn-driverinfo{
   text-align: center;
 }
 
-#icon-up-arrow{
+.icon-up-arrow{
   width: 1%;
   height: 1%;
 }

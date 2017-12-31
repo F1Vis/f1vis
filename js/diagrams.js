@@ -510,8 +510,6 @@ function createLineGraph(containerId, raceData){
                   
             for(var key in raceData.results){
               if(raceData.results[key].driverId == driverID){
-                console.log(raceData.results[key]);
-                console.log(_lap);
                 if(isNaN(raceData.results[key].position) || raceData.results[key].laps != _lap){
                   return driverCode;
                 }

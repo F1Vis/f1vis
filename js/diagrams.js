@@ -100,6 +100,13 @@ function createLineGraph(containerId, raceData){
       .attr("class", "focus")
       .attr("transform", "translate(" + graphPosWidth.posX + "," + graphPosWidth.posY + ")");
 	  
+ focus.append("rect")
+      .attr("class", "zoom")
+      .attr("width", svgWidth)
+      .attr("height", graphHeight)
+      .attr("transform", "translate(" + graphPosWidth.posX + "," + graphPosWidth.posY + ")")
+      .call(zoom);
+
   var context = svg.append("g")
       .attr("class", "context")
       .attr("height", smallGraphPosWidth.height)

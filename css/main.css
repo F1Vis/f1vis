@@ -90,11 +90,6 @@ body {
   padding-left: 1.25rem;
 }
 
-.area {
-  fill: steelblue;
-  clip-path: url(#clip);
-}
-
 .zoom {
   cursor: move;
   fill: none;

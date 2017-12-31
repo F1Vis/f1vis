@@ -96,6 +96,8 @@ preprocessor.load(function(data) {
           $("#courseSelection li[data="+raceD1.raceInfo.raceId+"] .courseimagecontainer").append(imageTag);
         });
     }
+    // Show first race by default
+    $("#courseSelection li").first().click();    
   });
 
   $(window).resize(function(e) {

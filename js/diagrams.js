@@ -448,7 +448,7 @@ function createLineGraph(containerId, raceData){
       textArr = getLapTextArray(raceData,d);
     }else if(dataType === elemTypes.pitstoppoint){
       d3.select(this)
-        .attr("r", linePointSize);
+        .attr("r", linePointSize * 1.4);
       textArr = getPitStopTextArray(raceData,d);
     }else if(dataType === elemTypes.endpoint){
       d3.select(this)

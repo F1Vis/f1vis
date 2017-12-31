@@ -531,7 +531,6 @@ function createLineGraph(containerId, raceData){
   }
   
   function updateYAxisText(){
-	console.log("lol");
 	var xAxisValues = d3.extent(x.domain());
 	if(xAxisValues[1] > 1){
 		// Get the min/max lap.

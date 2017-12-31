@@ -154,6 +154,43 @@ function createLineGraph(containerId, raceData){
           .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
           .attr("d", lineDataDefinitionSmall);
 
+      //Appends a circle for each datapoint
+      focus.selectAll(".linepoint")
+          .data(driverLapData.laps)
+          .enter().append("circle") // Uses the enter().append() method
+          .attr("class", "linedot") // Assign a class for styling
+		  .attr("clip-path","url(#clip)")
+          .attr("id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
+          .attr("data-line", driverLapData.driver.driverId)
+          .attr("data-opacitychange", 0)
+          .attr("data-highlighted", 0)
+          .attr("data-elemtype", elemTypes.linepoint)
+          .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
+          .attr("cx", function(d, i) {return x(d.lap) })
+          .attr("cy", function(d, i) { return y(d.position) })
+          .attr("r", linePointSize)
+          .style("opacity", 0);
+
+      //Appends a circle for each datapoint
+      focus.selectAll(".invisiblelinepoint")
+          .data(driverLapData.laps)
+          .enter().append("circle") // Uses the enter().append() method
+          .attr("class", "linedot") // Assign a class for styling
+		  .attr("clip-path","url(#clip)")
+          .attr("circle-id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
+          .attr("data-line", driverLapData.driver.driverId)
+          .attr("data-opacitychange", 0)
+          .attr("data-highlighted", 0)
+          .attr("data-elemtype", elemTypes.linepoint)
+          .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
+          .attr("cx", function(d, i) {return x(d.lap) })
+          .attr("cy", function(d, i) { return y(d.position) })
+          .attr("r", linePointSize*2.4)
+          .on("click", handleClickOnPoint)
+          .on("mouseover", handleMouseOverLinePoint)
+          .on("mouseout", handleMouseOutLinePoint)
+          .style("opacity", 0);
+
       driverLapData.laps.forEach((singleLap, singleLapIndex)=> {
         //console.log(["driverLaps.forEach", singleLap, singleLapIndex]);
         if(singleLap.pitStop){
@@ -192,43 +229,6 @@ function createLineGraph(containerId, raceData){
           //driverLapData.laps[singleLapIndex] = {};
         }
       });
-
-      //Appends a circle for each datapoint
-      focus.selectAll(".linepoint")
-          .data(driverLapData.laps)
-          .enter().append("circle") // Uses the enter().append() method
-          .attr("class", "linedot") // Assign a class for styling
-		  .attr("clip-path","url(#clip)")
-          .attr("id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
-          .attr("data-line", driverLapData.driver.driverId)
-          .attr("data-opacitychange", 0)
-          .attr("data-highlighted", 0)
-          .attr("data-elemtype", elemTypes.linepoint)
-          .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
-          .attr("cx", function(d, i) {return x(d.lap) })
-          .attr("cy", function(d, i) { return y(d.position) })
-          .attr("r", linePointSize)
-          .style("opacity", 0);
-
-      //Appends a circle for each datapoint
-      focus.selectAll(".invisiblelinepoint")
-          .data(driverLapData.laps)
-          .enter().append("circle") // Uses the enter().append() method
-          .attr("class", "linedot") // Assign a class for styling
-		  .attr("clip-path","url(#clip)")
-          .attr("circle-id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
-          .attr("data-line", driverLapData.driver.driverId)
-          .attr("data-opacitychange", 0)
-          .attr("data-highlighted", 0)
-          .attr("data-elemtype", elemTypes.linepoint)
-          .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
-          .attr("cx", function(d, i) {return x(d.lap) })
-          .attr("cy", function(d, i) { return y(d.position) })
-          .attr("r", linePointSize*2.4)
-          .on("click", handleClickOnPoint)
-          .on("mouseover", handleMouseOverLinePoint)
-          .on("mouseout", handleMouseOutLinePoint)
-          .style("opacity", 0);
 
       // in case the driver ended the race too early, get the status why he quit
       /*TODO: Mouseover for Rectangle*/

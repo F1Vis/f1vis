@@ -359,7 +359,7 @@ function createLineGraph(containerId, raceData){
       }
   }
 
-  function handleMouseOverLinePoint(d, i) {
+  function handleMouseOverLinePoint(d, i, e) {
     var elemType = d3.select(this).attr("data-elemtype");
     //depending on Pitstop and lap different Texts
     var textArr = [];
@@ -393,6 +393,11 @@ function createLineGraph(containerId, raceData){
     }
     textMaxLength = (2/3) * textMaxLength;
 
+    // Figure out relative tooltip position on x axis
+    var cxValue = d3.select(e[i]).attr("cx");
+    var xValue = (cxValue === null) ? d3.select(e[i]).attr("x") : cxValue;
+    var xRatio = xValue / svgWidth;
+
     var tooltipGroup = svg.append("g")
       .attr("id", "t" + d.lap + "-" + d.position + "-" + i); // Unique id so it can be removed later
 
@@ -400,7 +405,7 @@ function createLineGraph(containerId, raceData){
       .attr("style", "fill:rgb(225,225,225);stroke:black;stroke-width:2;")
       .attr("width", textMaxLength + "em")
       .attr("height", (textArr.length + 1) + "em")
-      .attr("x", function() { return d3.mouse(this)[0] + 10; })
+      .attr("x", function() { if(xRatio < 0.70) return d3.mouse(this)[0] + 10; else return d3.mouse(this)[0] - 130; })
       .attr("y", function() { return d3.mouse(this)[1] + 10; });
 
     //Necessary to add Text for each Line
@@ -408,7 +413,7 @@ function createLineGraph(containerId, raceData){
       // Specify where to put label of text
         tooltipGroup.append("text")
         .attr("dy", (textIndex + 1) + "em")
-        .attr("x", function() { return d3.mouse(this)[0] + 15; })
+        .attr("x", function() { if(xRatio < 0.70) return d3.mouse(this)[0] + 15; else return d3.mouse(this)[0] - 125; })
         .attr("y", function() { return d3.mouse(this)[1] + 15; })
         .text(function() {
           return text;  // Value of the text

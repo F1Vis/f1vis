@@ -14,8 +14,8 @@ function attachRaceStatistics(enhancedLapData, raceData){
   // empty statistics Container before adding new Statistics
   $(statisticsContainer).empty();
 
-  console.log(raceData);
-  console.log(enhancedLapData);
+  //console.log(raceData);
+  //console.log(enhancedLapData);
 
   textArr.push(avgSymbol + " <b>Lap time:</b> " + getAvgLapTime(raceData));
   textArr.push(avgSymbol + " <b>Pitstop time:</b> " + getAvgPitStopTime(raceData));

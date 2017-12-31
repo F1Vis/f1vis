@@ -521,7 +521,7 @@ function createLineGraph(containerId, raceData){
             break;
           }
           _lap--;
-          if(_lap < 0) break;
+          if(_lap <= 0) break;
         }
       }else{
           if(raceData.lapTimes.get(lapNr)[pos-1]){

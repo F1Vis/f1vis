@@ -4,7 +4,7 @@
  * In this file, functions for loading and preprocessing the data are defined.
  */
 
-/* 
+/*
  * Define the functions responsible for fetching+preprocessing data in a preprocessor object
  */
 var preprocessor = {
@@ -280,8 +280,6 @@ var preprocessor = {
 
   // Starts the fetch+preprocess step, calls back given function with results.
   load: function(callback) {
-    // Show loading dialog
-    loadingDialog.show(13);
     // Create a queue, add all the fetch&process functions and await their results
     d3.queue()
       .defer(preprocessor.fetchCircuits)

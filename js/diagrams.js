@@ -9,7 +9,7 @@ function createLineGraph(containerId, raceData){
     console.error(["Sorry, that raceData is empty. :-(", raceData]);
     return; // early return to avoid errors
   } else {
-    console.log(["raceData", raceData]);
+    //console.log(["raceData", raceData]);
   }
 
   var enhancedLapData = processor.getEnhancedLapDataPerDriver(raceData);

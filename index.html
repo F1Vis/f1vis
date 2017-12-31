@@ -13,109 +13,122 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
   <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="#">F1Vis</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <div class="wrap">
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">F1Vis</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(aktuelle Seite)</span></a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Coding-Guidlines!</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="#">Einrückungen mit zwei Leerzeichen</a>
-              <a class="dropdown-item" href="#">Charset ist UTF-8</a>
-              <a class="dropdown-item" href="#">Keine Panik!</a>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(aktuelle Seite)</span></a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Coding-Guidlines!</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown01">
+                <a class="dropdown-item" href="#">Einrückungen mit zwei Leerzeichen</a>
+                <a class="dropdown-item" href="#">Charset ist UTF-8</a>
+                <a class="dropdown-item" href="#">Keine Panik!</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main role="main" class="container">
+
+        <!-- Navigation card -->
+        <div class="card" id="selector-card">
+          <div class="card-header">Welches Rennen interessiert dich?</div>
+          <div class="card-body">
+            <!-- Year selector -->
+
+            <form>
+              <div class="form-group">
+                <label for="seasonByYearSelector">Wähle ein Jahr aus!</label>
+                <select class="form-control" id="seasonByYearSelector">
+                  <!-- This is filled using JS. -->
+                </select>
+              </div>
+            </form>
+
+            <!-- Course selector -->
+            <div class="strecken-selector">
+              <div class="frame">
+  	      <ul class="slidee" id="courseSelection"><!-- This will be filled by JS. --></ul>
+              </div>
+              <div class="scrollbar">
+                <div class="handle"></div>
+              </div>
             </div>
-          </li>
-        </ul>
+
+          </div> <!-- card-body -->
+
+          <div class="card-footer" style="padding:0;">
+            <div id="toggle-btn">
+              <svg id="icon-up-arrow" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 120 120" xml:space="preserve" transform="rotate(-90)">
+                <polygon fill="#010101" points="102.296,59.957 42.264,119.99 25.605,103.34 85.639,43.299 "/>
+                <polygon fill="#010101" points="85.74,76.71 25.715,16.653 42.373,0.011 102.391,60.067 "/>
+              </svg>
+            </div>
+          </div> <!-- card-footer -->
+
+        </div> <!-- card -->
+
+        <br>
+
+        <!-- Diagram card -->
+        <div class="card" id="diagram-card">
+          <div class="card-body" id="race-infobox"><!-- Race info box automatically filled by JS.--></div> <!-- card-body -->
+
+          <div class="card-footer text-muted">
+
+            <div class="content-box chart-box">
+              <div id="lineGraphBox"></div>
+              <div id="race-statistics">
+              </div>
+            </div>
+
+          </div> <!-- card-footer -->
+        </div> <!-- card -->
+
+        <br>
+
+        <!-- Driver info card -->
+        <div class="card" id="driver-card">
+          <div class="card-header">Rennteilnehmer</div>
+          <div class="card-body" id="driver-infobox"><!-- Driver info box automatically filled by JS.--></div> <!-- card-body -->
+        </div> <!-- card -->
+
+
+      </main><!-- /.container -->
+
+
+
+      <div id="overlay">
+        <div class="loading">
+        		<div class="loading-dot"></div>
+        		<div class="loading-dot"></div>
+        		<div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
       </div>
-    </nav>
-
-    <main role="main" class="container">
-
-      <!-- Navigation card -->
-      <div class="card" id="selector-card">
-        <div class="card-header">Welches Rennen interessiert dich?</div>
-        <div class="card-body">
-          <!-- Year selector -->
-
-          <form>
-            <div class="form-group">
-              <label for="seasonByYearSelector">Wähle ein Jahr aus!</label>
-              <select class="form-control" id="seasonByYearSelector">
-                <!-- This is filled using JS. -->
-              </select>
-            </div>
-          </form>
-
-          <!-- Course selector -->
-          <div class="strecken-selector">
-            <div class="frame">
-	      <ul class="slidee" id="courseSelection"><!-- This will be filled by JS. --></ul>
-            </div>
-            <div class="scrollbar">
-              <div class="handle"></div>
-            </div>
-          </div>
-
-        </div> <!-- card-body -->
-
-        <div class="card-footer" style="padding:0;">
-          <div id="toggle-btn">
-            <svg id="icon-up-arrow" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 120 120" xml:space="preserve" transform="rotate(-90)">
-              <polygon fill="#010101" points="102.296,59.957 42.264,119.99 25.605,103.34 85.639,43.299 "/>
-              <polygon fill="#010101" points="85.74,76.71 25.715,16.653 42.373,0.011 102.391,60.067 "/>
-            </svg>
-          </div>
-        </div> <!-- card-footer -->
-
-      </div> <!-- card -->
-
-      <br>
-
-      <!-- Diagram card -->
-      <div class="card" id="diagram-card">
-        <div class="card-body" id="race-infobox"><!-- Race info box automatically filled by JS.--></div> <!-- card-body -->
-
-        <div class="card-footer text-muted">
-
-          <div class="content-box chart-box">
-            <div id="lineGraphBox"></div>
-            <div id="race-statistics">
-            </div>
-          </div>
-
-        </div> <!-- card-footer --> 
-      </div> <!-- card -->
-
-      <br>
-
-      <!-- Driver info card -->
-      <div class="card" id="driver-card">
-        <div class="card-header">Rennteilnehmer</div>
-        <div class="card-body" id="driver-infobox"><!-- Driver info box automatically filled by JS.--></div> <!-- card-body -->
-      </div> <!-- card -->
-
-
-    </main><!-- /.container -->
-
-    <!-- Other utility infrastructure -->
-    <div id="loading-dialog" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">
-      <div class="modal-dialog modal-m">
-        <div class="modal-content">
-          <div class="modal-header">Wir bereiten gerade alles vor ...<br>Bitte haben Sie einen Augenblick Geduld.</div>
-          <div class="modal-body">
-            <div class="progress" style="margin-bottom:0;">
-              <div class="progress-bar progress-bar-striped progress-bar-animated active" style="width:100%"></div>
+      <!-- Other utility infrastructure -->
+      <!--
+      <div id="loading-dialog" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">
+        <!--<div class="modal-dialog modal-m">
+          <div class="modal-content">
+            <div class="modal-header">Wir bereiten gerade alles vor ...<br>Bitte haben Sie einen Augenblick Geduld.</div>
+            <div class="modal-body">
+              <div class="progress" style="margin-bottom:0;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated active" style="width:100%"></div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
 
     <!-- Placed at the end of the document so the pages load faster -->

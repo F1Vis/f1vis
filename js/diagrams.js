@@ -105,10 +105,11 @@ function createLineGraph(containerId, raceData){
 
   // -----------------------------------------------------------------------
 
+  var contextXAxis = d3.axisBottom(x2).tickValues(0);
   context.append("g")
       .attr("class", "axis axis--x")
       .attr("transform", "translate(0," + smallGraphPosWidth.height + ")")
-      .call(d3.axisBottom(x2));
+      .call(contextXAxis);
 
   context.append("g")
       .attr("class", "brush")

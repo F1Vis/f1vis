@@ -149,7 +149,8 @@ function createLineGraph(containerId, raceData){
           .attr("data-highlighted", 0)
           .attr("data-elemtype", elemTypes.line)
           .attr("stroke", getColorValue(driverIndex, enhancedLapData.length) )
-          .attr("d", lineDataDefinition);
+          .attr("d", lineDataDefinition)
+          .call(zoom);
 
       context.append("path")
           .data([driverLapData.laps])
@@ -176,7 +177,8 @@ function createLineGraph(containerId, raceData){
           .attr("cx", function(d, i) {return x(d.lap) })
           .attr("cy", function(d, i) { return y(d.position) })
           .attr("r", linePointSize)
-          .style("opacity", 0);
+          .style("opacity", 0)
+          .call(zoom);
 
       //Appends a circle for each datapoint
       focus.selectAll(".invisiblelinepoint")
@@ -196,7 +198,8 @@ function createLineGraph(containerId, raceData){
           .on("click", handleClickOnPoint)
           .on("mouseover", handleMouseOverLinePoint)
           .on("mouseout", handleMouseOutLinePoint)
-          .style("opacity", 0);
+          .style("opacity", 0)
+          .call(zoom);
 
       driverLapData.laps.forEach((singleLap, singleLapIndex)=> {
         //console.log(["driverLaps.forEach", singleLap, singleLapIndex]);
@@ -217,7 +220,8 @@ function createLineGraph(containerId, raceData){
               .attr("r", linePointSize * 1.4)
               .on("click", handleClickOnPoint)
               .on("mouseover", handleMouseOverLinePoint)
-              .on("mouseout", handleMouseOutLinePoint);
+              .on("mouseout", handleMouseOutLinePoint)
+              .call(zoom);
 
           context.selectAll(".pitstoppoint-context")
               .data([singleLap])
@@ -261,7 +265,8 @@ function createLineGraph(containerId, raceData){
             .attr("width", rectSize)
             .on("click", handleClickOnPoint)
             .on("mouseover", handleMouseOverLinePoint)
-            .on("mouseout", handleMouseOutLinePoint);
+            .on("mouseout", handleMouseOutLinePoint)
+            .call(zoom);
 
         context.selectAll(".endpoint")
             .data([driverLapData.laps[driverLapData.laps.length - 1]])

@@ -45,11 +45,15 @@ function createLineGraph(containerId, raceData){
       y = d3.scaleLinear().range([graphPosWidth.height, 0]),
       y2 = d3.scaleLinear().range([smallGraphPosWidth.height, 0]);
 
-  var xAxis = d3.axisBottom(x),
+  // Gather lapNumbers for xAxis tickvalues
+  var lapNumbers = [];
+  for(var i=0; i<raceData.lapTimes.size; i++) lapNumbers.push(i);
+
+  var xAxis = d3.axisBottom(x).tickValues(lapNumbers),
       yAxis = d3.axisLeft(y);
 
   var xAxisGridlines = d3.axisBottom(x)
-        .ticks(raceData.lapTimes.size) // One gridline for each lap
+        .tickValues(lapNumbers) // One gridline for each lap
         .tickSize(-graphPosWidth.height)
         .tickFormat("");
 

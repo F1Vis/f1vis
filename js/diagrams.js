@@ -134,7 +134,7 @@ function createLineGraph(containerId, raceData){
       focus.append("path")
           .data([driverLapData.laps])
           .attr("class", "line pathLines")
-		  .attr("clip-path","url(#clip)")
+	  .attr("clip-path","url(#clip)")
           .attr("data-line", driverLapData.driver.driverId) // custom data to specify the line		  
           .attr("data-opacitychange", 1)
           .attr("data-highlighted", 0)
@@ -287,6 +287,7 @@ function createLineGraph(containerId, raceData){
   focus.append("g")
     .attr("class", "axis axis--x")
     .attr("transform", "translate(0," + graphPosWidth.height + ")")
+    .attr("clip-path","url(#clip)")
     .call(xAxis);
 
   // Add the Y Axis on both sides

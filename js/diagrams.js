@@ -461,7 +461,7 @@ function createLineGraph(containerId, raceData){
   }
 
   function getLapTextArray(raceData, d){
-    var driverText = getDriverCodeById(raceData,d.driverId);
+    var driverText = getDriverCodeById(raceData,d.driverId) + " - " + getDriverNameById(raceData,d.driverId);
     var lapText = "Lap: " + d.lap;
     var posText = "Pos: " + d.position;
     var returnArr = [driverText, lapText, posText];

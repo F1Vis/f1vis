@@ -85,6 +85,12 @@ function getDriverCodeAndPositionArray(raceData, lapNumber){
   return posDriverCode;
 }
 
+function getDriverNameById(raceData, driverId){
+  var driverData = raceData.drivers.filter(driv => driv.driverId == driverId)[0];
+  if(driverData === undefined) return "XXX"; // TODO: Do a real fix instead of this quick fix
+  return driverData.forename + " " + driverData.surname;
+}
+
 function getDriverCodeById(raceData, driverId){
   var driverData = raceData.drivers.filter(driv => driv.driverId == driverId)[0];
   if(driverData === undefined) return "XXX"; // TODO: Do a real fix instead of this quick fix

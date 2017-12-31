@@ -322,12 +322,7 @@ function createLineGraph(containerId, raceData){
         d3.axisRight(y)
           .ticks(raceData.drivers.length)
           .tickFormat(function(d) {
-            var driverCode = "";
-            if(getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d)){
-              driverCode = getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d);
-            }else{
-              driverCode = getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size - 1, d);
-            }
+            var driverCode = getDriverCodeFromPosAndLap(raceData, raceData.lapTimes.size, d);
             return d + " " + driverCode ;
           })
       )
@@ -504,16 +499,36 @@ function createLineGraph(containerId, raceData){
       var qualifying = raceData.qualifying[pos - 1];
       if(qualifying === undefined) return "XXX"; // TODO: Do a real fix
       driverCode = getDriverCodeById(raceData, qualifying.driverId);
-    }else if(lapNr == raceData.lapTimes.size){
-      var resultPos = raceData.results[pos -1].position;
-      var resultLaps = raceData.results[pos -1].laps;
-      //making sure the Driver finished and drove all laps
-      if(resultPos && resultLaps == raceData.lapTimes.size){
-        driverCode =  getDriverCodeById(raceData,raceData.results[pos -1].driverId);
-      }
     }else{
-      if(raceData.lapTimes.get(lapNr)[pos-1]){
-        driverCode = getDriverCodeById(raceData, raceData.lapTimes.get(lapNr)[pos-1].driverId);
+      if(lapNr == raceData.lapTimes.size){ // are at the end of the graph. Only draw driver who finished
+        var found = false;
+        var _pos = pos-1;
+        var _lap = lapNr;
+        while(!found){
+          if(raceData.lapTimes.get(_lap)[_pos]){
+            var driverID = raceData.lapTimes.get(_lap)[_pos].driverId;
+                  
+            for(var key in raceData.results){
+              if(raceData.results[key].driverId == driverID){
+                console.log(raceData.results[key]);
+                console.log(_lap);
+                if(isNaN(raceData.results[key].position) || raceData.results[key].laps != _lap){
+                  return driverCode;
+                }
+              }
+            }
+           
+            driverCode = getDriverCodeById(raceData, raceData.lapTimes.get(_lap)[_pos].driverId);
+            found = true;
+            break;
+          }
+          _lap--;
+          if(_lap < 0) break;
+        }
+      }else{
+          if(raceData.lapTimes.get(lapNr)[pos-1]){
+            driverCode = getDriverCodeById(raceData, raceData.lapTimes.get(lapNr)[pos-1].driverId);
+          }
       }
     }
     return driverCode;
@@ -572,12 +587,7 @@ function createLineGraph(containerId, raceData){
 			d3.axisRight(y)
 			.ticks(raceData.drivers.length)
 			.tickFormat(function(d) {
-				var driverCode = "";
-				if(getDriverCodeFromPosAndLap(raceData, endLap, d)){
-				  driverCode = getDriverCodeFromPosAndLap(raceData, endLap, d);
-				}else{
-				  driverCode = getDriverCodeFromPosAndLap(raceData, endLap - 1, d); // TODO: only if the driver has finished..
-				}
+				var driverCode = getDriverCodeFromPosAndLap(raceData, endLap, d);
 				return d + " " + driverCode ;
 			}));
 	}

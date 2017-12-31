@@ -284,14 +284,15 @@ function createLineGraph(containerId, raceData){
   });
 
   // Add the X Axis
-  focus.append("g")
+  var testXAxis = focus.append("g")
     .attr("class", "axis axis--x")
     .attr("transform", "translate(0," + graphPosWidth.height + ")")
     .attr("clip-path","url(#clip)")
     .call(xAxis);
 
-  // Add the Y Axis on both sides
+  // Add the Y Axis on left side
   focus.append("g")
+	.attr("class","axis--y-left")
     .call(
       d3.axisLeft(y)
         .ticks(raceData.drivers.length)
@@ -300,15 +301,9 @@ function createLineGraph(containerId, raceData){
         })
     );
 
-  // Add gridlines on x axis to better figure out laps
-  focus.append("g")
-    .attr("class", "xAxisGridlines")
-    .attr("transform", "translate(0," + graphPosWidth.height + ")")
-    .style("opacity", 0.06)
-    .call(xAxisGridlines);
-
   //Add driver information on the right side of the graph.
   focus.append("g")
+	  .attr("class","axis--y-right")
       .call(
         d3.axisRight(y)
           .ticks(raceData.drivers.length)
@@ -323,13 +318,14 @@ function createLineGraph(containerId, raceData){
           })
       )
       .attr("transform", "translate( " + (graphPosWidth.width) + ", 0 )");
+	  
+  // Add gridlines on x axis to better figure out laps
+  focus.append("g")
+    .attr("class", "xAxisGridlines")
+    .attr("transform", "translate(0," + graphPosWidth.height + ")")
+    .style("opacity", 0.06)
+    .call(xAxisGridlines);
 
-//----------------------------
-
-
-
-
-  //---------------------------------------------------------------------------
 
   function handleClickOnPoint(d,i){
       //select elements that are highlightable but are not highlighted
@@ -524,6 +520,28 @@ function createLineGraph(containerId, raceData){
     focus.selectAll(".linedot").attr("cx", function(d, i) {return x(d.lap) });
     // Update xAxis
     focus.select(".axis--x").call(xAxis);
+    
+	var xAxisValues = d3.extent(x.domain());
+	if(xAxisValues[1] > 1){
+		var startLap = Math.floor(xAxisValues[0]);
+		var endLap = Math.floor(xAxisValues[1]);
+		focus.select(".axis--y-left").call(d3.axisLeft(y).ticks(raceData.drivers.length).tickFormat(function(d) {
+          return getDriverCodeFromPosAndLap(raceData, startLap, d) + " " + d;
+        }));
+		
+		focus.select(".axis--y-right").call(		
+		 d3.axisRight(y)
+          .ticks(raceData.drivers.length)
+          .tickFormat(function(d) {
+            var driverCode = "";
+            if(getDriverCodeFromPosAndLap(raceData, endLap, d)){
+              driverCode = getDriverCodeFromPosAndLap(raceData, endLap, d);
+            }else{
+              driverCode = getDriverCodeFromPosAndLap(raceData, endLap - 1, d); // only if the driver has finished..
+            }
+            return d + " " + driverCode ;
+          }));
+	}
     // Update gridlines
     focus.select(".xAxisGridlines").call(xAxisGridlines);
   }

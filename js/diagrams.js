@@ -82,12 +82,6 @@ function createLineGraph(containerId, raceData){
       .attr("height", svgHeight);
 
   //----------------------------------------------------------------------
-  /*svg.append("rect")
-      .attr("class", "zoom")
-      .attr("width", graphPosWidth.width)
-      .attr("height", graphPosWidth.height)
-      .attr("transform", "translate(" + graphPosWidth.posX + "," + graphPosWidth.posY + ")")
-      .call(zoom);*/
 
   svg.append("defs").append("clipPath")
     .attr("id", "clip")
@@ -95,10 +89,11 @@ function createLineGraph(containerId, raceData){
       .attr("width", graphPosWidth.width)
       .attr("height", graphPosWidth.height);
 
+	  
   var focus = svg.append("g")
       .attr("class", "focus")
       .attr("transform", "translate(" + graphPosWidth.posX + "," + graphPosWidth.posY + ")");
-
+	  
   var context = svg.append("g")
       .attr("class", "context")
       .attr("height", smallGraphPosWidth.height)
@@ -134,7 +129,8 @@ function createLineGraph(containerId, raceData){
       focus.append("path")
           .data([driverLapData.laps])
           .attr("class", "line pathLines")
-          .attr("data-line", driverLapData.driver.driverId) // custom data to specify the line
+		  .attr("clip-path","url(#clip)")
+          .attr("data-line", driverLapData.driver.driverId) // custom data to specify the line		  
           .attr("data-opacitychange", 1)
           .attr("data-highlighted", 0)
           .attr("data-elemtype", elemTypes.line)
@@ -159,6 +155,7 @@ function createLineGraph(containerId, raceData){
               .data([singleLap])
               .enter().append("circle") // Uses the enter().append() method
               .attr("class", "pitstopdot") // Assign a class for styling
+			  .attr("clip-path","url(#clip)")
               .attr("data-line", driverLapData.driver.driverId)
               .attr("data-opacitychange", 1)
               .attr("data-highlighted", 0)
@@ -194,6 +191,7 @@ function createLineGraph(containerId, raceData){
           .data(driverLapData.laps)
           .enter().append("circle") // Uses the enter().append() method
           .attr("class", "linedot") // Assign a class for styling
+		  .attr("clip-path","url(#clip)")
           .attr("id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
           .attr("data-line", driverLapData.driver.driverId)
           .attr("data-opacitychange", 0)
@@ -210,6 +208,7 @@ function createLineGraph(containerId, raceData){
           .data(driverLapData.laps)
           .enter().append("circle") // Uses the enter().append() method
           .attr("class", "linedot") // Assign a class for styling
+		  .attr("clip-path","url(#clip)")
           .attr("circle-id", function(d, i) { return "circle-linepoint-" + d.lap + "-" + d.driverId; })
           .attr("data-line", driverLapData.driver.driverId)
           .attr("data-opacitychange", 0)
@@ -236,6 +235,7 @@ function createLineGraph(containerId, raceData){
             .data([driverLapData.laps[driverLapData.laps.length - 1]])
             .enter().append("rect") // Uses the enter().append() method
             .attr("class", "endpointdot") // Assign a class for styling
+			.attr("clip-path","url(#clip)")
             .attr("data-line", driverLapData.driver.driverId)
             .attr("data-opacitychange", 1)
             .attr("data-highlighted", 0)
@@ -253,7 +253,7 @@ function createLineGraph(containerId, raceData){
             .data([driverLapData.laps[driverLapData.laps.length - 1]])
             .enter().append("rect") // Uses the enter().append() method
             //.attr("class", "endpoint") // Assign a class for styling
-            .attr("class", "zoomable")
+            .attr("class", "zoomable")			
             .attr("data-line", driverLapData.driver.driverId)
             .attr("data-opacitychange", 1)
             .attr("data-highlighted", 0)

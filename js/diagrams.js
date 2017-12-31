@@ -413,7 +413,7 @@ function createLineGraph(containerId, raceData){
       .attr("width", textMaxLength + "em")
       .attr("height", (textArr.length + 1) + "em")
       .attr("x", function() { if(xRatio < 0.70) return d3.mouse(this)[0] + 10; else return d3.mouse(this)[0] - 130; })
-      .attr("y", function() { return d3.mouse(this)[1] + 10; });
+      .attr("y", function() { return d3.mouse(this)[1] + 25; });
 
     //Necessary to add Text for each Line
     textArr.forEach((text, textIndex) =>{
@@ -421,7 +421,7 @@ function createLineGraph(containerId, raceData){
         tooltipGroup.append("text")
         .attr("dy", (textIndex + 1) + "em")
         .attr("x", function() { if(xRatio < 0.70) return d3.mouse(this)[0] + 15; else return d3.mouse(this)[0] - 125; })
-        .attr("y", function() { return d3.mouse(this)[1] + 15; })
+        .attr("y", function() { return d3.mouse(this)[1] + 30; })
         .text(function() {
           return text;  // Value of the text
         });
@@ -443,7 +443,7 @@ function createLineGraph(containerId, raceData){
       textArr = getLapTextArray(raceData,d);
     }else if(dataType === elemTypes.pitstoppoint){
       d3.select(this)
-        .attr("r", linePointSize);
+        .attr("r", linePointSize * 1.4);
       textArr = getPitStopTextArray(raceData,d);
     }else if(dataType === elemTypes.endpoint){
       d3.select(this)

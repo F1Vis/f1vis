@@ -92,7 +92,9 @@ function createLineGraph(containerId, raceData){
     .attr("id", "clip")
     .append("rect")
       .attr("width", graphPosWidth.width)
-      .attr("height", graphPosWidth.height);
+      .attr("height", graphPosWidth.height + 16) // Add 16 pixels of height ...
+      .attr("transform", "translate(0,-8)"); // ... so we can have 8 pixels above and below the graph
+      // This way, the lines and dots are not cut off
 	  
   var focus = svg.append("g")
       .attr("class", "focus")

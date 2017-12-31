@@ -266,8 +266,8 @@ function createLineGraph(containerId, raceData){
             .attr("data-highlighted", 0)
             .attr("data-elemtype", elemTypes.endpoint)
             .attr("fill", getColorValue(driverIndex, enhancedLapData.length))
-            .attr("x", function(d, i) { return x2(d.lap) - rectSize * 1/2; })
-            .attr("y", function(d, i) { return y2(d.position) - rectSize * 1/2; })
+            .attr("x", function(d, i) { return x2(d.lap) - rectSize * 1/4; })
+            .attr("y", function(d, i) { return y2(d.position) - rectSize * 1/4; })
             .attr("height", rectSize * 0.4)
             .attr("width", rectSize * 0.4)
             .attr("d", lineDataDefinition);
